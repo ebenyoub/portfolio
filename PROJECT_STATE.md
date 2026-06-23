@@ -2,19 +2,43 @@
 
 ## Description du Projet
 Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bachelor 3 Ingénierie du Web et servir de démonstration technique premium auprès des recruteurs.
-L'application comprend une partie Frontend de présentation et de gestion, une partie Backend de gestion de contenu (CMS), et une base de données MySQL, le tout orchestré par Docker.
 
-## Statut Actuel
-- **Frontend** : Opérationnel. Construit avec React 19, TypeScript, Vite, React Router, Tailwind CSS v4, React Hook Form et Zod. Intégration d'uploads d'images Cloudinary non signés côté client.
-- **Backend** : Opérationnel. API REST construite avec Express 5, TypeScript, MySQL2 (via pool de connexions), JWT pour l'authentification admin, et Nodemailer pour le formulaire de contact.
-- **Base de données** : MySQL 8. Table `projects` et table `users` configurées avec les structures nécessaires (carousels, images de galerie, drapeaux de mise en avant).
+---
 
-## Fichiers Modifiés récemment / Historique de pilotage
-- Initialisation de la documentation de pilotage IA (juin 2026).
-- Audit technique complet réalisé.
+## État des Modules
 
-## Risques et Bloquants Identifiés
-1. **Risque d'images brisées** : L'intégration Cloudinary repose sur le frontend directement avec un preset non signé. Si le preset ou le cloud name ne sont pas définis ou mal configurés, les créations/éditions échoueront.
-2. **Dockerfile Frontend incomplet** : Le `Dockerfile` frontend utilise `CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]` au lieu d'un serveur web de production (ex: Nginx) pour servir les fichiers statiques buildés, ce qui n'est pas adapté pour la production.
-3. **Sécurité JWT** : Signature avec un secret qui doit être robuste en production.
-4. **Erreur de syntaxe Dockerfile Frontend** : `CMD["npm", ...]` manque d'un espace après `CMD` dans le Dockerfile frontend (`CMD["npm", ...]` génère une erreur au build).
+### 1. État Docker
+* **Base de données (`db`)** : Conteneur MySQL 8.0 opérationnel et persistant. Point d'entrée `init.sql` exécuté correctement.
+* **Backend** : Conteneur Node.js 20 opérationnel (`portfolio_backend` servant l'API REST sur le port `3001`).
+* **Frontend** : Conteneur configuré pour le développement. Le Dockerfile frontend utilise un serveur de développement et requiert un ajustement pour servir les builds statiques en production (voir backlog).
+
+### 2. État Cloudinary
+* Opérationnel côté frontend. Intégration de l'upload d'images sans signature (unsigned preset) via les variables d'environnement configurées dans le `.env` du frontend.
+* Sécurité assurée : aucune clé secrète Cloudinary (`CLOUDINARY_API_SECRET`) n'est embarquée côté frontend.
+
+### 3. État CMS
+* Espace d'administration fonctionnel accessible sur `/admin`.
+* Permet la création, modification, suppression de projets, ainsi que la configuration des carousels (sélection des projets mis en avant `is_featured` et ordre `featured_order`).
+
+### 4. État GitHub Import
+* Présence d'un script d'initialisation et d'import automatique dans `db/init.sql` pour charger directement les métadonnées de projets issus des dépôts GitHub publics d'Elyas Benyoub.
+
+### 5. État Screenshots
+* Les captures d'écran des projets sont hébergées sur Cloudinary. Les chemins relatifs historiques locaux d'images (ex: `/project-images/...`) sont résolus via un utilitaire de secours frontend.
+
+### 6. État Figma Make
+* **Statut** : Complètement intégré. Les pages publiques (`Home`, `Projects`, `Project Detail`, `Contact` et `Login`) ainsi que les styles de la charte visuelle sombre (`#0A0A0A`), les espacements et les cartes projets ont été réalignés fidèlement sur les références de `figma_make/`.
+
+---
+
+## Problèmes Connus
+1. **Dockerfile Frontend en Mode Dev** : Actuellement, le conteneur frontend exécute l'application en mode dev. Un build de production multi-stage avec un reverse proxy (ex: Nginx) est nécessaire pour le déploiement final.
+2. **CORS local en dur** : Le backend Express n'accepte que des origines locales (`localhost:5173`, etc.).
+3. **Erreur de syntaxe Dockerfile Frontend** : `CMD["npm", ...]` sans espace dans `portfolio_frontend/Dockerfile` à corriger.
+
+---
+
+## Prochaine tâche recommandée
+* **[PB-001] : Correction et optimisation Docker pour la Production**
+  * Corriger l'erreur syntaxique `CMD` dans le `Dockerfile` frontend.
+  * Mettre en place un build multi-stage avec Nginx pour servir le frontend de façon sécurisée et performante en production.

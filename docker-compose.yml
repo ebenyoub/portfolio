@@ -1,9 +1,8 @@
 services:
   db:
     image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: portfolio_db
+    env_file:
+      - ./.env.mysql
     ports:
       - "127.0.0.1:3308:3306"
     volumes:

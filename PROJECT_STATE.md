@@ -11,7 +11,7 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
 * **Base de données (`db`)** : Conteneur MySQL 8.0 opérationnel et persistant. Point d'entrée `init.sql` exécuté correctement. Port 3308 lié à `127.0.0.1` en local pour éviter toute exposition publique.
 * **Backend** : Conteneur Node.js 20 opérationnel (port `3001`).
 * **Frontend** : Conteneur opérationnel avec build multi-stage et serveur Nginx Alpine (port `8080` mappé vers le port `80`).
-* **Sécurité & Production** : Fichier `docker-compose.prod.yml` en place pour retirer l'exposition de ports de MySQL et charger les variables d'environnement de production.
+* **Sécurité & Production** : Fichier `docker-compose.prod.yml` en place pour retirer l'exposition de ports de MySQL en production. Les secrets de la base de données sont isolés dans `.env.mysql` pour éviter d'exposer les secrets applicatifs (JWT, Cloudinary, Mail) au conteneur MySQL.
 
 ### 2. État Cloudinary
 * Opérationnel côté frontend. Intégration de l'upload d'images sans signature (unsigned preset) via les variables d'environnement configurées dans le `.env` du frontend.

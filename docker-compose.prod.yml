@@ -2,7 +2,7 @@ services:
   db:
     ports: !reset []
     env_file:
-      - ./portfolio_backend/.env
+      - ./.env.mysql
 
   backend:
     env_file:

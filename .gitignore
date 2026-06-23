@@ -1,0 +1,17 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+
+node_modules/
+dist/
+coverage/
+reports/
+
+portfolio_backend/dist/
+portfolio_backend/uploads/
+portfolio_frontend/dist/
+portfolio_frontend/node_modules/
+portfolio_backend/node_modules/
+
+*.log

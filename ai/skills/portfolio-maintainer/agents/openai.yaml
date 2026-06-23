@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio Maintainer"
+  short_description: "Maintenir le portfolio Elyas"
+  default_prompt: "Use $portfolio-maintainer to update the portfolio while preserving CMS, Docker, and db/init.sql."

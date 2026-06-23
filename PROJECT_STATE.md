@@ -28,7 +28,7 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
 * Les captures d'écran des projets sont hébergées sur Cloudinary. Les chemins relatifs historiques locaux d'images (ex: `/project-images/...`) sont résolus via un utilitaire de secours frontend.
 
 ### 6. État Figma Make
-* **Statut** : Complètement intégré. Les pages publiques (`Home`, `Projects`, `Project Detail`, `Contact` et `Login`) ainsi que les styles de la charte visuelle sombre (`#0A0A0A`), les espacements et les cartes projets ont été réalignés fidèlement sur les références de `figma_make/`.
+* **Statut** : Complètement intégré. Alignement visuel effectué (PB-004 Phase 2). La lisibilité des petites cartes Stack a été optimisée (PB-004 Phase 3) en passant la couleur de fond sur `#111111` avec lueur de couleur radiale (`cat.color` à 8% d'opacité), en rehaussant le contraste des bordures à `#2D2D2D` et en rendant la liste des projets au bas des cartes lisible via une couleur plus claire (`#6B7280` -> `#A1A1AA` au survol) et une bordure de séparation.
 
 ---
 

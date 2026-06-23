@@ -75,21 +75,22 @@ const TIMELINE = [
 
 function StackCardComponent({ cat }: { cat: typeof STACK_CATEGORIES[0] }) {
   const Icon = cat.icon;
+  const customBackground = `radial-gradient(circle at 10% 10%, ${cat.color}15, transparent 80%), #111111`;
   return (
-    <div className="h-full border border-[#262626] rounded-xl p-6 hover:border-[#363636] transition-all duration-300 group" style={{ background: cat.bg }}>
+    <div className="h-full flex flex-col border border-[#2D2D2D] rounded-xl p-6 hover:border-[#3D3D3D] transition-all duration-300 group" style={{ background: customBackground }}>
       <div className="flex items-center gap-3 mb-5">
         <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: `${cat.color}18`, border: `1px solid ${cat.color}28` }}>
           <Icon size={18} style={{ color: cat.color }} />
         </div>
         <span className="text-sm font-semibold text-white" style={{ fontFamily: "Manrope, sans-serif" }}>{cat.label}</span>
       </div>
-      <div className="flex flex-wrap gap-2 mb-4">
+      <div className="flex flex-wrap gap-2 mb-6">
         {cat.techs.map((tech) => (
-          <span key={tech} className="text-xs font-mono px-2.5 py-1 rounded-md border border-[#262626] bg-[#0A0A0A] text-[#A1A1AA] group-hover:border-[#303030] transition-colors">{tech}</span>
+          <span key={tech} className="text-xs font-mono px-2.5 py-1 rounded-md border border-[#333333] bg-[#0A0A0A] text-[#A1A1AA] group-hover:border-[#444444] transition-colors">{tech}</span>
         ))}
       </div>
       {cat.projects && (
-        <p className="text-[10px] font-mono text-[#3B3B3B] group-hover:text-[#4B4B4B] transition-colors">
+        <p className="text-[10px] font-mono text-[#6B7280] group-hover:text-[#A1A1AA] transition-colors mt-auto pt-3 border-t border-[#262626]">
           {cat.projects}
         </p>
       )}
@@ -156,10 +157,10 @@ const HomePage = () => {
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white pt-16">
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden border-b border-[#1A1A1A]">
+      <section className="relative min-h-screen flex items-center overflow-hidden border-b border-[#1A1A1A]">
         <div className="absolute inset-0 opacity-25 pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, #3B3B3B 1px, transparent 1px)", backgroundSize: "30px 30px" }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 70% 40% at 50% -5%, rgba(59,130,246,0.13) 0%, transparent 65%)" }} />
-        <div className="relative max-w-6xl mx-auto px-6 py-20 w-full grid lg:grid-cols-2 gap-16 items-center">
+        <div className="relative max-w-6xl mx-auto px-6 py-24 w-full grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <div className="inline-flex items-center gap-2.5 border border-[#262626] bg-[#111111] rounded-full px-3.5 py-1.5 mb-8">
               <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
@@ -191,6 +192,7 @@ const HomePage = () => {
               <div className="flex items-center gap-3.5">
                 <a href="https://github.com/ebenyoub" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors" aria-label="GitHub"><Github size={17} /></a>
                 <a href="https://linkedin.com/in/elyas-benyoub" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors" aria-label="LinkedIn"><Linkedin size={17} /></a>
+                <a href="mailto:embenyoub@gmail.com" className="hover:text-white transition-colors" aria-label="Email"><Mail size={17} /></a>
               </div>
             </div>
           </div>

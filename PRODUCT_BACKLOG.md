@@ -16,27 +16,54 @@ Ce document liste et priorise les prochaines interventions à effectuer sur le P
 
 ### [P0] PB-001 : Correction et optimisation Docker pour la Production (Terminé)
 * **Description** :
-  1. Corriger l'erreur syntaxique de la ligne 11 du `Dockerfile` frontend (`CMD["npm", ...]` sans espace).
-  2. Remplacer l'exécution en mode dev (`npm run dev`) dans le `Dockerfile` frontend par un build multi-stage compilant le projet (`npm run build`) et servant les fichiers statiques via un serveur Nginx configuré et sécurisé.
-* **Impact** : Déploiement en production possible, optimisé et sécurisé.
-* **Estimation** : Terminé.
+  1. Corriger l'erreur syntaxique dans le `Dockerfile` frontend.
+  2. Build multi-stage compilant le frontend et servant via un serveur Nginx sécurisé.
+* **Statut** : Terminé.
 
-### [P1] PB-002 : CORS Dynamique pour le Backend
+### [P1] PB-002 : Sécurisation Docker & Secrets MySQL (Terminé)
+* **Description** :
+  1. Exposer MySQL localement sur `127.0.0.1:3308` pour éviter une exposition publique.
+  2. Séparer l'usage prod avec `docker-compose.prod.yml` (pas de ports exposés pour la db).
+  3. Isoler les secrets db de l'application dans `.env.mysql`.
+* **Statut** : Terminé.
+
+### [P1] PB-004 : Alignement Figma Make (HomePage & Outils) (Terminé)
+* **Description** :
+  1. Alignement visuel de la page publique principale (Navbar, Hero, responsive, transitions).
+  2. Amélioration de la lisibilité des cartes de stack et technologies en mode sombre.
+* **Statut** : Terminé.
+
+### [P1] PB-005 : Intégration Layout Admin Figma Make (Terminé)
+* **Description** : Remplacement de l'apparence admin par le layout sombre et premium Figma avec barre de navigation rétractable.
+* **Statut** : Terminé.
+
+### [P1] PB-006 : Alignement Admin Projects Figma Make (Terminé)
+* **Description** : Refonte de la table de liste des projets, de l'état de mise en avant et des actions d'édition sous format de design SaaS premium sombre.
+* **Statut** : Terminé.
+
+### [P1] PB-007 : Alignement Formulaires Admin Figma Make (Terminé)
+* **Description** : Rendre les formulaires d'édition et création conformes au thème sombre premium (textareas adaptés, upload de couverture, carousel de miniatures, boutons épurés).
+* **Statut** : Terminé.
+
+### [P1] PB-008 : Dashboard Admin Figma Make (Terminé)
+* **Description** : Intégration d'un tableau de bord moderne avec indicateurs de performances (KPIs), journal d'activité récente dynamique et raccourcis d'accès rapide.
+* **Statut** : Terminé.
+
+### [P1] PB-009 : Audit et Tests de Sécurité Auth (Terminé)
+* **Description** :
+  1. Audit de la stratégie de tests.
+  2. Mise en place de tests unitaires pour le middleware JWT du backend (Vitest).
+  3. Écriture des tests d'intégration pour le composant `PrivateRoute` (Frontend).
+* **Statut** : Terminé.
+
+### [P1] PB-011 : CORS Dynamique pour le Backend (À faire)
 * **Description** : Remplacer la liste d'origines CORS codée en dur dans `server.ts` par une variable d'environnement `CORS_ORIGIN` (ex. `http://localhost:5173` en dev et `https://elyas-benyoub.fr` en production).
-* **Impact** : Évite les erreurs de requêtes cross-origin en production.
-* **Estimation** : 15 min.
+* **Statut** : À faire.
 
-### [P1] PB-003 : Écriture de Tests de Non-Régression pour Cloudinary et les Carousels
-* **Description** : Ajouter des tests unitaires et d'intégration frontend (Vitest) simulant le mock Cloudinary pour l'upload d'images, et testant le comportement du carousel d'accueil ( featured projects ) et de détails.
-* **Impact** : Garantit la stabilité du code lors des futures modifications.
-* **Estimation** : 1h30.
+### [P1] PB-012 : Écriture de Tests de Non-Régression pour Cloudinary et les Carousels (À faire)
+* **Description** : Ajouter des tests unitaires et d'intégration frontend (Vitest) simulant le mock Cloudinary pour l'upload d'images, et testant le comportement du carousel d'accueil ("featured projects") et de détails.
+* **Statut** : À faire.
 
-### [P2] PB-004 : Amélioration globale de l'Accessibilité (WCAG / a11y)
+### [P2] PB-013 : Amélioration globale de l'Accessibilité (WCAG / a11y) (À faire)
 * **Description** : Rajouter des attributs d'accessibilité `aria-label` manquants sur les liens purement iconiques (réseaux sociaux, etc.) et vérifier le comportement de la navigation au clavier.
-* **Impact** : Portfolio accessible et mieux valorisé techniquement.
-* **Estimation** : 30 min.
-
-### [P3] PB-005 : Rationalisation du Makefile (Terminé)
-* **Description** : Intégrer les scripts de build, de test et de lissage (linting) globaux dans le Makefile pour permettre une validation rapide et unifiée du projet en local.
-* **Impact** : Améliore le confort de développement local.
-* **Estimation** : Terminé.
+* **Statut** : À faire.

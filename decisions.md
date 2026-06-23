@@ -36,3 +36,19 @@
   - MySQL n'est plus accessible de l'extérieur en production, limitant la surface d'attaque.
   - Pas d'impact sur le flux de développement local.
 
+## ADR 5 : Formulaires et Layout Admin Figma Make
+* **Statut** : Accepté
+* **Contexte** : Assurer la cohérence visuelle de l'espace d'administration avec la charte graphique sombre haut de gamme issue de `figma_make`.
+* **Décision** : Moderniser l'ensemble de l'interface d'administration sous format SaaS sombre (`#111111`, `#0A0A0A`, bordures `#262626`), y compris la barre latérale rétractable, la table de gestion des projets, les formulaires de création et d'édition de projet (champs sombres, textareas, miniatures de galerie, boutons d'action) et le tableau de bord avec indicateurs clés (KPIs) et liste d'activité.
+* **Conséquences** :
+  - L'expérience administrateur est homogène et premium.
+  - Aucune logique fonctionnelle (RHF/Zod, Cloudinary, CRUD) n'a été altérée.
+
+## ADR 6 : Tests de Sécurité Auth avec Vitest
+* **Statut** : Accepté
+* **Contexte** : Sécuriser les accès sensibles (CRUD projets) de l'administration contre les régressions accidentelles de sécurité.
+* **Décision** : Implémenter des tests automatisés pour valider le contrôle d'accès : tests unitaires du middleware JWT Express du backend, et tests d'intégration du wrapper de navigation React `PrivateRoute` côté frontend.
+* **Conséquences** :
+  - Prévention robuste contre les fuites d'authentification ou les accès anonymes aux routes protégées.
+  - Automatisation complète via `make test` et `make validate` (CI locale).
+

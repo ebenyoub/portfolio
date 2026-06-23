@@ -61,6 +61,8 @@ build:
 test:
 	@echo "🧪 Tests Frontend..."
 	cd portfolio_frontend && npm run test -- --run
+	@echo "🧪 Tests Backend..."
+	cd portfolio_backend && npm run test
 
 validate: lint build test
 	@echo "✅ Validation complète réussie !"

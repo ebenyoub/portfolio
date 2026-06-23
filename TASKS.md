@@ -12,6 +12,7 @@
 - [x] Alignement de la table des projets admin (PB-006).
 - [x] Alignement des formulaires admin (création / édition) avec Figma Make (PB-007).
 - [x] Intégration du Dashboard Admin premium aligné avec Figma Make (PB-008).
+- [x] Tests unitaires et d'intégration de sécurité Auth (PB-009 Phase 2).
 
 ## Tâches futures
 - [ ] Sécurisation de la configuration CORS du backend pour la production (PB-002 Phase 4).

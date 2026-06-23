@@ -10,6 +10,7 @@
 - [x] Optimisation de la lisibilité des cartes Stack (PB-004 Phase 3).
 - [x] Intégration du Layout Admin premium (PB-005 Phase 2).
 - [x] Alignement de la table des projets admin (PB-006).
+- [x] Alignement des formulaires admin (création / édition) avec Figma Make (PB-007).
 
 ## Tâches futures
 - [ ] Sécurisation de la configuration CORS du backend pour la production (PB-002 Phase 4).

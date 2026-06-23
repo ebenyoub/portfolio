@@ -29,7 +29,8 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
 * Les captures d'écran des projets sont hébergées sur Cloudinary. Les chemins relatifs historiques locaux d'images (ex: `/project-images/...`) sont résolus via un utilitaire de secours frontend.
 
 ### 6. État Figma Make
-* **Statut** : Complètement intégré. Alignement visuel effectué (PB-004 Phase 2). La lisibilité des cartes Stack a été optimisée (PB-004 Phase 3). L'alignement de la page de gestion des projets admin avec Figma Make a été réalisé (PB-006) : la table est désormais un conteneur sombre `#111111` avec bordures fines, les projets y sont listés avec leur miniature, leur titre, des badges de technologies stylisés, l'état des sections configurées, des contrôles d'accueil sombres, et des boutons d'action utilisant des icônes Lucide.
+* **Statut** : Complètement intégré. Alignement visuel effectué (PB-004 Phase 2). La lisibilité des cartes Stack a été optimisée (PB-004 Phase 3). L'alignement de la page de gestion des projets admin (PB-006) et des formulaires de création/édition de projet (PB-007) avec Figma Make a été entièrement réalisé. Les formulaires adoptent désormais une structure sombre et premium (`#111111`, `#0A0A0A` pour les champs, bordures `#262626`), des textareas stylisés, une zone d'upload de couverture moderne, des aperçus de galerie soignés avec miniatures homogènes, et des boutons d'actions harmonisés (Annuler, Enregistrer).
+
 
 ---
 

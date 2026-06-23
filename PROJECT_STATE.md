@@ -20,6 +20,7 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
 ### 3. État CMS
 * Espace d'administration fonctionnel accessible sur `/admin`.
 * Permet la création, modification, suppression de projets, ainsi que la configuration des carousels (sélection des projets mis en avant `is_featured` et ordre `featured_order`).
+* **Layout Admin** : Le composant `AdminLayout.tsx` enveloppe désormais l'ensemble des routes admin (Projets, Nouveau projet, Édition). Il implémente une navigation latérale sombre repliable fidèle au design Figma Make, avec des pages de secours "En cours de développement" pour les autres modules (Parcours, Compétences, Médias, Paramètres).
 
 ### 4. État GitHub Import
 * Présence d'un script d'initialisation et d'import automatique dans `db/init.sql` pour charger directement les métadonnées de projets issus des dépôts GitHub publics d'Elyas Benyoub.

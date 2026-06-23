@@ -17,11 +17,11 @@ const FeaturedSettings = ({
   onToggleFeatured,
   onUpdateFeaturedOrder,
 }: FeaturedSettingsProps) => (
-  <div className="flex flex-wrap items-center gap-4">
-    <label className="flex items-center gap-2 text-xs font-mono text-[#A1A1AA] cursor-pointer">
+  <div className="flex flex-wrap items-center gap-3">
+    <label className="inline-flex items-center gap-2 rounded-full border border-[#262626] bg-[#0A0A0A] px-3 py-2 text-xs font-mono text-[#A1A1AA] cursor-pointer">
       <input
         type="checkbox"
-        className="h-4 w-4 bg-[#0A0A0A] border-[#262626] rounded text-[#3B82F6] focus:ring-[#3B82F6]/30 focus:ring-offset-[#0A0A0A]"
+        className="h-4 w-4 rounded border-[#262626] bg-[#0A0A0A] text-[#3B82F6] focus:ring-[#3B82F6]/30 focus:ring-offset-[#0A0A0A]"
         checked={isFeatured}
         disabled={isSaving}
         aria-label={`Sélection accueil pour ${project.title}`}
@@ -29,10 +29,10 @@ const FeaturedSettings = ({
           void onToggleFeatured(project, event.target.checked);
         }}
       />
-      Accueil
+      {isFeatured ? "En vitrine" : "Accueil"}
     </label>
 
-    <label className="flex items-center gap-2 text-xs font-mono text-[#A1A1AA]">
+    <label className="inline-flex items-center gap-2 rounded-full border border-[#262626] bg-[#0A0A0A] px-3 py-2 text-xs font-mono text-[#A1A1AA]">
       Ordre
       <input
         type="number"
@@ -43,7 +43,7 @@ const FeaturedSettings = ({
         onChange={(event) => {
           void onUpdateFeaturedOrder(project, event.target.value);
         }}
-        className="h-8 w-16 bg-[#0A0A0A] border border-[#262626] rounded-lg px-2 text-center text-xs text-white focus:outline-none focus:border-[#3B82F6] disabled:opacity-30 disabled:cursor-not-allowed font-mono"
+        className="h-8 w-16 rounded-md border border-[#262626] bg-[#111111] px-2 text-center text-xs text-white outline-none transition-colors focus:border-[#3B82F6] disabled:cursor-not-allowed disabled:opacity-30 font-mono"
         aria-label={`Ordre d'affichage accueil pour ${project.title}`}
       />
     </label>

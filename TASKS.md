@@ -12,6 +12,7 @@
 - [x] Alignement de la table des projets admin (PB-006).
 - [x] Alignement des formulaires admin (création / édition) avec Figma Make (PB-007).
 - [x] Intégration du Dashboard Admin premium aligné avec Figma Make (PB-008).
+- [x] Reprise de l'écran `/admin/projects` pour respecter plus fidèlement Figma Make (PB-FIX-ADMIN).
 - [x] Tests unitaires et d'intégration de sécurité Auth (PB-009 Phase 2).
 - [x] Tests d'intégration CRUD Projets backend et pages Projets frontend (PB-012).
 - [x] Configuration CORS backend dynamique pour les environnements dev et production (PB-011).
@@ -21,5 +22,4 @@
 ## Tâches futures
 - [ ] Validation complète du flux d'upload Cloudinary unsigned avec les variables d'environnement.
 - [ ] Raccorder le composant `FeaturedProjectsCarousel` à la page d'accueil en respectant Figma Make.
-
 

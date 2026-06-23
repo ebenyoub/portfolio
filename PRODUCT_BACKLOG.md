@@ -49,6 +49,10 @@ Ce document liste et priorise les prochaines interventions à effectuer sur le P
 * **Description** : Intégration d'un tableau de bord moderne avec indicateurs de performances (KPIs), journal d'activité récente dynamique et raccourcis d'accès rapide.
 * **Statut** : Terminé.
 
+### [P1] PB-FIX-ADMIN : Reprise UI `/admin/projects` Figma Make (Terminé)
+* **Description** : Remplacement de l'apparence de liste classique par une vue sombre premium avec en-tête de catalogue, recherche locale, miniatures, stack, statut, date et actions iconiques.
+* **Statut** : Terminé.
+
 ### [P1] PB-009 : Audit et Tests de Sécurité Auth (Terminé)
 * **Description** :
   1. Audit de la stratégie de tests.

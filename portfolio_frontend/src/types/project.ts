@@ -27,6 +27,8 @@ export type Project = {
   featured_order?: number | null;
   challenges?: string | null;
   solution?: string | null;
+  created_at?: string | Date | null;
+  updated_at?: string | Date | null;
 };
 
 export type GalleryImageFormValue = {

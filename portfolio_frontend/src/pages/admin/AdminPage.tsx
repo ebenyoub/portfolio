@@ -10,6 +10,7 @@ const AdminPage = () => {
   const { apiFetch, isLoading } = useFetch();
   const [projects, setProjects] = useState<Project[]>([]);
   const [savingProjectIds, setSavingProjectIds] = useState<number[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -95,16 +96,38 @@ const AdminPage = () => {
     });
   };
 
+  const filteredProjects = projects.filter((project) => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return true;
+
+    return [
+      project.title,
+      project.description,
+      project.tech_stack,
+      project.github_url,
+      project.demo_url,
+    ]
+      .filter(Boolean)
+      .some((value) => value?.toString().toLowerCase().includes(query));
+  });
+
   return (
     <div className="space-y-6">
-      <AdminProjectHeader />
+      <AdminProjectHeader
+        projectCount={projects.length}
+        featuredCount={projects.filter(isProjectFeatured).length}
+        visibleCount={filteredProjects.length}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+      />
       <AdminProjectList
-        projects={projects}
+        projects={filteredProjects}
         isLoading={isLoading}
         savingProjectIds={savingProjectIds}
         onDeleteProject={deleteProject}
         onToggleFeatured={toggleFeaturedProject}
         onUpdateFeaturedOrder={updateFeaturedOrder}
+        hasFilter={searchQuery.trim().length > 0}
       />
     </div>
   );

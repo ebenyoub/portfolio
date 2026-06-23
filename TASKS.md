@@ -3,10 +3,11 @@
 ## Tâches en cours
 - [x] Audit complet du code existant et des configurations d'infrastructure.
 - [x] Structuration de la documentation de pilotage IA.
+- [x] Correction de l'erreur de syntaxe dans le `Dockerfile` frontend et migration vers Nginx multi-stage (PB-001).
+- [x] Séparation de l'usage local et production de MySQL via `docker-compose.prod.yml` (PB-002 Phase 2).
 
 ## Tâches futures
-- [ ] Correction de l'erreur de syntaxe dans le `Dockerfile` frontend (`CMD ["npm", ...]` au lieu de `CMD["npm", ...]`).
-- [ ] Migration du `Dockerfile` frontend vers une configuration multi-stage avec Nginx pour le service des fichiers statiques de production.
+- [ ] Sécurisation de la configuration CORS du backend pour la production (PB-002 Phase 3).
 - [ ] Validation complète du flux d'upload Cloudinary unsigned avec les variables d'environnement.
-- [ ] Ajout des tests de non-régression manquants listés dans le TODO.md (mock Cloudinary, carousel d'accueil, carousel de détail).
-- [ ] Sécurisation de la configuration CORS du backend pour la production.
+- [ ] Ajout des tests de non-régression manquants (mock Cloudinary, carousel d'accueil, carousel de détail) (PB-003).
+

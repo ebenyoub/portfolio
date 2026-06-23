@@ -8,9 +8,10 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
 ## État des Modules
 
 ### 1. État Docker
-* **Base de données (`db`)** : Conteneur MySQL 8.0 opérationnel et persistant. Point d'entrée `init.sql` exécuté correctement.
-* **Backend** : Conteneur Node.js 20 opérationnel (`portfolio_backend` servant l'API REST sur le port `3001`).
-* **Frontend** : Conteneur configuré pour le développement. Le Dockerfile frontend utilise un serveur de développement et requiert un ajustement pour servir les builds statiques en production (voir backlog).
+* **Base de données (`db`)** : Conteneur MySQL 8.0 opérationnel et persistant. Point d'entrée `init.sql` exécuté correctement. Port 3308 lié à `127.0.0.1` en local pour éviter toute exposition publique.
+* **Backend** : Conteneur Node.js 20 opérationnel (port `3001`).
+* **Frontend** : Conteneur opérationnel avec build multi-stage et serveur Nginx Alpine (port `8080` mappé vers le port `80`).
+* **Sécurité & Production** : Fichier `docker-compose.prod.yml` en place pour retirer l'exposition de ports de MySQL et charger les variables d'environnement de production.
 
 ### 2. État Cloudinary
 * Opérationnel côté frontend. Intégration de l'upload d'images sans signature (unsigned preset) via les variables d'environnement configurées dans le `.env` du frontend.
@@ -32,12 +33,11 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
 ---
 
 ## Problèmes Connus
-1. **Dockerfile Frontend en Mode Dev** : Actuellement, le conteneur frontend exécute l'application en mode dev. Un build de production multi-stage avec un reverse proxy (ex: Nginx) est nécessaire pour le déploiement final.
-2. **CORS local en dur** : Le backend Express n'accepte que des origines locales (`localhost:5173`, etc.).
-3. **Erreur de syntaxe Dockerfile Frontend** : `CMD["npm", ...]` sans espace dans `portfolio_frontend/Dockerfile` à corriger.
+1. **CORS local en dur** : Le backend Express n'accepte que des origines locales (`localhost:5173`, etc.).
 
 ---
 
 ## Prochaine tâche recommandée
 * **[PB-002] : CORS Dynamique pour le Backend**
   * Rendre dynamique les origines CORS acceptées par le serveur Express pour ne pas être bloqué lors du déploiement en production.
+

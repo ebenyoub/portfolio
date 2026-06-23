@@ -1,0 +1,9 @@
+services:
+  db:
+    ports: !reset []
+    env_file:
+      - ./portfolio_backend/.env
+
+  backend:
+    env_file:
+      - ./portfolio_backend/.env

@@ -25,3 +25,14 @@
 * **Conséquences** :
   - Le frontend est isolé du serveur Node de développement.
   - Possibilité de déployer sur port HTTP standard (port `80` exposé en interne, mappé sur le port souhaité de l'hôte, ex: `8080`).
+
+## ADR 4 : Sécurisation Docker Minimale (Séparation Dev/Prod)
+* **Statut** : Accepté
+* **Contexte** : Sécuriser la base de données MySQL en production tout en préservant le confort du développement local.
+* **Décision** : 
+  1. Restreindre l'exposition du port de la base de données MySQL (`3308`) à la boucle locale (`127.0.0.1`) dans le fichier principal `docker-compose.yml`.
+  2. Créer un fichier de surcharge `docker-compose.prod.yml` pour la production qui retire complètement l'exposition de ports de MySQL via l'opérateur `!reset` et configure le chargement des variables d'environnement (`env_file`) pour les services de base de données et de backend.
+* **Conséquences** :
+  - MySQL n'est plus accessible de l'extérieur en production, limitant la surface d'attaque.
+  - Pas d'impact sur le flux de développement local.
+

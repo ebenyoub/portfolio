@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -10,13 +10,14 @@ import {
   LogOut,
   ExternalLink,
   Menu,
+  X,
   ChevronRight,
 } from "lucide-react";
 import { Toaster } from "sonner";
 import useAuth from "../hooks/useAuth";
 
 const NAV_ITEMS = [
-  { to: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { to: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/admin/projects", label: "Projets", icon: Layers },
   { to: "/admin/parcours", label: "Parcours", icon: GraduationCap },
   { to: "/admin/competences", label: "Compétences", icon: Cpu },
@@ -30,48 +31,48 @@ function NavItem({
   icon: Icon,
   collapsed,
   onClick,
-  exact = false,
 }: {
   to: string;
   label: string;
   icon: React.ElementType;
   collapsed: boolean;
   onClick?: () => void;
-  exact?: boolean;
 }) {
-  const isActive = exact ? window.location.pathname === to : window.location.pathname.startsWith(to);
-
   return (
     <NavLink
       to={to}
       onClick={onClick}
-      aria-label={collapsed ? label : undefined}
-      className={() =>
-        `group flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-150 ${
+      className={({ isActive }) =>
+        `group flex items-center gap-3 rounded-lg border px-3 py-2 text-sm transition-all duration-150 ${
           isActive
-            ? "bg-[#1A1A1A] text-white border border-[#2E2E2E]"
-            : "text-[#A1A1AA] hover:text-white hover:bg-[#111111] border border-transparent"
+            ? "border-[#2E2E2E] bg-[#1A1A1A] text-white"
+            : "border-transparent text-[#A1A1AA] hover:bg-[#111111] hover:text-white"
         } ${collapsed ? "justify-center" : ""}`
       }
+      aria-label={collapsed ? label : undefined}
     >
-      <Icon
-        size={16}
-        className={`flex-shrink-0 transition-colors ${isActive ? "text-[#3B82F6]" : "group-hover:text-white"}`}
-      />
-      {!collapsed && <span style={{ fontFamily: "Inter, sans-serif" }}>{label}</span>}
-      {!collapsed && isActive && (
-        <ChevronRight size={12} className="ml-auto text-[#3B82F6]" />
+      {({ isActive }) => (
+        <>
+          <Icon
+            size={16}
+            className={`flex-shrink-0 transition-colors ${isActive ? "text-[#3B82F6]" : "group-hover:text-white"}`}
+          />
+          {!collapsed && <span style={{ fontFamily: "Inter, sans-serif" }}>{label}</span>}
+          {!collapsed && isActive && (
+            <ChevronRight size={12} className="ml-auto text-[#3B82F6]" />
+          )}
+        </>
       )}
     </NavLink>
   );
 }
 
-interface SidebarContentProps {
+type SidebarContentProps = {
   collapsed: boolean;
   isMobile?: boolean;
   handleLogout: () => void;
   setMobileOpen: (open: boolean) => void;
-}
+};
 
 function SidebarContent({
   collapsed,
@@ -80,45 +81,42 @@ function SidebarContent({
   setMobileOpen,
 }: SidebarContentProps) {
   return (
-    <div className="flex flex-col h-full">
-      {/* Logo */}
+    <div className="flex h-full flex-col">
       <div
-        className={`flex items-center gap-3 px-4 py-4 border-b border-[#1A1A1A] flex-shrink-0 ${
+        className={`flex flex-shrink-0 items-center gap-3 border-b border-[#1A1A1A] px-4 py-4 ${
           collapsed && !isMobile ? "justify-center px-3" : ""
         }`}
       >
-        <div className="w-7 h-7 rounded-lg bg-[#3B82F6] flex items-center justify-center flex-shrink-0">
-          <span className="text-white text-xs font-bold font-mono">EB</span>
+        <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-[#3B82F6]">
+          <span className="font-mono text-xs font-bold text-white">EB</span>
         </div>
         {(!collapsed || isMobile) && (
-          <span className="text-sm font-bold text-white tracking-tight" style={{ fontFamily: "Manrope, sans-serif" }}>
-            EB Admin
-          </span>
+          <div className="min-w-0">
+            <p className="text-sm font-bold leading-none text-white" style={{ fontFamily: "Manrope, sans-serif" }}>
+              EB Admin
+            </p>
+            <p className="mt-0.5 text-[10px] font-mono text-[#A1A1AA]">Portfolio CMS</p>
+          </div>
         )}
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 space-y-0.5 overflow-y-auto px-2 py-4">
         {NAV_ITEMS.map((item) => (
           <NavItem
-            key={item.label}
-            to={item.to}
-            label={item.label}
-            icon={item.icon}
-            exact={item.exact}
+            key={item.to}
+            {...item}
             collapsed={collapsed && !isMobile}
             onClick={isMobile ? () => setMobileOpen(false) : undefined}
           />
         ))}
       </nav>
 
-      {/* Footer */}
-      <div className="flex-shrink-0 border-t border-[#1A1A1A] p-2 space-y-0.5">
+      <div className="flex-shrink-0 space-y-0.5 border-t border-[#1A1A1A] p-2">
         <a
           href="/"
           target="_blank"
           rel="noopener noreferrer"
-          className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[#A1A1AA] hover:text-white hover:bg-[#111111] transition-all ${
+          className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-[#A1A1AA] transition-all hover:bg-[#111111] hover:text-white ${
             collapsed && !isMobile ? "justify-center" : ""
           }`}
           aria-label={collapsed && !isMobile ? "Voir le site" : undefined}
@@ -128,7 +126,7 @@ function SidebarContent({
         </a>
         <button
           onClick={handleLogout}
-          className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[#A1A1AA] hover:text-red-400 hover:bg-red-500/05 transition-all ${
+          className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-[#A1A1AA] transition-all hover:bg-red-500/5 hover:text-red-400 ${
             collapsed && !isMobile ? "justify-center" : ""
           }`}
           aria-label={collapsed && !isMobile ? "Déconnexion" : undefined}
@@ -148,7 +146,9 @@ export default function AdminLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    if (!isAuthenticated) navigate("/login", { replace: true });
+    if (!isAuthenticated) {
+      navigate("/login", { replace: true });
+    }
   }, [isAuthenticated, navigate]);
 
   const handleLogout = () => {
@@ -159,10 +159,9 @@ export default function AdminLayout() {
   if (!isAuthenticated) return null;
 
   return (
-    <div className="flex h-screen bg-[#0A0A0A] overflow-hidden">
-      {/* Desktop sidebar */}
+    <div className="flex h-screen overflow-hidden bg-[#0A0A0A]">
       <aside
-        className={`hidden md:flex flex-col flex-shrink-0 border-r border-[#1A1A1A] bg-[#0A0A0A] transition-all duration-200 relative ${
+        className={`relative hidden flex-shrink-0 flex-col border-r border-[#1A1A1A] bg-[#0A0A0A] transition-all duration-200 md:flex ${
           collapsed ? "w-[56px]" : "w-[220px]"
         }`}
       >
@@ -171,27 +170,33 @@ export default function AdminLayout() {
           handleLogout={handleLogout}
           setMobileOpen={setMobileOpen}
         />
-        {/* Collapse toggle */}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="absolute bottom-[88px] w-5 h-8 bg-[#1A1A1A] border border-[#262626] rounded-r-md flex items-center justify-center text-[#A1A1AA] hover:text-white transition-colors z-10"
-          style={{ right: -20, left: "auto" }}
+          className="absolute bottom-[88px] left-0 z-10 flex h-8 w-5 items-center justify-center rounded-r-md border border-[#262626] bg-[#1A1A1A] text-[#A1A1AA] transition-colors hover:text-white"
+          style={{ left: collapsed ? 44 : 208 }}
           aria-label={collapsed ? "Développer la navigation" : "Réduire la navigation"}
         >
           <ChevronRight size={11} className={`transition-transform ${collapsed ? "" : "rotate-180"}`} />
         </button>
       </aside>
 
-      {/* Mobile drawer */}
       {mobileOpen && (
-        <div className="md:hidden fixed inset-0 z-50 flex">
+        <div className="fixed inset-0 z-50 flex md:hidden">
           <button
             type="button"
             className="absolute inset-0 bg-black/70 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)}
             aria-label="Fermer le menu"
           />
-          <aside role="dialog" aria-modal="true" aria-label="Navigation administration" className="relative w-[260px] bg-[#0A0A0A] border-r border-[#1A1A1A] flex flex-col">
+          <aside className="relative flex w-[260px] flex-col border-r border-[#1A1A1A] bg-[#0A0A0A]">
+            <button
+              type="button"
+              onClick={() => setMobileOpen(false)}
+              className="absolute right-3 top-3 z-10 text-[#A1A1AA] hover:text-white"
+              aria-label="Fermer la navigation"
+            >
+              <X size={16} />
+            </button>
             <SidebarContent
               collapsed={collapsed}
               isMobile
@@ -202,13 +207,11 @@ export default function AdminLayout() {
         </div>
       )}
 
-      {/* Main */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Top bar (mobile only) */}
-        <div className="md:hidden flex items-center justify-between px-4 h-14 border-b border-[#1A1A1A] flex-shrink-0">
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+        <div className="flex h-14 flex-shrink-0 items-center justify-between border-b border-[#1A1A1A] px-4 md:hidden">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-[#3B82F6] flex items-center justify-center">
-              <span className="text-white text-[10px] font-bold font-mono">EB</span>
+            <div className="flex h-6 w-6 items-center justify-center rounded bg-[#3B82F6]">
+              <span className="font-mono text-[10px] font-bold text-white">EB</span>
             </div>
             <span className="text-sm font-bold text-white" style={{ fontFamily: "Manrope, sans-serif" }}>
               Admin
@@ -216,16 +219,15 @@ export default function AdminLayout() {
           </div>
           <button
             onClick={() => setMobileOpen(true)}
-            className="text-[#A1A1AA] hover:text-white p-1"
+            className="p-1 text-[#A1A1AA] hover:text-white"
             aria-label="Menu"
           >
             <Menu size={20} />
           </button>
         </div>
 
-        {/* Content */}
         <main className="flex-1 overflow-y-auto">
-          <div className="max-w-7xl mx-auto px-5 md:px-8 py-8">
+          <div className="mx-auto max-w-5xl px-5 py-8 md:px-8">
             <Outlet />
           </div>
         </main>

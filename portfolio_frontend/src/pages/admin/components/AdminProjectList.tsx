@@ -20,39 +20,22 @@ const AdminProjectList = ({
   onUpdateFeaturedOrder,
   hasFilter,
 }: AdminProjectListProps) => (
-  <section className="overflow-hidden rounded-[28px] border border-[#262626] bg-[#0E0E0E] shadow-[0_24px_60px_rgba(0,0,0,0.32)]">
-    <div className="flex items-center justify-between border-b border-[#1A1A1A] px-6 py-4">
-      <div>
-        <p className="text-xs font-mono uppercase tracking-[0.2em] text-[#4B4B4B]">Catalogue</p>
-        <p className="mt-1 text-sm text-[#A1A1AA]">
-          {projects.length > 0
-            ? `${projects.length} projet${projects.length > 1 ? "s" : ""} affiché${projects.length > 1 ? "s" : ""}`
-            : "Aucun projet affiché"}
-        </p>
-      </div>
-      <div className="hidden sm:flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.18em] text-[#4B4B4B]">
-        <span className="rounded-full border border-[#262626] bg-[#0A0A0A] px-3 py-2">Miniature</span>
-        <span className="rounded-full border border-[#262626] bg-[#0A0A0A] px-3 py-2">Stack</span>
-        <span className="rounded-full border border-[#262626] bg-[#0A0A0A] px-3 py-2">Statut</span>
-        <span className="rounded-full border border-[#262626] bg-[#0A0A0A] px-3 py-2">Date</span>
-      </div>
-    </div>
-
-    <div className="grid grid-cols-[minmax(0,1.6fr)_minmax(180px,0.9fr)_140px_140px_180px_auto] gap-4 border-b border-[#1A1A1A] px-6 py-3 text-[10px] font-mono uppercase tracking-[0.22em] text-[#4B4B4B] max-xl:hidden">
-      <span>Projet</span>
-      <span>Stack</span>
-      <span>Statut</span>
-      <span>Date</span>
-      <span>Mise en avant</span>
-      <span className="text-right">Actions</span>
+  <section className="overflow-hidden rounded-xl border border-[#262626] bg-[#111111]">
+    <div className="grid grid-cols-[auto_1fr_auto_auto_auto_auto] gap-4 border-b border-[#1A1A1A] px-4 py-3 text-[10px] font-mono uppercase tracking-widest text-[#4B4B4B] max-lg:hidden">
+      <span className="w-10" />
+      <span>Titre</span>
+      <span className="w-20 text-center">Statut</span>
+      <span className="w-24 text-center">Mis a jour</span>
+      <span className="w-36 text-center">Accueil</span>
+      <span className="w-20 text-right">Actions</span>
     </div>
 
     {isLoading && projects.length === 0 ? (
-      <div className="px-6 py-14 text-center text-[#A1A1AA] font-mono text-sm animate-pulse">
+      <div className="px-6 py-14 text-center text-sm font-mono text-[#A1A1AA] animate-pulse">
         Chargement des projets...
       </div>
     ) : projects.length > 0 ? (
-      <div className="divide-y divide-[#1A1A1A]">
+      <div>
         {projects.map((project) => (
           <AdminProjectRow
             key={project.id}

@@ -60,6 +60,27 @@ describe("Frontend Projects Pages Integration Tests", () => {
       expect(screen.getByText("A super interactive calculator built with React.")).toBeInTheDocument();
     });
 
+    it("opens a premium project modal from the list", async () => {
+      const user = userEvent.setup();
+      mockUseFetch.mockReturnValue({
+        apiFetch: vi.fn().mockResolvedValue({
+          data: [mockProject],
+        }),
+        isLoading: false,
+      });
+
+      render(
+        <MemoryRouter>
+          <ProjectsPage />
+        </MemoryRouter>
+      );
+
+      await user.click(await screen.findByRole("button", { name: /Voir le detail de React Calculator/i }));
+
+      expect(screen.getByRole("dialog", { name: /Apercu du projet React Calculator/i })).toBeInTheDocument();
+      expect(screen.getByText("Code source")).toBeInTheDocument();
+    });
+
     it("renders error state when projects cannot be loaded", async () => {
       mockUseFetch.mockReturnValue({
         apiFetch: vi.fn().mockRejectedValue(new Error("Impossible de charger les projets.")),
@@ -142,8 +163,7 @@ describe("Frontend Projects Pages Integration Tests", () => {
       expect(screen.getByText("CSS")).toBeInTheDocument();
     });
 
-    it("displays and navigates gallery images", async () => {
-      const user = userEvent.setup();
+    it("uses the first gallery image as hero media on the direct detail route", async () => {
       const projectWithGallery = {
         ...mockProject,
         image_url: null,
@@ -163,13 +183,11 @@ describe("Frontend Projects Pages Integration Tests", () => {
         </MemoryRouter>
       );
 
-      const firstImage = await screen.findByAltText("React Calculator - image 1");
+      const firstImage = await screen.findByAltText("React Calculator");
       expect(firstImage).toHaveAttribute("src", "https://example.com/first.png");
-      await user.click(screen.getByRole("button", { name: "Image suivante" }));
-      expect(screen.getByAltText("React Calculator - image 2")).toHaveAttribute("src", "https://example.com/second.png");
     });
 
-    it("handles a gallery without images without rendering carousel controls", async () => {
+    it("renders the premium detail route without media controls when no gallery is available", async () => {
       const projectWithEmptyGallery = {
         ...mockProject,
         image_url: null,
@@ -190,8 +208,8 @@ describe("Frontend Projects Pages Integration Tests", () => {
       );
 
       await screen.findByRole("heading", { name: "React Calculator" });
-      expect(screen.queryByRole("button", { name: "Image suivante" })).not.toBeInTheDocument();
-      expect(screen.queryByRole("button", { name: "Image précédente" })).not.toBeInTheDocument();
+      expect(screen.queryByRole("img", { name: "React Calculator" })).not.toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: /Fermer le projet/i })).not.toBeInTheDocument();
     });
   });
 });

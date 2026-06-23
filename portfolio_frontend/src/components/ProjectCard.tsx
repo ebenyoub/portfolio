@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Github, ArrowUpRight } from "lucide-react";
 import { getImageSrc } from "../utils/images";
+import { getProjectCategory } from "../utils/projectPresentation";
+import type { Project } from "../types/project";
 
 export interface ProjectCardProps {
   id: number;
@@ -11,26 +12,30 @@ export interface ProjectCardProps {
   tech_stack?: string;
   github_url?: string;
   demo_url?: string;
+  onOpenDetail: () => void;
 }
 
 const ProjectCard = ({
-  id,
   title,
   description,
   image_url,
   tech_stack,
   github_url,
+  onOpenDetail,
 }: ProjectCardProps) => {
   const [imageFailed, setImageFailed] = useState(false);
   const stack = tech_stack
     ? tech_stack.split(",").map((tech) => tech.trim()).filter(Boolean)
     : [];
+  const category = getProjectCategory({
+    id: 0,
+    title,
+    description,
+    tech_stack,
+  } as Project);
 
   return (
-    <Link
-      to={`/projects/${id}`}
-      className="group bg-[#111111] border border-[#262626] rounded-xl overflow-hidden cursor-pointer hover:border-[#3B82F6]/40 transition-all duration-300 hover:shadow-[0_0_40px_rgba(59,130,246,0.06)] flex flex-col h-full"
-    >
+    <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-[#262626] bg-[#111111] transition-all duration-300 hover:border-[#3B82F6]/40 hover:shadow-[0_0_40px_rgba(59,130,246,0.06)]">
       <div className="relative h-44 bg-[#1A1A1A] overflow-hidden flex-shrink-0">
         {image_url && !imageFailed ? (
           <img
@@ -45,6 +50,11 @@ const ProjectCard = ({
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/30 to-transparent" />
+        <div className="absolute right-3 top-3">
+          <span className="rounded border border-[#262626] bg-[#0A0A0A]/80 px-2 py-0.5 text-[10px] font-mono text-[#A1A1AA] backdrop-blur-sm">
+            {category}
+          </span>
+        </div>
       </div>
       
       <div className="p-5 flex flex-col flex-grow">
@@ -71,10 +81,15 @@ const ProjectCard = ({
         )}
 
         <div className="flex items-center justify-between mt-auto pt-2">
-          <span className="flex items-center gap-1.5 text-xs text-[#3B82F6] font-medium group-hover:gap-2.5 transition-all">
+          <button
+            type="button"
+            onClick={onOpenDetail}
+            className="flex items-center gap-1.5 text-xs font-medium text-[#3B82F6] transition-all group-hover:gap-2.5"
+            aria-label={`Voir le detail de ${title}`}
+          >
             Voir le détail
             <ArrowUpRight size={13} />
-          </span>
+          </button>
           {github_url && (
             <a
               href={github_url}
@@ -89,7 +104,7 @@ const ProjectCard = ({
           )}
         </div>
       </div>
-    </Link>
+    </article>
   );
 };
 

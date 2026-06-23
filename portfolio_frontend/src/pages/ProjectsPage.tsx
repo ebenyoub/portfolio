@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import useFetch from '../hooks/apiFetch';
 import { toast } from 'sonner';
 import ProjectCard from '../components/ProjectCard';
+import ProjectCaseStudyModal from '../components/ProjectCaseStudyModal';
 import type { Project } from '../types/project';
 
 const ProjectsPage = () => {
   const { apiFetch, isLoading } = useFetch();
   const [error, setError] = useState<string | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -102,6 +104,7 @@ const ProjectsPage = () => {
                 image_url={project.image_url ?? undefined}
                 tech_stack={project.tech_stack ?? undefined}
                 github_url={project.github_url ?? undefined}
+                onOpenDetail={() => setSelectedProject(project)}
               />
             ))
           ) : (
@@ -109,6 +112,11 @@ const ProjectsPage = () => {
           )}
         </div>
       </div>
+
+      <ProjectCaseStudyModal
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
+      />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import {
   Linkedin,
   Mail,
   ArrowRight,
+  Download,
   Code2,
   Database,
   Server,
@@ -15,6 +16,7 @@ import {
 } from "lucide-react";
 import useFetch from "../hooks/apiFetch";
 import ProjectCard from "../components/ProjectCard";
+import ProjectCaseStudyModal from "../components/ProjectCaseStudyModal";
 import type { Project } from "../types/project";
 
 // ─── Stack Categories Definition ────────────────────────────────────────────────
@@ -101,6 +103,7 @@ function StackCardComponent({ cat }: { cat: typeof STACK_CATEGORIES[0] }) {
 const HomePage = () => {
   const { apiFetch } = useFetch();
   const [projects, setProjects] = useState<Project[]>([]);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -254,6 +257,7 @@ const HomePage = () => {
                   image_url={project.image_url ?? undefined}
                   tech_stack={project.tech_stack ?? undefined}
                   github_url={project.github_url ?? undefined}
+                  onOpenDetail={() => setSelectedProject(project)}
                 />
               ))
             ) : (
@@ -292,22 +296,91 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Pre-Contact Section */}
-      <section className="py-20 bg-[#0D0D0D] border-b border-[#1A1A1A]">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold mb-4" style={{ fontFamily: "Manrope, sans-serif" }}>Envie de collaborer ?</h2>
-          <p className="text-[#A1A1AA] text-base leading-relaxed mb-10 max-w-xl mx-auto">
-            Je suis actuellement à la recherche d'une alternance en développement web. N'hésitez pas à me contacter pour discuter d'opportunités de collaboration !
-          </p>
-          <Link
-            to="/contact"
-            className="inline-flex items-center gap-2 bg-[#3B82F6] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#2563EB] transition-colors"
-          >
-            <Mail size={16} />
-            Me contacter
-          </Link>
+      {/* Contact Section */}
+      <section id="contact" className="border-b border-[#1A1A1A] bg-[#0D0D0D] py-28">
+        <div className="max-w-6xl mx-auto px-6">
+          <p className="mb-3 text-xs font-mono uppercase tracking-[0.2em] text-[#3B82F6]">Contact</p>
+          <div className="grid items-start gap-16 lg:grid-cols-2">
+            <div>
+              <h2
+                className="mb-6 text-4xl font-extrabold tracking-tight text-white md:text-5xl leading-[1.1]"
+                style={{ fontFamily: "Manrope, sans-serif" }}
+              >
+                Travaillons
+                <br />
+                <span
+                  className="text-transparent bg-clip-text"
+                  style={{ backgroundImage: "linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)" }}
+                >
+                  ensemble.
+                </span>
+              </h2>
+              <p className="mb-8 max-w-md text-base leading-relaxed text-[#A1A1AA]">
+                Disponible pour une alternance Bachelor 3 Ingenierie du Web a l'ESGI (Lyon / Remote). Ouvert aux projets freelance et aux opportunites de stage.
+              </p>
+              <a
+                href="mailto:embenyoub@gmail.com"
+                className="group flex items-center gap-3 text-lg font-semibold text-white transition-colors duration-200 hover:text-[#3B82F6]"
+                style={{ fontFamily: "Manrope, sans-serif" }}
+              >
+                embenyoub@gmail.com
+                <ArrowRight size={18} className="rotate-[-45deg] text-[#3B82F6] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </a>
+              <div className="mt-8">
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-2 rounded-lg border border-[#262626] px-5 py-3 text-sm font-semibold text-white transition-all hover:border-[#3B3B3B] hover:bg-[#111111]"
+                >
+                  <Mail size={15} />
+                  Ouvrir la page contact
+                </Link>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              {[
+                { icon: Github, label: "GitHub", sublabel: "github.com/ebenyoub", href: "https://github.com/ebenyoub", color: "#FFFFFF" },
+                { icon: Linkedin, label: "LinkedIn", sublabel: "linkedin.com/in/elyas-benyoub", href: "https://linkedin.com/in/elyas-benyoub", color: "#0A66C2" },
+                { icon: Mail, label: "Email", sublabel: "embenyoub@gmail.com", href: "mailto:embenyoub@gmail.com", color: "#3B82F6" },
+                { icon: Download, label: "Curriculum Vitae", sublabel: "Telecharger le PDF", href: "/cv_alternance_B3.pdf", color: "#10B981" },
+              ].map((link) => {
+                const Icon = link.icon;
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target={link.href.startsWith("http") || link.href.endsWith(".pdf") ? "_blank" : undefined}
+                    rel={link.href.startsWith("http") || link.href.endsWith(".pdf") ? "noopener noreferrer" : undefined}
+                    className="group flex items-start gap-3 rounded-xl border border-[#262626] bg-[#111111] p-4 transition-all duration-200 hover:border-[#363636] hover:bg-[#141414]"
+                  >
+                    <div
+                      className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg"
+                      style={{ background: `${link.color}14`, border: `1px solid ${link.color}20` }}
+                    >
+                      <Icon size={15} style={{ color: link.color }} />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="mb-0.5 text-sm font-semibold text-white" style={{ fontFamily: "Manrope, sans-serif" }}>
+                        {link.label}
+                      </p>
+                      <p className="text-xs text-[#A1A1AA]">{link.sublabel}</p>
+                    </div>
+                  </a>
+                );
+              })}
+              <div className="mt-3 flex items-center gap-2 text-xs font-mono text-[#4B4B4B]">
+                <MapPin size={11} />
+                Lyon, France - 2026
+              </div>
+            </div>
+          </div>
         </div>
       </section>
+
+      <ProjectCaseStudyModal
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
+      />
     </div>
   );
 };

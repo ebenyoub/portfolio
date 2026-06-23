@@ -8,31 +8,31 @@ type AdminProjectActionsProps = {
 };
 
 const AdminProjectActions = ({ project, onDeleteProject }: AdminProjectActionsProps) => (
-  <div className="flex items-center justify-end gap-1.5">
+  <div className="flex items-center justify-end gap-1">
     <a
       href={`/projects/${project.id}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#262626] bg-[#0A0A0A] text-[#4B4B4B] transition-colors hover:border-[#363636] hover:text-[#D4D4D8]"
+      className="flex h-7 w-7 items-center justify-center rounded-lg text-[#4B4B4B] transition-all hover:bg-[#1A1A1A] hover:text-[#A1A1AA]"
       aria-label="Prévisualiser"
     >
-      <ExternalLink size={14} />
+      <ExternalLink size={13} />
     </a>
     <Link
       to={`/admin/projects/${project.id}/edit`}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#262626] bg-[#0A0A0A] text-[#4B4B4B] transition-colors hover:border-[#3B82F6]/30 hover:text-[#3B82F6]"
+      className="flex h-7 w-7 items-center justify-center rounded-lg text-[#4B4B4B] transition-all hover:bg-[#3B82F6]/10 hover:text-[#3B82F6]"
       aria-label="Modifier"
     >
-      <Pencil size={14} />
+      <Pencil size={13} />
     </Link>
     <button
       onClick={() => {
         void onDeleteProject(project);
       }}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#262626] bg-[#0A0A0A] text-[#4B4B4B] transition-colors hover:border-red-500/30 hover:text-red-400"
+      className="flex h-7 w-7 items-center justify-center rounded-lg text-[#4B4B4B] transition-all hover:bg-red-500/10 hover:text-red-400"
       aria-label="Supprimer"
     >
-      <Trash2 size={14} />
+      <Trash2 size={13} />
     </button>
   </div>
 );

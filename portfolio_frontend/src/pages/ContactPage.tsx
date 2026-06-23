@@ -64,17 +64,17 @@ const ContactPage = () => {
           <div className="space-y-8">
             <div>
               <p className="text-sm text-[#A1A1AA] mb-4">Email de contact direct :</p>
-              <a href="mailto:elyas.benyoub@email.com" className="group flex items-center gap-3 text-white text-lg font-semibold hover:text-[#3B82F6] transition-colors duration-200" style={{ fontFamily: "Manrope, sans-serif" }}>
-                elyas.benyoub@email.com
+              <a href="mailto:embenyoub@gmail.com" className="group flex items-center gap-3 text-white text-lg font-semibold hover:text-[#3B82F6] transition-colors duration-200" style={{ fontFamily: "Manrope, sans-serif" }}>
+                embenyoub@gmail.com
                 <ArrowUpRight size={18} className="text-[#3B82F6] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="flex flex-col gap-3">
               {[
                 { icon: Github, label: "GitHub", sublabel: "github.com/ebenyoub", href: "https://github.com/ebenyoub", color: "#FFFFFF" },
                 { icon: Linkedin, label: "LinkedIn", sublabel: "linkedin.com/in/elyas-benyoub", href: "https://linkedin.com/in/elyas-benyoub", color: "#0A66C2" },
-                { icon: Mail, label: "Email", sublabel: "elyas.benyoub@email.com", href: "mailto:elyas.benyoub@email.com", color: "#3B82F6" },
+                { icon: Mail, label: "Email", sublabel: "embenyoub@gmail.com", href: "mailto:embenyoub@gmail.com", color: "#3B82F6" },
                 { icon: Download, label: "Curriculum Vitae", sublabel: "Télécharger le PDF", href: "/cv_alternance_B3.pdf", color: "#10B981" },
               ].map((link) => {
                 const Icon = link.icon;

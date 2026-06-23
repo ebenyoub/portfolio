@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import ProjectsPage from "../pages/ProjectsPage";
@@ -139,6 +140,58 @@ describe("Frontend Projects Pages Integration Tests", () => {
       expect(screen.getByText("A super interactive calculator built with React.")).toBeInTheDocument();
       expect(screen.getByText("React")).toBeInTheDocument();
       expect(screen.getByText("CSS")).toBeInTheDocument();
+    });
+
+    it("displays and navigates gallery images", async () => {
+      const user = userEvent.setup();
+      const projectWithGallery = {
+        ...mockProject,
+        image_url: null,
+        gallery_images: ["https://example.com/first.png", "https://example.com/second.png"],
+        display_settings: { show_cover: false, show_gallery: true },
+      };
+      mockUseFetch.mockReturnValue({
+        apiFetch: vi.fn().mockResolvedValue({ success: true, data: projectWithGallery }),
+        isLoading: false,
+      });
+
+      render(
+        <MemoryRouter initialEntries={["/projects/1"]}>
+          <Routes>
+            <Route path="/projects/:id" element={<ProjectDetailPage />} />
+          </Routes>
+        </MemoryRouter>
+      );
+
+      const firstImage = await screen.findByAltText("React Calculator - image 1");
+      expect(firstImage).toHaveAttribute("src", "https://example.com/first.png");
+      await user.click(screen.getByRole("button", { name: "Image suivante" }));
+      expect(screen.getByAltText("React Calculator - image 2")).toHaveAttribute("src", "https://example.com/second.png");
+    });
+
+    it("handles a gallery without images without rendering carousel controls", async () => {
+      const projectWithEmptyGallery = {
+        ...mockProject,
+        image_url: null,
+        gallery_images: [],
+        display_settings: { show_cover: false, show_gallery: true },
+      };
+      mockUseFetch.mockReturnValue({
+        apiFetch: vi.fn().mockResolvedValue({ success: true, data: projectWithEmptyGallery }),
+        isLoading: false,
+      });
+
+      render(
+        <MemoryRouter initialEntries={["/projects/1"]}>
+          <Routes>
+            <Route path="/projects/:id" element={<ProjectDetailPage />} />
+          </Routes>
+        </MemoryRouter>
+      );
+
+      await screen.findByRole("heading", { name: "React Calculator" });
+      expect(screen.queryByRole("button", { name: "Image suivante" })).not.toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: "Image précédente" })).not.toBeInTheDocument();
     });
   });
 });

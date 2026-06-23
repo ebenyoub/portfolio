@@ -64,9 +64,9 @@ Ce document liste et priorise les prochaines interventions à effectuer sur le P
 * **Description** : Ajouter des tests HTTP backend avec Vitest et Supertest pour les routes publiques et protégées des projets (`GET`, `POST`, `PUT`, `DELETE`), puis couvrir les pages publiques de liste et détail avec leurs états de chargement et d'erreur.
 * **Statut** : Terminé.
 
-### [P1] PB-003 : Tests Cloudinary et Carousels (À faire)
-* **Description** : Ajouter les tests de non-régression frontend pour l'upload Cloudinary unsigned, le carousel d'accueil piloté par `is_featured`/`featured_order` et le carousel de détail piloté par `gallery_images`.
-* **Statut** : À faire.
+### [P1] PB-003 : Tests Cloudinary et Carousels (Terminé)
+* **Description** : Tests de non-régression frontend pour l'upload Cloudinary unsigned, le carousel de projets mis en avant piloté par `is_featured`/`featured_order` et le carousel de détail piloté par `gallery_images`.
+* **Statut** : Terminé.
 
 ### [P2] PB-013 : Amélioration globale de l'Accessibilité (WCAG / a11y) (À faire)
 * **Description** : Rajouter des attributs d'accessibilité `aria-label` manquants sur les liens purement iconiques (réseaux sociaux, etc.) et vérifier le comportement de la navigation au clavier.

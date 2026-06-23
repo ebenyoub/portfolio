@@ -15,11 +15,11 @@
 - [x] Tests unitaires et d'intégration de sécurité Auth (PB-009 Phase 2).
 - [x] Tests d'intégration CRUD Projets backend et pages Projets frontend (PB-012).
 - [x] Configuration CORS backend dynamique pour les environnements dev et production (PB-011).
+- [x] Tests Cloudinary et carousels frontend avec mocks réseau (PB-003).
 
 ## Tâches futures
 - [ ] Validation complète du flux d'upload Cloudinary unsigned avec les variables d'environnement.
-- [ ] Ajout des tests de non-régression manquants (mock Cloudinary, carousel d'accueil, carousel de détail) (PB-003).
-
+- [ ] Raccorder le composant `FeaturedProjectsCarousel` à la page d'accueil en respectant Figma Make.
 
 
 

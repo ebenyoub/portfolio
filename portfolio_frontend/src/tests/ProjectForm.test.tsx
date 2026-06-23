@@ -110,6 +110,26 @@ describe('ProjectForm Cloudinary submit flow', () => {
     }));
   });
 
+  it('shows the upload loading state until Cloudinary resolves', async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn(async () => undefined);
+    let resolveUpload: (result: { secure_url: string; public_id: string }) => void;
+    uploadImageToCloudinaryMock.mockImplementationOnce(() => new Promise((resolve) => {
+      resolveUpload = resolve;
+    }));
+    renderProjectForm(onSubmit);
+
+    await fillRequiredFields(user);
+    await user.upload(screen.getByLabelText('Sélectionner Image de couverture'), coverFile);
+    await user.click(screen.getByRole('button', { name: 'Créer le projet' }));
+
+    const submitButton = await screen.findByRole('button', { name: 'Upload images...' });
+    expect(submitButton).toBeDisabled();
+
+    resolveUpload!({ secure_url: 'https://res.cloudinary.com/demo/image/upload/cover.webp', public_id: 'cover' });
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
+  });
+
   it('does not save when Cloudinary upload fails', async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn<(_payload: ProjectPayload) => Promise<void>>();

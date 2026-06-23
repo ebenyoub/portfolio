@@ -40,11 +40,18 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
   * Configuration CORS (`cors.config.test.ts`) : 3 tests vérifiant le parsing des origines, l'autorisation d'une origine configurée et l'absence d'en-tête CORS pour une origine non autorisée.
 * **Frontend (Vitest)** :
   * Sécurité (`PrivateRoute.test.tsx`) : Validation de l'accès aux pages d'administration.
-  * Pages Projets (`ProjectsIntegration.test.tsx`) : 6 tests d'intégration de `ProjectsPage` et `ProjectDetailPage` vérifiant l'affichage de la liste et des détails, les états de chargement, ainsi que les erreurs de liste et de détail.
+  * Pages Projets (`ProjectsIntegration.test.tsx`) : 8 tests d'intégration de `ProjectsPage` et `ProjectDetailPage` vérifiant l'affichage de la liste et des détails, les états de chargement, les erreurs, la navigation de galerie et son état vide.
+  * Cloudinary (`cloudinary.test.ts`, `ProjectForm.test.tsx`) : Mock réseau de l'upload, contrôle de l'URL sécurisée retournée, erreur de l'API et état de chargement du formulaire.
+  * Carousels (`FeaturedProjectsCarousel.test.tsx`, `ProjectsIntegration.test.tsx`) : Sélection et ordre des projets mis en avant, navigation suivante/précédente, état vide, galerie de détail, changement d'image active et galerie sans image.
 * **CI Locale** : Intégration dans le processus `make validate` qui vérifie le linting, le build et exécute les tests unitaires/d'intégration de tout le projet.
 
 ---
 
+## Points d'attention
+* `FeaturedProjectsCarousel` est couvert par les tests, mais n'est pas encore rendu par `HomePage`. Son raccordement devra respecter l'alignement Figma Make dans un ticket dédié.
+
+---
+
 ## Prochaine tâche recommandée
-* **[PB-003] : Tests Cloudinary et Carousels**
-  * Ajouter les tests de non-régression de l'upload Cloudinary et des carousels public/détail.
+* **[PB-013] : Amélioration globale de l'accessibilité**
+  * Vérifier les libellés accessibles et la navigation clavier des interfaces publique et admin.

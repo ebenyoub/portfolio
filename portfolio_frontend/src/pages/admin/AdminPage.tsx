@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import Container from "../../components/ui/Container";
 import useFetch from "../../hooks/apiFetch";
 import type { Project } from "../../types/project";
 import AdminProjectHeader from "./components/AdminProjectHeader";
@@ -97,7 +96,7 @@ const AdminPage = () => {
   };
 
   return (
-    <Container className="max-w-6xl! flex-col py-12">
+    <div className="space-y-6">
       <AdminProjectHeader />
       <AdminProjectList
         projects={projects}
@@ -107,7 +106,7 @@ const AdminPage = () => {
         onToggleFeatured={toggleFeaturedProject}
         onUpdateFeaturedOrder={updateFeaturedOrder}
       />
-    </Container>
+    </div>
   );
 };
 

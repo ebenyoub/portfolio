@@ -1,5 +1,3 @@
-import Card from "../../../components/ui/Card";
-import { EmptyState, LoadingState } from "../../../components/ui/Page";
 import type { Project } from "../../../types/project";
 import AdminProjectRow from "./AdminProjectRow";
 
@@ -20,21 +18,21 @@ const AdminProjectList = ({
   onToggleFeatured,
   onUpdateFeaturedOrder,
 }: AdminProjectListProps) => (
-  <Card className="overflow-hidden rounded-xl border border-gray-200 bg-white p-0 shadow-sm">
-    <div className="grid grid-cols-[1.35fr_0.85fr_1fr_0.85fr_auto] gap-4 border-b border-gray-200 bg-gray-50 px-5 py-3 text-sm font-bold text-gray-600 max-xl:hidden">
+  <div className="bg-[#111111] border border-[#262626] rounded-xl overflow-hidden shadow-2xl">
+    <div className="grid grid-cols-[1.35fr_0.85fr_1fr_0.85fr_auto] gap-4 border-b border-[#1A1A1A] px-5 py-3.5 text-[10px] font-mono text-[#4B4B4B] uppercase tracking-widest max-xl:hidden">
       <span>Projet</span>
       <span>Stack</span>
       <span>Sections</span>
-      <span>Accueil</span>
-      <span>Actions</span>
+      <span>Mise en avant</span>
+      <span className="text-right">Actions</span>
     </div>
 
     {isLoading && projects.length === 0 ? (
-      <LoadingState className="p-8 text-gray-500">
-        <p>Chargement des projets...</p>
-      </LoadingState>
+      <div className="p-12 text-center text-[#A1A1AA] font-mono text-sm animate-pulse">
+        Chargement des projets...
+      </div>
     ) : projects.length > 0 ? (
-      <div className="divide-y divide-gray-100">
+      <div className="divide-y divide-[#1A1A1A]">
         {projects.map((project) => (
           <AdminProjectRow
             key={project.id}
@@ -47,9 +45,11 @@ const AdminProjectList = ({
         ))}
       </div>
     ) : (
-      <EmptyState className="p-8">Aucun projet pour le moment.</EmptyState>
+      <div className="p-12 text-center text-[#A1A1AA] font-mono text-sm">
+        Aucun projet pour le moment.
+      </div>
     )}
-  </Card>
+  </div>
 );
 
 export default AdminProjectList;

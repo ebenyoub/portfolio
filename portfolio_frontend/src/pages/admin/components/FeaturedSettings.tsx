@@ -17,11 +17,11 @@ const FeaturedSettings = ({
   onToggleFeatured,
   onUpdateFeaturedOrder,
 }: FeaturedSettingsProps) => (
-  <div className="flex flex-wrap items-center gap-3">
-    <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+  <div className="flex flex-wrap items-center gap-4">
+    <label className="flex items-center gap-2 text-xs font-mono text-[#A1A1AA] cursor-pointer">
       <input
         type="checkbox"
-        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+        className="h-4 w-4 bg-[#0A0A0A] border-[#262626] rounded text-[#3B82F6] focus:ring-[#3B82F6]/30 focus:ring-offset-[#0A0A0A]"
         checked={isFeatured}
         disabled={isSaving}
         aria-label={`Sélection accueil pour ${project.title}`}
@@ -32,7 +32,7 @@ const FeaturedSettings = ({
       Accueil
     </label>
 
-    <label className="flex items-center gap-2 text-sm text-gray-600">
+    <label className="flex items-center gap-2 text-xs font-mono text-[#A1A1AA]">
       Ordre
       <input
         type="number"
@@ -43,7 +43,7 @@ const FeaturedSettings = ({
         onChange={(event) => {
           void onUpdateFeaturedOrder(project, event.target.value);
         }}
-        className="h-9 w-20 rounded-md border border-gray-300 px-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
+        className="h-8 w-16 bg-[#0A0A0A] border border-[#262626] rounded-lg px-2 text-center text-xs text-white focus:outline-none focus:border-[#3B82F6] disabled:opacity-30 disabled:cursor-not-allowed font-mono"
         aria-label={`Ordre d'affichage accueil pour ${project.title}`}
       />
     </label>

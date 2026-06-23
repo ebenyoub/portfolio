@@ -1,22 +1,27 @@
 import { Link } from "react-router-dom";
-import { PageDescription, PageHeader, PageTitle } from "../../../components/ui/Page";
+import { Plus } from "lucide-react";
 
 const AdminProjectHeader = () => (
-  <PageHeader className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+  <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div>
-      <PageTitle className="text-4xl font-extrabold text-gray-900">Administration</PageTitle>
-      <PageDescription className="mt-2 text-gray-600">
-        Gérez les projets, leur mise en avant sur l'accueil et les sections affichées sur chaque page détail.
-      </PageDescription>
+      <p className="text-xs font-mono tracking-[0.2em] uppercase text-[#3B82F6] mb-1">Gestion</p>
+      <h1 className="text-3xl font-bold text-white tracking-tight" style={{ fontFamily: "Manrope, sans-serif" }}>
+        Projets
+      </h1>
+      <p className="mt-2 text-sm text-[#A1A1AA]">
+        Gérerez les projets, leur mise en avant sur l'accueil et les sections de détail.
+      </p>
     </div>
 
     <Link
       to="/admin/projects/new"
-      className="inline-flex items-center justify-center rounded-md bg-blue-600 px-5 py-3 font-bold text-white transition-colors hover:bg-blue-700"
+      className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#3B82F6] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#2563EB]"
+      style={{ fontFamily: "Inter, sans-serif" }}
     >
+      <Plus size={15} />
       Nouveau projet
     </Link>
-  </PageHeader>
+  </div>
 );
 
 export default AdminProjectHeader;

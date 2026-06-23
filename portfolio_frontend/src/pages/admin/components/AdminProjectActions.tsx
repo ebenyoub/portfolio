@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Button from "../../../components/ui/Button";
+import { Pencil, Trash2, ExternalLink } from "lucide-react";
 import type { Project } from "../../../types/project";
 
 type AdminProjectActionsProps = {
@@ -8,28 +8,32 @@ type AdminProjectActionsProps = {
 };
 
 const AdminProjectActions = ({ project, onDeleteProject }: AdminProjectActionsProps) => (
-  <div className="flex gap-2 lg:justify-end">
-    <Link
-      to={`/projects/${project.id}`}
-      className="rounded-md bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors hover:bg-gray-200"
+  <div className="flex items-center gap-1.5 justify-end">
+    <a
+      href={`/projects/${project.id}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-8 h-8 rounded-lg flex items-center justify-center text-[#4B4B4B] hover:text-[#A1A1AA] hover:bg-[#1A1A1A] transition-all"
+      aria-label="Prévisualiser"
     >
-      Voir
-    </Link>
+      <ExternalLink size={14} />
+    </a>
     <Link
       to={`/admin/projects/${project.id}/edit`}
-      className="rounded-md bg-blue-50 px-3 py-2 text-sm font-bold text-blue-700 transition-colors hover:bg-blue-100"
+      className="w-8 h-8 rounded-lg flex items-center justify-center text-[#4B4B4B] hover:text-[#3B82F6] hover:bg-[#3B82F6]/10 transition-all"
+      aria-label="Modifier"
     >
-      Modifier
+      <Pencil size={14} />
     </Link>
-    <Button
-      type="button"
+    <button
       onClick={() => {
         void onDeleteProject(project);
       }}
-      className="bg-red-50 px-3 py-2 text-sm font-bold text-red-700 hover:bg-red-100"
+      className="w-8 h-8 rounded-lg flex items-center justify-center text-[#4B4B4B] hover:text-red-400 hover:bg-red-500/10 transition-all"
+      aria-label="Supprimer"
     >
-      Supprimer
-    </Button>
+      <Trash2 size={14} />
+    </button>
   </div>
 );
 

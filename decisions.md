@@ -52,3 +52,10 @@
   - Prévention robuste contre les fuites d'authentification ou les accès anonymes aux routes protégées.
   - Automatisation complète via `make test` et `make validate` (CI locale).
 
+## ADR 7 : Tests d'Intégration CRUD Projets
+* **Statut** : Accepté
+* **Contexte** : Les routes Projets constituent le coeur fonctionnel du portfolio et doivent être couvertes sans dépendre d'une base MySQL réelle.
+* **Décision** : Utiliser Vitest avec Supertest sur une application Express locale et mocker le pool MySQL. La commande backend cible `src` afin d'exclure les copies compilées dans `dist` et de ne pas exécuter chaque test deux fois.
+* **Conséquences** :
+  - Les réponses HTTP, l'authentification/autorisation et la validation sont exercées de bout en bout dans le routeur.
+  - La suite reste déterministe et ne requiert ni Docker ni une base de données active.

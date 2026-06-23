@@ -60,8 +60,12 @@ Ce document liste et priorise les prochaines interventions à effectuer sur le P
 * **Description** : Remplacer la liste d'origines CORS codée en dur dans `server.ts` par une variable d'environnement `CORS_ORIGIN` (ex. `http://localhost:5173` en dev et `https://elyas-benyoub.fr` en production).
 * **Statut** : À faire.
 
-### [P1] PB-012 : Écriture de Tests de Non-Régression pour Cloudinary et les Carousels (À faire)
-* **Description** : Ajouter des tests unitaires et d'intégration frontend (Vitest) simulant le mock Cloudinary pour l'upload d'images, et testant le comportement du carousel d'accueil ("featured projects") et de détails.
+### [P1] PB-012 : Tests d'intégration CRUD Projets (Terminé)
+* **Description** : Ajouter des tests HTTP backend avec Vitest et Supertest pour les routes publiques et protégées des projets (`GET`, `POST`, `PUT`, `DELETE`), puis couvrir les pages publiques de liste et détail avec leurs états de chargement et d'erreur.
+* **Statut** : Terminé.
+
+### [P1] PB-003 : Tests Cloudinary et Carousels (À faire)
+* **Description** : Ajouter les tests de non-régression frontend pour l'upload Cloudinary unsigned, le carousel d'accueil piloté par `is_featured`/`featured_order` et le carousel de détail piloté par `gallery_images`.
 * **Statut** : À faire.
 
 ### [P2] PB-013 : Amélioration globale de l'Accessibilité (WCAG / a11y) (À faire)

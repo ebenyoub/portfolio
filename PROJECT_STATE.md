@@ -33,8 +33,12 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
 * **Statut** : Complètement intégré. Alignement visuel effectué (PB-004 Phase 2). La lisibilité des cartes Stack a été optimisée (PB-004 Phase 3). L'alignement de la page de gestion des projets admin (PB-006), des formulaires de création/édition de projet (PB-007) et du Dashboard Admin (PB-008) avec Figma Make a été entièrement réalisé. Les pages de l'admin adoptent désormais une structure sombre et premium (`#111111`, `#0A0A0A` pour les champs/tables/listes, bordures `#262626`), des textareas stylisés, des KPI Cards haut de gamme, et des activités récentes bien hiérarchisées.
 
 ### 7. État des Tests
-* **Backend (Vitest)** : Mise en place d'une suite de tests unitaires pour le middleware JWT (`auth.middleware.test.ts`), validant l'accès refusé (sans token ou token invalide) et l'accès autorisé (avec token valide).
-* **Frontend (Vitest)** : Mise en place d'une suite de tests d'intégration pour le composant `PrivateRoute.tsx` (`PrivateRoute.test.tsx`), vérifiant la redirection correcte vers `/login` pour les visiteurs anonymes et l'affichage de la page pour les administrateurs connectés.
+* **Backend (Vitest)** :
+  * Middleware JWT (`auth.middleware.test.ts`) : Validation du contrôle d'accès.
+  * API CRUD Projets (`project.integration.test.ts`) : 15 tests d'intégration HTTP (via Supertest) couvrant le succès, les ressources introuvables, les accès non autorisés (401/403) et la validation invalide (400) pour `GET`, `POST`, `PUT` et `DELETE`. La commande Vitest cible `src` pour exclure les copies compilées dans `dist`.
+* **Frontend (Vitest)** :
+  * Sécurité (`PrivateRoute.test.tsx`) : Validation de l'accès aux pages d'administration.
+  * Pages Projets (`ProjectsIntegration.test.tsx`) : 6 tests d'intégration de `ProjectsPage` et `ProjectDetailPage` vérifiant l'affichage de la liste et des détails, les états de chargement, ainsi que les erreurs de liste et de détail.
 * **CI Locale** : Intégration dans le processus `make validate` qui vérifie le linting, le build et exécute les tests unitaires/d'intégration de tout le projet.
 
 ---
@@ -45,6 +49,5 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
 ---
 
 ## Prochaine tâche recommandée
-* **[PB-002] : CORS Dynamique pour le Backend**
+* **[PB-011] : CORS Dynamique pour le Backend**
   * Rendre dynamique les origines CORS acceptées par le serveur Express pour ne pas être bloqué lors du déploiement en production.
-

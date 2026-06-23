@@ -13,12 +13,12 @@
 - [x] Alignement des formulaires admin (création / édition) avec Figma Make (PB-007).
 - [x] Intégration du Dashboard Admin premium aligné avec Figma Make (PB-008).
 - [x] Tests unitaires et d'intégration de sécurité Auth (PB-009 Phase 2).
+- [x] Tests d'intégration CRUD Projets backend et pages Projets frontend (PB-012).
 
 ## Tâches futures
 - [ ] Sécurisation de la configuration CORS du backend pour la production (PB-002 Phase 4).
 - [ ] Validation complète du flux d'upload Cloudinary unsigned avec les variables d'environnement.
 - [ ] Ajout des tests de non-régression manquants (mock Cloudinary, carousel d'accueil, carousel de détail) (PB-003).
-
 
 
 

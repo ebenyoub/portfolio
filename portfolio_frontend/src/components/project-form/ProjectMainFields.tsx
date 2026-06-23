@@ -53,7 +53,7 @@ const ProjectMainFields = ({
         aria-invalid={!!errors.title}
         className={errors.title ? "border-red-500/50" : ""}
       />
-      {errors.title && <p className="text-red-400 text-xs mt-1 font-mono">{errors.title.message}</p>}
+      {errors.title && <p role="alert" className="text-red-400 text-xs mt-1 font-mono">{errors.title.message}</p>}
     </FormGroup>
 
     <FormGroup>
@@ -75,7 +75,7 @@ const ProjectMainFields = ({
         aria-invalid={!!errors.description}
         {...register("description")}
       />
-      {errors.description && <p className="text-red-400 text-xs mt-1 font-mono">{errors.description.message}</p>}
+      {errors.description && <p role="alert" className="text-red-400 text-xs mt-1 font-mono">{errors.description.message}</p>}
     </FormGroup>
 
     <FormGroup>
@@ -87,7 +87,7 @@ const ProjectMainFields = ({
         aria-invalid={!!errors.github_url}
         className={errors.github_url ? "border-red-500/50" : ""}
       />
-      {errors.github_url && <p className="text-red-400 text-xs mt-1 font-mono">{errors.github_url.message}</p>}
+      {errors.github_url && <p role="alert" className="text-red-400 text-xs mt-1 font-mono">{errors.github_url.message}</p>}
     </FormGroup>
 
     <FormGroup>
@@ -99,7 +99,7 @@ const ProjectMainFields = ({
         aria-invalid={!!errors.demo_url}
         className={errors.demo_url ? "border-red-500/50" : ""}
       />
-      {errors.demo_url && <p className="text-red-400 text-xs mt-1 font-mono">{errors.demo_url.message}</p>}
+      {errors.demo_url && <p role="alert" className="text-red-400 text-xs mt-1 font-mono">{errors.demo_url.message}</p>}
     </FormGroup>
 
     <FormGroup className="md:col-span-2">

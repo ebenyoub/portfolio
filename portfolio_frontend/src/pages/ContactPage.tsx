@@ -115,7 +115,7 @@ const ContactPage = () => {
                     aria-invalid={!!errors.name}
                     className={`w-full bg-[#0A0A0A] border rounded-lg px-4 py-2.5 text-sm text-white placeholder-[#4B4B4B] font-mono outline-none focus:border-[#3B82F6] focus:ring-1 focus:ring-[#3B82F6]/30 transition-colors ${errors.name ? "border-red-500/50" : "border-[#262626]"}`}
                   />
-                  {errors.name && <p className="text-xs text-red-400 font-mono">{errors.name.message}</p>}
+                  {errors.name && <p role="alert" className="text-xs text-red-400 font-mono">{errors.name.message}</p>}
                 </div>
 
                 <div className="space-y-1.5">
@@ -129,7 +129,7 @@ const ContactPage = () => {
                     aria-invalid={!!errors.email}
                     className={`w-full bg-[#0A0A0A] border rounded-lg px-4 py-2.5 text-sm text-white placeholder-[#4B4B4B] font-mono outline-none focus:border-[#3B82F6] focus:ring-1 focus:ring-[#3B82F6]/30 transition-colors ${errors.email ? "border-red-500/50" : "border-[#262626]"}`}
                   />
-                  {errors.email && <p className="text-xs text-red-400 font-mono">{errors.email.message}</p>}
+                  {errors.email && <p role="alert" className="text-xs text-red-400 font-mono">{errors.email.message}</p>}
                 </div>
               </div>
 
@@ -144,7 +144,7 @@ const ContactPage = () => {
                   aria-invalid={!!errors.subject}
                   className={`w-full bg-[#0A0A0A] border rounded-lg px-4 py-2.5 text-sm text-white placeholder-[#4B4B4B] font-mono outline-none focus:border-[#3B82F6] focus:ring-1 focus:ring-[#3B82F6]/30 transition-colors ${errors.subject ? "border-red-500/50" : "border-[#262626]"}`}
                 />
-                {errors.subject && <p className="text-xs text-red-400 font-mono">{errors.subject.message}</p>}
+                {errors.subject && <p role="alert" className="text-xs text-red-400 font-mono">{errors.subject.message}</p>}
               </div>
 
               <div className="space-y-1.5">
@@ -158,7 +158,7 @@ const ContactPage = () => {
                   aria-invalid={!!errors.message}
                   className={`w-full bg-[#0A0A0A] border rounded-lg px-4 py-2.5 text-sm text-white placeholder-[#4B4B4B] font-mono outline-none focus:border-[#3B82F6] focus:ring-1 focus:ring-[#3B82F6]/30 transition-colors ${errors.message ? "border-red-500/50" : "border-[#262626]"}`}
                 />
-                {errors.message && <p className="text-xs text-red-400 font-mono">{errors.message.message}</p>}
+                {errors.message && <p role="alert" className="text-xs text-red-400 font-mono">{errors.message.message}</p>}
               </div>
 
               <button

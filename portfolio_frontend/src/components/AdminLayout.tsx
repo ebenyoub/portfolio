@@ -45,6 +45,7 @@ function NavItem({
     <NavLink
       to={to}
       onClick={onClick}
+      aria-label={collapsed ? label : undefined}
       className={() =>
         `group flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-150 ${
           isActive
@@ -120,6 +121,7 @@ function SidebarContent({
           className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[#A1A1AA] hover:text-white hover:bg-[#111111] transition-all ${
             collapsed && !isMobile ? "justify-center" : ""
           }`}
+          aria-label={collapsed && !isMobile ? "Voir le site" : undefined}
         >
           <ExternalLink size={16} className="flex-shrink-0" />
           {(!collapsed || isMobile) && <span>Voir le site</span>}
@@ -129,6 +131,7 @@ function SidebarContent({
           className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[#A1A1AA] hover:text-red-400 hover:bg-red-500/05 transition-all ${
             collapsed && !isMobile ? "justify-center" : ""
           }`}
+          aria-label={collapsed && !isMobile ? "Déconnexion" : undefined}
         >
           <LogOut size={16} className="flex-shrink-0" />
           {(!collapsed || isMobile) && <span>Déconnexion</span>}
@@ -173,6 +176,7 @@ export default function AdminLayout() {
           onClick={() => setCollapsed(!collapsed)}
           className="absolute bottom-[88px] w-5 h-8 bg-[#1A1A1A] border border-[#262626] rounded-r-md flex items-center justify-center text-[#A1A1AA] hover:text-white transition-colors z-10"
           style={{ right: -20, left: "auto" }}
+          aria-label={collapsed ? "Développer la navigation" : "Réduire la navigation"}
         >
           <ChevronRight size={11} className={`transition-transform ${collapsed ? "" : "rotate-180"}`} />
         </button>
@@ -181,8 +185,13 @@ export default function AdminLayout() {
       {/* Mobile drawer */}
       {mobileOpen && (
         <div className="md:hidden fixed inset-0 z-50 flex">
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
-          <aside className="relative w-[260px] bg-[#0A0A0A] border-r border-[#1A1A1A] flex flex-col">
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={() => setMobileOpen(false)}
+            aria-label="Fermer le menu"
+          />
+          <aside role="dialog" aria-modal="true" aria-label="Navigation administration" className="relative w-[260px] bg-[#0A0A0A] border-r border-[#1A1A1A] flex flex-col">
             <SidebarContent
               collapsed={collapsed}
               isMobile

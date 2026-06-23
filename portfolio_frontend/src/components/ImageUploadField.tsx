@@ -59,6 +59,8 @@ const ImageUploadField = ({
           onChange={(event) => updateValue(event.target.value)}
           placeholder="https://res.cloudinary.com/... ou /project-images/..."
           className={error ? "border-red-500/50" : ""}
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? `${id}-error` : undefined}
         />
 
         <input
@@ -95,7 +97,7 @@ const ImageUploadField = ({
       </div>
 
       <p className="text-xs font-mono text-[#4B4B4B]">Sélectionne une image ou colle une URL.</p>
-      {error && <p className="text-red-400 text-xs font-mono">{error}</p>}
+      {error && <p id={`${id}-error`} role="alert" className="text-red-400 text-xs font-mono">{error}</p>}
     </div>
   );
 };

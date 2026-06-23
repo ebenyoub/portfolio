@@ -43,6 +43,7 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
   * Pages Projets (`ProjectsIntegration.test.tsx`) : 8 tests d'intégration de `ProjectsPage` et `ProjectDetailPage` vérifiant l'affichage de la liste et des détails, les états de chargement, les erreurs, la navigation de galerie et son état vide.
   * Cloudinary (`cloudinary.test.ts`, `ProjectForm.test.tsx`) : Mock réseau de l'upload, contrôle de l'URL sécurisée retournée, erreur de l'API et état de chargement du formulaire.
   * Carousels (`FeaturedProjectsCarousel.test.tsx`, `ProjectsIntegration.test.tsx`) : Sélection et ordre des projets mis en avant, navigation suivante/précédente, état vide, galerie de détail, changement d'image active et galerie sans image.
+  * Accessibilité (`Accessibility.test.tsx`) : Régressions sur le nom accessible de la modale d'image, les contrôles de carousel et les erreurs de galerie annoncées aux lecteurs d'écran.
 * **CI Locale** : Intégration dans le processus `make validate` qui vérifie le linting, le build et exécute les tests unitaires/d'intégration de tout le projet.
 
 ---
@@ -53,5 +54,5 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
 ---
 
 ## Prochaine tâche recommandée
-* **[PB-013] : Amélioration globale de l'accessibilité**
-  * Vérifier les libellés accessibles et la navigation clavier des interfaces publique et admin.
+* **Raccordement du carousel accueil**
+  * Intégrer `FeaturedProjectsCarousel` à `HomePage` en conservant l'alignement Figma Make.

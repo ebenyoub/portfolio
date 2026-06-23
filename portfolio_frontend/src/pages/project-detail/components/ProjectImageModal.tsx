@@ -29,6 +29,7 @@ const ProjectImageModal = ({
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 md:p-8"
       role="dialog"
       aria-modal="true"
+      aria-label={`Aperçu de ${image.alt}`}
       onClick={onClose}
     >
       <div className="relative w-full max-w-6xl" onClick={(event) => event.stopPropagation()}>

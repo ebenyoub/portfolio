@@ -105,7 +105,7 @@ const LoginPage = () => {
                 aria-invalid={!!errors.email}
                 className={`w-full bg-[#0A0A0A] border rounded-lg px-4 py-3 text-sm text-white placeholder-[#4B4B4B] font-mono outline-none focus:border-[#3B82F6] focus:ring-1 focus:ring-[#3B82F6]/30 transition-colors ${errors.email ? "border-red-500/50" : "border-[#262626]"}`}
               />
-              {errors.email && <p className="text-xs text-red-400 font-mono">{errors.email.message}</p>}
+              {errors.email && <p role="alert" className="text-xs text-red-400 font-mono">{errors.email.message}</p>}
             </div>
 
             {/* Password */}
@@ -132,7 +132,7 @@ const LoginPage = () => {
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
-              {errors.password && <p className="text-xs text-red-400 font-mono">{errors.password.message}</p>}
+              {errors.password && <p role="alert" className="text-xs text-red-400 font-mono">{errors.password.message}</p>}
             </div>
 
             {/* Submit */}

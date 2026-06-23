@@ -94,4 +94,9 @@
   section[id] {
     scroll-margin-top: 80px;
   }
+
+  :focus-visible {
+    outline: 2px solid var(--ring) !important;
+    outline-offset: 3px;
+  }
 }

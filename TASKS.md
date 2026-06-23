@@ -16,10 +16,10 @@
 - [x] Tests d'intégration CRUD Projets backend et pages Projets frontend (PB-012).
 - [x] Configuration CORS backend dynamique pour les environnements dev et production (PB-011).
 - [x] Tests Cloudinary et carousels frontend avec mocks réseau (PB-003).
+- [x] Amélioration de l'accessibilité du portfolio public et de l'admin (PB-013).
 
 ## Tâches futures
 - [ ] Validation complète du flux d'upload Cloudinary unsigned avec les variables d'environnement.
 - [ ] Raccorder le composant `FeaturedProjectsCarousel` à la page d'accueil en respectant Figma Make.
-
 
 

@@ -98,7 +98,7 @@ const GalleryImagesField = ({
         </button>
       </div>
 
-      {globalError && <p className="text-red-400 text-xs font-mono">{globalError}</p>}
+      {globalError && <p role="alert" className="text-red-400 text-xs font-mono">{globalError}</p>}
 
       {images.length > 0 && (
         <div className="space-y-3">
@@ -114,9 +114,11 @@ const GalleryImagesField = ({
                   value={image.url}
                   onChange={(event) => onChangeImage(index, event.target.value)}
                   placeholder="https://res.cloudinary.com/... ou /project-images/..."
+                  aria-invalid={Boolean(errors[index])}
+                  aria-describedby={errors[index] ? `gallery-image-error-${index}` : undefined}
                   className={errors[index] ? "border-red-500/50" : ""}
                 />
-                {errors[index] && <p className="text-red-400 text-xs font-mono">{errors[index]}</p>}
+                {errors[index] && <p id={`gallery-image-error-${index}`} role="alert" className="text-red-400 text-xs font-mono">{errors[index]}</p>}
               </div>
 
               <div className="flex flex-wrap gap-2 md:flex-row items-center">
@@ -125,6 +127,7 @@ const GalleryImagesField = ({
                   className="bg-[#262626] border border-[#363636] hover:bg-[#363636] text-white text-xs font-mono px-3 py-1.5 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                   disabled={index === 0}
                   onClick={() => onMoveImage(index, index - 1)}
+                  aria-label={`Monter l'image ${index + 1}`}
                 >
                   Monter
                 </button>
@@ -133,6 +136,7 @@ const GalleryImagesField = ({
                   className="bg-[#262626] border border-[#363636] hover:bg-[#363636] text-white text-xs font-mono px-3 py-1.5 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                   disabled={index === images.length - 1}
                   onClick={() => onMoveImage(index, index + 1)}
+                  aria-label={`Descendre l'image ${index + 1}`}
                 >
                   Descendre
                 </button>
@@ -140,6 +144,7 @@ const GalleryImagesField = ({
                   type="button"
                   className="bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 text-xs font-mono px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
                   onClick={() => onRemoveImage(index)}
+                  aria-label={`Supprimer l'image ${index + 1}`}
                 >
                   Supprimer
                 </button>

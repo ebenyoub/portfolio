@@ -68,6 +68,6 @@ Ce document liste et priorise les prochaines interventions à effectuer sur le P
 * **Description** : Tests de non-régression frontend pour l'upload Cloudinary unsigned, le carousel de projets mis en avant piloté par `is_featured`/`featured_order` et le carousel de détail piloté par `gallery_images`.
 * **Statut** : Terminé.
 
-### [P2] PB-013 : Amélioration globale de l'Accessibilité (WCAG / a11y) (À faire)
-* **Description** : Rajouter des attributs d'accessibilité `aria-label` manquants sur les liens purement iconiques (réseaux sociaux, etc.) et vérifier le comportement de la navigation au clavier.
-* **Statut** : À faire.
+### [P2] PB-013 : Amélioration globale de l'Accessibilité (WCAG / a11y) (Terminé)
+* **Description** : Ajout d'indicateurs de focus clavier, de noms accessibles sur les contrôles iconiques et les tiroirs de navigation, ainsi que d'annonces d'erreur pour les formulaires et les médias.
+* **Statut** : Terminé.

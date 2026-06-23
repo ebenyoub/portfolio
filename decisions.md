@@ -17,3 +17,11 @@
 * **Conséquences** :
   - Identité haut de gamme, polices Manrope et Inter intégrées.
   - Préservation intégrale de la structure de données API et de la validation de formulaires React Hook Form/Zod.
+
+## ADR 3 : Build Multi-Stage Frontend Production avec Nginx
+* **Statut** : Accepté
+* **Contexte** : Assurer des performances optimales et sécuriser le service de fichiers statiques en production.
+* **Décision** : Le frontend est configuré dans un Dockerfile multi-stage. L'étape de compilation produit les assets optimisés à l'aide de Vite, puis Nginx en version alpine sert les fichiers statiques à l'aide d'une configuration de réécriture d'URL assurant la compatibilité avec le routeur de React (`nginx.conf`).
+* **Conséquences** :
+  - Le frontend est isolé du serveur Node de développement.
+  - Possibilité de déployer sur port HTTP standard (port `80` exposé en interne, mappé sur le port souhaité de l'hôte, ex: `8080`).

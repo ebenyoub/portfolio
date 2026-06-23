@@ -14,12 +14,12 @@ Ce document liste et priorise les prochaines interventions à effectuer sur le P
 
 ---
 
-### [P0] PB-001 : Correction et optimisation Docker pour la Production
+### [P0] PB-001 : Correction et optimisation Docker pour la Production (Terminé)
 * **Description** :
   1. Corriger l'erreur syntaxique de la ligne 11 du `Dockerfile` frontend (`CMD["npm", ...]` sans espace).
   2. Remplacer l'exécution en mode dev (`npm run dev`) dans le `Dockerfile` frontend par un build multi-stage compilant le projet (`npm run build`) et servant les fichiers statiques via un serveur Nginx configuré et sécurisé.
 * **Impact** : Déploiement en production possible, optimisé et sécurisé.
-* **Estimation** : 35 min.
+* **Estimation** : Terminé.
 
 ### [P1] PB-002 : CORS Dynamique pour le Backend
 * **Description** : Remplacer la liste d'origines CORS codée en dur dans `server.ts` par une variable d'environnement `CORS_ORIGIN` (ex. `http://localhost:5173` en dev et `https://elyas-benyoub.fr` en production).

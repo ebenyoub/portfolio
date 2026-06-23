@@ -39,6 +39,5 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
 ---
 
 ## Prochaine tâche recommandée
-* **[PB-001] : Correction et optimisation Docker pour la Production**
-  * Corriger l'erreur syntaxique `CMD` dans le `Dockerfile` frontend.
-  * Mettre en place un build multi-stage avec Nginx pour servir le frontend de façon sécurisée et performante en production.
+* **[PB-002] : CORS Dynamique pour le Backend**
+  * Rendre dynamique les origines CORS acceptées par le serveur Express pour ne pas être bloqué lors du déploiement en production.

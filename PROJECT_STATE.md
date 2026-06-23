@@ -12,6 +12,7 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
 * **Backend** : Conteneur Node.js 20 opérationnel (port `3001`).
 * **Frontend** : Conteneur opérationnel avec build multi-stage et serveur Nginx Alpine (port `8080` mappé vers le port `80`).
 * **Sécurité & Production** : Fichier `docker-compose.prod.yml` en place pour retirer l'exposition de ports de MySQL en production. Les secrets de la base de données sont isolés dans `.env.mysql` pour éviter d'exposer les secrets applicatifs (JWT, Cloudinary, Mail) au conteneur MySQL.
+* **CORS** : Les origines backend sont configurées par `CORS_ORIGIN` dans `portfolio_backend/.env`, sous forme de liste séparée par des virgules. Cette même variable est injectée par les compositions Docker de développement et de production.
 
 ### 2. État Cloudinary
 * Opérationnel côté frontend. Intégration de l'upload d'images sans signature (unsigned preset) via les variables d'environnement configurées dans le `.env` du frontend.
@@ -36,6 +37,7 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
 * **Backend (Vitest)** :
   * Middleware JWT (`auth.middleware.test.ts`) : Validation du contrôle d'accès.
   * API CRUD Projets (`project.integration.test.ts`) : 15 tests d'intégration HTTP (via Supertest) couvrant le succès, les ressources introuvables, les accès non autorisés (401/403) et la validation invalide (400) pour `GET`, `POST`, `PUT` et `DELETE`. La commande Vitest cible `src` pour exclure les copies compilées dans `dist`.
+  * Configuration CORS (`cors.config.test.ts`) : 3 tests vérifiant le parsing des origines, l'autorisation d'une origine configurée et l'absence d'en-tête CORS pour une origine non autorisée.
 * **Frontend (Vitest)** :
   * Sécurité (`PrivateRoute.test.tsx`) : Validation de l'accès aux pages d'administration.
   * Pages Projets (`ProjectsIntegration.test.tsx`) : 6 tests d'intégration de `ProjectsPage` et `ProjectDetailPage` vérifiant l'affichage de la liste et des détails, les états de chargement, ainsi que les erreurs de liste et de détail.
@@ -43,11 +45,6 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
 
 ---
 
-## Problèmes Connus
-1. **CORS local en dur** : Le backend Express n'accepte que des origines locales (`localhost:5173`, etc.).
-
----
-
 ## Prochaine tâche recommandée
-* **[PB-011] : CORS Dynamique pour le Backend**
-  * Rendre dynamique les origines CORS acceptées par le serveur Express pour ne pas être bloqué lors du déploiement en production.
+* **[PB-003] : Tests Cloudinary et Carousels**
+  * Ajouter les tests de non-régression de l'upload Cloudinary et des carousels public/détail.

@@ -59,3 +59,11 @@
 * **Conséquences** :
   - Les réponses HTTP, l'authentification/autorisation et la validation sont exercées de bout en bout dans le routeur.
   - La suite reste déterministe et ne requiert ni Docker ni une base de données active.
+
+## ADR 8 : Liste blanche CORS configurable par environnement
+* **Statut** : Accepté
+* **Contexte** : Les origines CORS étaient codées en dur dans le serveur Express, ce qui empêchait de configurer proprement le futur domaine de production.
+* **Décision** : Lire `CORS_ORIGIN` depuis l'environnement backend et parser une liste d'origines séparées par des virgules. Les requêtes provenant d'une origine absente de cette liste ne reçoivent pas d'en-tête `Access-Control-Allow-Origin`.
+* **Conséquences** :
+  - Le même mécanisme couvre le développement local et la production sans modifier Docker.
+  - Les clients non navigateur restent possibles, car une requête sans en-tête `Origin` est acceptée.

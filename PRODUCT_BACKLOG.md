@@ -56,9 +56,9 @@ Ce document liste et priorise les prochaines interventions à effectuer sur le P
   3. Écriture des tests d'intégration pour le composant `PrivateRoute` (Frontend).
 * **Statut** : Terminé.
 
-### [P1] PB-011 : CORS Dynamique pour le Backend (À faire)
-* **Description** : Remplacer la liste d'origines CORS codée en dur dans `server.ts` par une variable d'environnement `CORS_ORIGIN` (ex. `http://localhost:5173` en dev et `https://elyas-benyoub.fr` en production).
-* **Statut** : À faire.
+### [P1] PB-011 : CORS Dynamique pour le Backend (Terminé)
+* **Description** : Remplacer la liste d'origines CORS codée en dur dans `server.ts` par la variable d'environnement `CORS_ORIGIN`. La valeur accepte plusieurs origines séparées par des virgules et s'applique aux compositions Docker de développement et de production via le même fichier d'environnement backend.
+* **Statut** : Terminé.
 
 ### [P1] PB-012 : Tests d'intégration CRUD Projets (Terminé)
 * **Description** : Ajouter des tests HTTP backend avec Vitest et Supertest pour les routes publiques et protégées des projets (`GET`, `POST`, `PUT`, `DELETE`), puis couvrir les pages publiques de liste et détail avec leurs états de chargement et d'erreur.

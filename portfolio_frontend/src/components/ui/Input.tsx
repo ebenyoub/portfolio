@@ -1,7 +1,7 @@
 import { cn } from "../../utils";
 
 export const Label = ({ children, className, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) => (
-    <label className={cn("mb-1 font-medium", className)} {...props}>
+    <label className={cn("block text-xs font-mono text-[#A1A1AA] uppercase tracking-wider mb-2", className)} {...props}>
         {children}
     </label>
 );
@@ -10,7 +10,7 @@ const Input = ({ className, ...props }: React.InputHTMLAttributes<HTMLInputEleme
   return (
     <input 
         type="text" 
-        className={cn("border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500", className)}
+        className={cn("w-full bg-[#0A0A0A] border border-[#262626] rounded-lg px-4 py-2.5 text-sm text-white placeholder-[#4B4B4B] font-mono outline-none focus:border-[#3B82F6] transition-colors disabled:opacity-30 disabled:cursor-not-allowed", className)}
         {...props}
     />
   )

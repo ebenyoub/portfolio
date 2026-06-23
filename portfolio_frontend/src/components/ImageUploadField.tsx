@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import Button from "./ui/Button";
 import Input, { Label } from "./ui/Input";
 import { getImageSrc } from "../utils/images";
 
@@ -44,12 +43,12 @@ const ImageUploadField = ({
   return (
     <div className="flex flex-col gap-2">
       <Label htmlFor={id}>
-        {label} {required && <span className="text-red-600">*</span>}
+        {label} {required && <span className="text-red-400">*</span>}
       </Label>
 
       {previewSrc && (
-        <div className="h-40 overflow-hidden rounded-lg border border-gray-200 bg-gray-100">
-          <img src={previewSrc} alt="" className="h-full w-full object-cover" />
+        <div className="h-40 overflow-hidden rounded-lg border border-[#262626] bg-[#0A0A0A] relative group/preview">
+          <img src={previewSrc} alt="" className="h-full w-full object-cover opacity-80" />
         </div>
       )}
 
@@ -59,7 +58,7 @@ const ImageUploadField = ({
           value={value}
           onChange={(event) => updateValue(event.target.value)}
           placeholder="https://res.cloudinary.com/... ou /project-images/..."
-          className={error ? "border-red-500" : ""}
+          className={error ? "border-red-500/50" : ""}
         />
 
         <input
@@ -76,27 +75,27 @@ const ImageUploadField = ({
           }}
         />
 
-        <Button
+        <button
           type="button"
-          className="shrink-0 bg-gray-900 hover:bg-gray-800"
+          className="shrink-0 bg-[#262626] border border-[#363636] hover:bg-[#363636] text-white rounded-lg px-4 py-2.5 text-xs font-mono font-semibold transition-colors cursor-pointer"
           onClick={() => inputRef.current?.click()}
         >
           Choisir
-        </Button>
+        </button>
 
         {(value || selectedPreviewUrl) && (
-          <Button
+          <button
             type="button"
-            className="shrink-0 bg-gray-100 text-gray-700 hover:bg-gray-200"
+            className="shrink-0 bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 rounded-lg px-4 py-2.5 text-xs font-mono font-semibold transition-colors cursor-pointer"
             onClick={() => updateValue("")}
           >
             Retirer
-          </Button>
+          </button>
         )}
       </div>
 
-      <p className="text-xs text-gray-500">Sélectionne une image ou colle une URL.</p>
-      {error && <p className="text-red-500 text-xs">{error}</p>}
+      <p className="text-xs font-mono text-[#4B4B4B]">Sélectionne une image ou colle une URL.</p>
+      {error && <p className="text-red-400 text-xs font-mono">{error}</p>}
     </div>
   );
 };

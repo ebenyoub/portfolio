@@ -7,9 +7,13 @@ type ProjectDetailsFieldsProps = {
   register: UseFormRegister<ProjectFormValues>;
 };
 
+const textareaClass = "w-full bg-[#0A0A0A] border border-[#262626] rounded-lg px-4 py-2.5 text-sm text-white placeholder-[#4B4B4B] font-mono outline-none focus:border-[#3B82F6] transition-colors";
+
 const ProjectDetailsFields = ({ register }: ProjectDetailsFieldsProps) => (
   <FormSection>
-    <FormTitle className="text-lg font-bold text-gray-800">Détails approfondis</FormTitle>
+    <FormTitle className="text-sm font-mono text-[#A1A1AA] uppercase tracking-wider mb-4">
+      Détails approfondis
+    </FormTitle>
 
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <FormGroup>
@@ -17,7 +21,7 @@ const ProjectDetailsFields = ({ register }: ProjectDetailsFieldsProps) => (
         <textarea
           id="context"
           rows={3}
-          className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300"
+          className={textareaClass}
           placeholder="Pourquoi ce projet a-t-il été créé ?"
           {...register("context")}
         />
@@ -28,7 +32,7 @@ const ProjectDetailsFields = ({ register }: ProjectDetailsFieldsProps) => (
         <textarea
           id="objective"
           rows={3}
-          className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300"
+          className={textareaClass}
           placeholder="Quels étaient les buts à atteindre ?"
           {...register("objective")}
         />
@@ -39,7 +43,7 @@ const ProjectDetailsFields = ({ register }: ProjectDetailsFieldsProps) => (
         <textarea
           id="challenges"
           rows={3}
-          className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300"
+          className={textareaClass}
           placeholder="Quelles difficultés avez-vous surmontées ?"
           {...register("challenges")}
         />
@@ -50,7 +54,7 @@ const ProjectDetailsFields = ({ register }: ProjectDetailsFieldsProps) => (
         <textarea
           id="solution"
           rows={3}
-          className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300"
+          className={textareaClass}
           placeholder="Comment avez-vous résolu ces problèmes ?"
           {...register("solution")}
         />
@@ -61,14 +65,15 @@ const ProjectDetailsFields = ({ register }: ProjectDetailsFieldsProps) => (
         <textarea
           id="learned_skills"
           rows={4}
-          className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300"
+          className={textareaClass}
           placeholder="Langage C"
           {...register("learned_skills")}
         />
-        <p className="text-xs text-gray-500">Une compétence par ligne.</p>
+        <p className="text-xs text-[#4B4B4B] font-mono mt-1">Une compétence par ligne.</p>
       </FormGroup>
     </div>
   </FormSection>
 );
 
 export default ProjectDetailsFields;
+

@@ -45,15 +45,15 @@ const ProjectMainFields = ({
 }: ProjectMainFieldsProps) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
     <FormGroup>
-      <Label htmlFor="title">Titre du projet <span className="text-red-600">*</span></Label>
+      <Label htmlFor="title">Titre du projet <span className="text-red-400">*</span></Label>
       <Input
         id="title"
         placeholder="Ex: Cub3d"
         {...register("title")}
         aria-invalid={!!errors.title}
-        className={errors.title ? "border-red-500" : ""}
+        className={errors.title ? "border-red-500/50" : ""}
       />
-      {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>}
+      {errors.title && <p className="text-red-400 text-xs mt-1 font-mono">{errors.title.message}</p>}
     </FormGroup>
 
     <FormGroup>
@@ -66,16 +66,16 @@ const ProjectMainFields = ({
     </FormGroup>
 
     <FormGroup className="md:col-span-2">
-      <Label htmlFor="description">Description courte <span className="text-red-600">*</span></Label>
+      <Label htmlFor="description">Description courte <span className="text-red-400">*</span></Label>
       <textarea
         id="description"
         rows={3}
-        className={`w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.description ? "border-red-500" : "border-gray-300"}`}
+        className={`w-full bg-[#0A0A0A] border rounded-lg px-4 py-2.5 text-sm text-white placeholder-[#4B4B4B] font-mono outline-none focus:border-[#3B82F6] transition-colors ${errors.description ? "border-red-500/50" : "border-[#262626]"}`}
         placeholder="Décrivez brièvement le projet..."
         aria-invalid={!!errors.description}
         {...register("description")}
       />
-      {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description.message}</p>}
+      {errors.description && <p className="text-red-400 text-xs mt-1 font-mono">{errors.description.message}</p>}
     </FormGroup>
 
     <FormGroup>
@@ -85,9 +85,9 @@ const ProjectMainFields = ({
         placeholder="https://github.com/..."
         {...register("github_url")}
         aria-invalid={!!errors.github_url}
-        className={errors.github_url ? "border-red-500" : ""}
+        className={errors.github_url ? "border-red-500/50" : ""}
       />
-      {errors.github_url && <p className="text-red-500 text-xs mt-1">{errors.github_url.message}</p>}
+      {errors.github_url && <p className="text-red-400 text-xs mt-1 font-mono">{errors.github_url.message}</p>}
     </FormGroup>
 
     <FormGroup>
@@ -97,9 +97,9 @@ const ProjectMainFields = ({
         placeholder="https://..."
         {...register("demo_url")}
         aria-invalid={!!errors.demo_url}
-        className={errors.demo_url ? "border-red-500" : ""}
+        className={errors.demo_url ? "border-red-500/50" : ""}
       />
-      {errors.demo_url && <p className="text-red-500 text-xs mt-1">{errors.demo_url.message}</p>}
+      {errors.demo_url && <p className="text-red-400 text-xs mt-1 font-mono">{errors.demo_url.message}</p>}
     </FormGroup>
 
     <FormGroup className="md:col-span-2">

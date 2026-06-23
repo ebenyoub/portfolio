@@ -20,19 +20,21 @@ type DisplaySettingsFieldsProps = {
 
 const DisplaySettingsFields = ({ register }: DisplaySettingsFieldsProps) => (
   <FormSection>
-    <FormTitle className="text-lg font-bold text-gray-800">Sections visibles sur la page détail</FormTitle>
+    <FormTitle className="text-sm font-mono text-[#A1A1AA] uppercase tracking-wider mb-4">
+      Sections visibles sur la page détail
+    </FormTitle>
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
       {checkboxOptions.map((option) => (
         <label
           key={option.name}
-          className="flex items-center gap-3 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm font-medium text-gray-700"
+          className="flex items-center gap-3 rounded-lg border border-[#262626] bg-[#0A0A0A] px-3 py-2 text-sm font-medium text-gray-300 hover:border-[#3B82F6]/50 hover:bg-[#111111] transition-colors cursor-pointer"
         >
           <input
             type="checkbox"
-            className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            className="h-4 w-4 rounded border-[#262626] bg-[#0A0A0A] text-[#3B82F6] focus:ring-[#3B82F6] focus:ring-offset-[#111111] bg-none cursor-pointer"
             {...register(`display_settings.${option.name}`)}
           />
-          {option.label}
+          <span className="font-mono text-xs uppercase tracking-wider">{option.label}</span>
         </label>
       ))}
     </div>
@@ -40,3 +42,4 @@ const DisplaySettingsFields = ({ register }: DisplaySettingsFieldsProps) => (
 );
 
 export default DisplaySettingsFields;
+

@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useNavigate, useParams } from "react-router-dom";
-import Container from "../components/ui/Container";
-import Card from "../components/ui/Card";
-import { FormTitle } from "../components/ui/Form";
 import { EmptyState, LoadingState } from "../components/ui/Page";
+import Container from "../components/ui/Container";
 import useFetch from "../hooks/apiFetch";
 import ProjectForm, { type ProjectFormValues, type ProjectPayload } from "../components/ProjectForm";
 import type { Project } from "../types/project";
@@ -95,11 +93,11 @@ const EditProjectPage = () => {
   }
 
   return (
-    <Container className="py-12 max-w-4xl">
-      <Card className="rounded-2xl border border-gray-100 bg-white p-8 shadow-xl md:p-12">
-        <FormTitle className="text-3xl font-extrabold text-gray-900 mb-8">
+    <div className="max-w-3xl mx-auto space-y-6">
+      <div className="bg-[#111111] border border-[#262626] rounded-xl p-8 shadow-2xl">
+        <h1 className="text-2xl font-bold text-white tracking-tight mb-8" style={{ fontFamily: "Manrope, sans-serif" }}>
           Modifier {project.title}
-        </FormTitle>
+        </h1>
 
         <ProjectForm
           defaultValues={projectToFormValues(project)}
@@ -109,8 +107,8 @@ const EditProjectPage = () => {
           onSubmit={onSubmit}
           onCancel={() => navigate("/admin")}
         />
-      </Card>
-    </Container>
+      </div>
+    </div>
   );
 };
 

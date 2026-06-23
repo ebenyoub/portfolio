@@ -334,11 +334,11 @@ const ProjectForm = ({
         onMoveGalleryImage={move}
       />
 
-      <hr className="border-gray-100" />
+      <hr className="border-[#262626]" />
 
       <DisplaySettingsFields register={register} />
 
-      <hr className="border-gray-100" />
+      <hr className="border-[#262626]" />
 
       <ProjectDetailsFields register={register} />
 

@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import Button from "./ui/Button";
 import Input, { Label } from "./ui/Input";
 import { getImageSrc } from "../utils/images";
 import type { GalleryImageFormValue } from "../types/project";
@@ -61,9 +60,9 @@ const GalleryImagesField = ({
     <div className="flex flex-col gap-3">
       <div>
         <Label>
-          {label} {required && <span className="text-red-600">*</span>}
+          {label} {required && <span className="text-red-400">*</span>}
         </Label>
-        <p className="text-xs text-gray-500">Ajoute des images par sélection ou URL. L'ordre affiché ici est celui du carousel.</p>
+        <p className="text-xs font-mono text-[#4B4B4B]">Ajoute des images par sélection ou URL. L'ordre affiché ici est celui du carousel.</p>
       </div>
 
       <div className="flex flex-wrap gap-3">
@@ -82,30 +81,30 @@ const GalleryImagesField = ({
           }}
         />
 
-        <Button
+        <button
           type="button"
-          className="bg-gray-900 hover:bg-gray-800"
+          className="bg-[#262626] border border-[#363636] hover:bg-[#363636] text-white rounded-lg px-4 py-2 text-xs font-mono font-semibold transition-colors cursor-pointer"
           onClick={() => inputRef.current?.click()}
         >
           Choisir des images
-        </Button>
+        </button>
 
-        <Button
+        <button
           type="button"
-          className="bg-gray-100 text-gray-700 hover:bg-gray-200"
+          className="bg-[#111111] border border-[#262626] hover:bg-[#1A1A1A] text-white rounded-lg px-4 py-2 text-xs font-mono font-semibold transition-colors cursor-pointer"
           onClick={onAddUrl}
         >
           Ajouter une URL
-        </Button>
+        </button>
       </div>
 
-      {globalError && <p className="text-red-500 text-xs">{globalError}</p>}
+      {globalError && <p className="text-red-400 text-xs font-mono">{globalError}</p>}
 
       {images.length > 0 && (
         <div className="space-y-3">
           {images.map((image, index) => (
-            <div key={image.id} className="grid grid-cols-1 gap-3 rounded-lg border border-gray-200 p-3 md:grid-cols-[120px_1fr_auto]">
-              <div className="aspect-video overflow-hidden rounded-md bg-gray-100">
+            <div key={image.id} className="grid grid-cols-1 gap-3 rounded-lg border border-[#262626] p-3 md:grid-cols-[120px_1fr_auto] items-center bg-[#111111]">
+              <div className="aspect-video overflow-hidden rounded-md bg-[#0A0A0A] border border-[#262626]">
                 <GalleryPreview image={image} />
               </div>
 
@@ -115,35 +114,35 @@ const GalleryImagesField = ({
                   value={image.url}
                   onChange={(event) => onChangeImage(index, event.target.value)}
                   placeholder="https://res.cloudinary.com/... ou /project-images/..."
-                  className={errors[index] ? "border-red-500" : ""}
+                  className={errors[index] ? "border-red-500/50" : ""}
                 />
-                {errors[index] && <p className="text-red-500 text-xs">{errors[index]}</p>}
+                {errors[index] && <p className="text-red-400 text-xs font-mono">{errors[index]}</p>}
               </div>
 
-              <div className="flex flex-wrap gap-2 md:flex-col">
-                <Button
+              <div className="flex flex-wrap gap-2 md:flex-row items-center">
+                <button
                   type="button"
-                  className="bg-gray-100 px-3 py-2 text-gray-700 hover:bg-gray-200"
+                  className="bg-[#262626] border border-[#363636] hover:bg-[#363636] text-white text-xs font-mono px-3 py-1.5 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                   disabled={index === 0}
                   onClick={() => onMoveImage(index, index - 1)}
                 >
                   Monter
-                </Button>
-                <Button
+                </button>
+                <button
                   type="button"
-                  className="bg-gray-100 px-3 py-2 text-gray-700 hover:bg-gray-200"
+                  className="bg-[#262626] border border-[#363636] hover:bg-[#363636] text-white text-xs font-mono px-3 py-1.5 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                   disabled={index === images.length - 1}
                   onClick={() => onMoveImage(index, index + 1)}
                 >
                   Descendre
-                </Button>
-                <Button
+                </button>
+                <button
                   type="button"
-                  className="bg-red-50 px-3 py-2 text-red-700 hover:bg-red-100"
+                  className="bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 text-xs font-mono px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
                   onClick={() => onRemoveImage(index)}
                 >
                   Supprimer
-                </Button>
+                </button>
               </div>
             </div>
           ))}

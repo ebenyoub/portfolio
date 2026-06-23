@@ -1,8 +1,5 @@
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import Container from "../components/ui/Container";
-import Card from "../components/ui/Card";
-import { FormTitle } from "../components/ui/Form";
 import useFetch from "../hooks/apiFetch";
 import ProjectForm, { type ProjectPayload } from "../components/ProjectForm";
 
@@ -27,11 +24,11 @@ const CreateProjectPage = () => {
   };
 
   return (
-    <Container className="py-12 max-w-4xl">
-      <Card className="rounded-2xl border border-gray-100 bg-white p-8 shadow-xl md:p-12">
-        <FormTitle className="text-3xl font-extrabold text-gray-900 mb-8">
+    <div className="max-w-3xl mx-auto space-y-6">
+      <div className="bg-[#111111] border border-[#262626] rounded-xl p-8 shadow-2xl">
+        <h1 className="text-2xl font-bold text-white tracking-tight mb-8" style={{ fontFamily: "Manrope, sans-serif" }}>
           Ajouter un nouveau projet
-        </FormTitle>
+        </h1>
 
         <ProjectForm
           isLoading={isLoading}
@@ -40,8 +37,8 @@ const CreateProjectPage = () => {
           onSubmit={onSubmit}
           onCancel={() => navigate("/admin")}
         />
-      </Card>
-    </Container>
+      </div>
+    </div>
   );
 };
 

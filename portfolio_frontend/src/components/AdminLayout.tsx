@@ -16,8 +16,8 @@ import { Toaster } from "sonner";
 import useAuth from "../hooks/useAuth";
 
 const NAV_ITEMS = [
-  { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { to: "/admin", label: "Projets", icon: Layers, exact: true },
+  { to: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { to: "/admin/projects", label: "Projets", icon: Layers },
   { to: "/admin/parcours", label: "Parcours", icon: GraduationCap },
   { to: "/admin/competences", label: "Compétences", icon: Cpu },
   { to: "/admin/medias", label: "Médias", icon: Image },

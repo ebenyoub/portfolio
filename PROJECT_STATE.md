@@ -20,7 +20,8 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
 ### 3. État CMS
 * Espace d'administration fonctionnel accessible sur `/admin`.
 * Permet la création, modification, suppression de projets, ainsi que la configuration des carousels (sélection des projets mis en avant `is_featured` et ordre `featured_order`).
-* **Layout Admin** : Le composant `AdminLayout.tsx` enveloppe désormais l'ensemble des routes admin (Projets, Nouveau projet, Édition). Il implémente une navigation latérale sombre repliable fidèle au design Figma Make, avec des pages de secours "En cours de développement" pour les autres modules (Parcours, Compétences, Médias, Paramètres).
+* **Layout Admin** : Le composant `AdminLayout.tsx` enveloppe désormais l'ensemble des routes admin (Dashboard, Projets, Nouveau projet, Édition). Il implémente une navigation latérale sombre repliable fidèle au design Figma Make, avec des pages de secours "En cours de développement" pour les autres modules (Parcours, Compétences, Médias, Paramètres).
+* **Dashboard Admin** : Le composant `AdminDashboardPage.tsx` gère l'affichage à l'adresse `/admin/dashboard` (avec redirection automatique depuis `/admin`), et propose des KPIs dynamiques (nombre de projets, compétences extraites, médias liés, étapes du parcours), un flux d'activité récente dynamique basé sur les projets et des raccourcis d'accès rapide.
 
 ### 4. État GitHub Import
 * Présence d'un script d'initialisation et d'import automatique dans `db/init.sql` pour charger directement les métadonnées de projets issus des dépôts GitHub publics d'Elyas Benyoub.
@@ -29,7 +30,8 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
 * Les captures d'écran des projets sont hébergées sur Cloudinary. Les chemins relatifs historiques locaux d'images (ex: `/project-images/...`) sont résolus via un utilitaire de secours frontend.
 
 ### 6. État Figma Make
-* **Statut** : Complètement intégré. Alignement visuel effectué (PB-004 Phase 2). La lisibilité des cartes Stack a été optimisée (PB-004 Phase 3). L'alignement de la page de gestion des projets admin (PB-006) et des formulaires de création/édition de projet (PB-007) avec Figma Make a été entièrement réalisé. Les formulaires adoptent désormais une structure sombre et premium (`#111111`, `#0A0A0A` pour les champs, bordures `#262626`), des textareas stylisés, une zone d'upload de couverture moderne, des aperçus de galerie soignés avec miniatures homogènes, et des boutons d'actions harmonisés (Annuler, Enregistrer).
+* **Statut** : Complètement intégré. Alignement visuel effectué (PB-004 Phase 2). La lisibilité des cartes Stack a été optimisée (PB-004 Phase 3). L'alignement de la page de gestion des projets admin (PB-006), des formulaires de création/édition de projet (PB-007) et du Dashboard Admin (PB-008) avec Figma Make a été entièrement réalisé. Les pages de l'admin adoptent désormais une structure sombre et premium (`#111111`, `#0A0A0A` pour les champs/tables/listes, bordures `#262626`), des textareas stylisés, des KPI Cards haut de gamme, et des activités récentes bien hiérarchisées.
+
 
 
 ---

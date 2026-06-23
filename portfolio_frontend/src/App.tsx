@@ -1,10 +1,11 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 import './App.css'
 import HomePage from './pages/HomePage'
 import ProjectsPage from './pages/ProjectsPage'
 import ProjectDetailPage from './pages/project-detail/ProjectDetailPage'
 import LoginPage from './pages/LoginPage'
 import AdminPage from './pages/admin/AdminPage'
+import AdminDashboardPage from './pages/admin/AdminDashboardPage'
 import CreateProjectPage from './pages/CreateProjectPage'
 import EditProjectPage from './pages/EditProjectPage'
 import ContactPage from './pages/ContactPage'
@@ -30,7 +31,9 @@ function App() {
         
         {/* Protected Admin Routes */}
         <Route element={<PrivateRoute><AdminLayout /></PrivateRoute>}>
-          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+          <Route path="/admin/projects" element={<AdminPage />} />
           <Route path="/admin/projects/new" element={<CreateProjectPage />} />
           <Route path="/admin/projects/:id/edit" element={<EditProjectPage />} />
           <Route path="/admin/parcours" element={<UnderConstruction title="Gestion du Parcours" />} />

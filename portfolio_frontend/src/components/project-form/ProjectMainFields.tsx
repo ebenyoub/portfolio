@@ -21,7 +21,7 @@ type ProjectMainFieldsProps = {
   coverPreviewUrl: string | null;
   onCoverFileSelect: (file: File | null) => void;
   onAddGalleryUrl: () => void;
-  onAppendGalleryFiles: (files: File[]) => void;
+  onAddSelectedGalleryUrl: (url: string) => void;
   onChangeGalleryImage: (index: number, value: string) => void;
   onRemoveGalleryImage: (index: number) => void;
   onMoveGalleryImage: (from: number, to: number) => void;
@@ -38,7 +38,7 @@ const ProjectMainFields = ({
   coverPreviewUrl,
   onCoverFileSelect,
   onAddGalleryUrl,
-  onAppendGalleryFiles,
+  onAddSelectedGalleryUrl,
   onChangeGalleryImage,
   onRemoveGalleryImage,
   onMoveGalleryImage,
@@ -128,7 +128,7 @@ const ProjectMainFields = ({
         errors={galleryImageErrors}
         globalError={galleryGlobalError}
         onAddUrl={onAddGalleryUrl}
-        onAppendFiles={onAppendGalleryFiles}
+        onAddSelectedUrl={onAddSelectedGalleryUrl}
         onChangeImage={onChangeGalleryImage}
         onRemoveImage={onRemoveGalleryImage}
         onMoveImage={onMoveGalleryImage}

@@ -1,7 +1,8 @@
-import { useRef } from "react";
+import { useState } from "react";
 import Input, { Label } from "./ui/Input";
 import { getImageSrc } from "../utils/images";
 import type { GalleryImageFormValue } from "../types/project";
+import MediaPickerModal from "./MediaPickerModal";
 
 type GalleryField = GalleryImageFormValue & {
   id: string;
@@ -14,7 +15,8 @@ type GalleryImagesFieldProps = {
   errors?: (string | undefined)[];
   globalError?: string;
   onAddUrl: () => void;
-  onAppendFiles: (files: File[]) => void;
+  onAddSelectedUrl?: (url: string) => void;
+  onAppendFiles?: (files: File[]) => void;
   onChangeImage: (index: number, value: string) => void;
   onRemoveImage: (index: number) => void;
   onMoveImage: (from: number, to: number) => void;
@@ -25,7 +27,7 @@ const GalleryPreview = ({ image }: { image: GalleryField }) => {
 
   if (!previewSrc) {
     return (
-      <div className="flex h-full w-full items-center justify-center text-xs font-medium text-gray-400">
+      <div className="flex h-full w-full items-center justify-center text-xs font-medium text-[#4B4B4B]">
         Image
       </div>
     );
@@ -41,20 +43,12 @@ const GalleryImagesField = ({
   errors = [],
   globalError,
   onAddUrl,
-  onAppendFiles,
+  onAddSelectedUrl,
   onChangeImage,
   onRemoveImage,
   onMoveImage,
 }: GalleryImagesFieldProps) => {
-  const inputRef = useRef<HTMLInputElement | null>(null);
-
-  const selectFiles = (files: FileList) => {
-    onAppendFiles(Array.from(files));
-
-    if (inputRef.current) {
-      inputRef.current.value = "";
-    }
-  };
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
 
   return (
     <div className="flex flex-col gap-3">
@@ -62,29 +56,14 @@ const GalleryImagesField = ({
         <Label>
           {label} {required && <span className="text-red-400">*</span>}
         </Label>
-        <p className="text-xs font-mono text-[#4B4B4B]">Ajoute des images par sélection ou URL. L'ordre affiché ici est celui du carousel.</p>
+        <p className="text-xs font-mono text-[#4B4B4B]">Sélectionnez des images dans la médiathèque ou collez des URLs. L'ordre affiché ici est celui du carousel.</p>
       </div>
 
       <div className="flex flex-wrap gap-3">
-        <input
-          ref={inputRef}
-          type="file"
-          multiple
-          aria-label="Sélectionner les images du carousel"
-          accept="image/jpeg,image/png,image/webp"
-          className="hidden"
-          onChange={(event) => {
-            const files = event.target.files;
-            if (files && files.length > 0) {
-              selectFiles(files);
-            }
-          }}
-        />
-
         <button
           type="button"
           className="bg-[#262626] border border-[#363636] hover:bg-[#363636] text-white rounded-lg px-4 py-2 text-xs font-mono font-semibold transition-colors cursor-pointer"
-          onClick={() => inputRef.current?.click()}
+          onClick={() => setIsPickerOpen(true)}
         >
           Choisir des images
         </button>
@@ -94,7 +73,7 @@ const GalleryImagesField = ({
           className="bg-[#111111] border border-[#262626] hover:bg-[#1A1A1A] text-white rounded-lg px-4 py-2 text-xs font-mono font-semibold transition-colors cursor-pointer"
           onClick={onAddUrl}
         >
-          Ajouter une URL
+          Ajouter une URL vide
         </button>
       </div>
 
@@ -153,6 +132,12 @@ const GalleryImagesField = ({
           ))}
         </div>
       )}
+
+      <MediaPickerModal
+        isOpen={isPickerOpen}
+        onClose={() => setIsPickerOpen(false)}
+        onSelect={(url) => onAddSelectedUrl?.(url)}
+      />
     </div>
   );
 };

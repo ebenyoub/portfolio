@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useFieldArray, useForm, useWatch, type FieldErrors } from "react-hook-form";
 import { z } from "zod";
 import Form from "./ui/Form";
@@ -9,10 +9,8 @@ import ProjectFormSubmitActions from "./project-form/ProjectFormSubmitActions";
 import ProjectMainFields from "./project-form/ProjectMainFields";
 import {
   defaultProjectDisplaySettings,
-  type GalleryImageFormValue,
   type ProjectDisplaySettings,
 } from "../types/project";
-import { uploadImageToCloudinary } from "../services/cloudinary";
 
 const isHttpUrl = (value: string) => {
   if (!value.trim()) return true;
@@ -44,14 +42,8 @@ const displaySettingsSchema = z.object({
   show_learned_skills: z.boolean(),
 });
 
-const isFileValue = (value: unknown): value is File => (
-  typeof File !== "undefined" && value instanceof File
-);
-
 const galleryImageSchema = z.object({
   url: z.string(),
-  file: z.custom<File>(isFileValue).optional(),
-  previewUrl: z.string().optional(),
 });
 
 const projectSchema = z.object({
@@ -70,7 +62,7 @@ const projectSchema = z.object({
   display_settings: displaySettingsSchema,
 }).superRefine((values, context) => {
   const validGalleryImages = values.gallery_images.filter((image) => (
-    image.url.trim() || image.file
+    image.url.trim()
   ));
 
   values.gallery_images.forEach((image, index) => {
@@ -175,11 +167,9 @@ const ProjectForm = ({
   onSubmit,
   onCancel,
 }: ProjectFormProps) => {
-  const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
-  const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(null);
   const [isUploadingImages, setIsUploadingImages] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
-  const objectUrlsRef = useRef<string[]>([]);
+
   const {
     control,
     register,
@@ -214,103 +204,46 @@ const ProjectForm = ({
     ? errors.gallery_images.map((error) => error?.url?.message)
     : [];
 
-  useEffect(() => () => {
-    objectUrlsRef.current.forEach((objectUrl) => URL.revokeObjectURL(objectUrl));
-    objectUrlsRef.current = [];
-  }, []);
-
-  const createPreviewUrl = (file: File) => {
-    const objectUrl = URL.createObjectURL(file);
-    objectUrlsRef.current.push(objectUrl);
-
-    return objectUrl;
-  };
-
-  const revokePreviewUrl = (objectUrl: string | undefined) => {
-    if (!objectUrl) return;
-
-    URL.revokeObjectURL(objectUrl);
-    objectUrlsRef.current = objectUrlsRef.current.filter((storedUrl) => storedUrl !== objectUrl);
-  };
-
-  const selectCoverImageFile = (file: File | null) => {
-    revokePreviewUrl(coverPreviewUrl || undefined);
-    setCoverImageFile(file);
-    setCoverPreviewUrl(file ? createPreviewUrl(file) : null);
-  };
-
-  const appendGalleryFiles = (files: File[]) => {
-    append(files.map((file) => ({
-      url: "",
-      file,
-      previewUrl: createPreviewUrl(file),
-    })));
-  };
-
   const changeGalleryImage = (index: number, value: string) => {
-    const currentImage = galleryValues[index] as GalleryImageFormValue | undefined;
-    revokePreviewUrl(currentImage?.previewUrl);
     setValue(`gallery_images.${index}`, {
-      ...currentImage,
       url: value,
-      file: undefined,
-      previewUrl: undefined,
     }, {
       shouldDirty: true,
       shouldValidate: true,
     });
   };
 
-  const removeGalleryImage = (index: number) => {
-    const currentImage = galleryValues[index] as GalleryImageFormValue | undefined;
-    revokePreviewUrl(currentImage?.previewUrl);
-    remove(index);
-  };
-
   const submitForm = async (values: ProjectFormValues) => {
     setIsUploadingImages(true);
     setUploadError(null);
 
-    let uploadedCoverImageUrl: string | null;
-    let galleryImagesPayload: string[];
     try {
-      uploadedCoverImageUrl = coverImageFile
-        ? (await uploadImageToCloudinary(coverImageFile)).secure_url
-        : cleanText(values.image_url);
+      const galleryImagesPayload = values.gallery_images
+        .map((img) => img.url.trim())
+        .filter(Boolean);
 
-      const uploadedGalleryImages = await Promise.all(
-        values.gallery_images.map(async (image) => {
-          if (image.file) {
-            return (await uploadImageToCloudinary(image.file)).secure_url;
-          }
-
-          return image.url.trim();
-        })
-      );
-      galleryImagesPayload = uploadedGalleryImages.filter(Boolean);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "Upload Cloudinary impossible.";
-      setUploadError(message);
-      return;
+      await onSubmit({
+        title: values.title.trim(),
+        description: values.description.trim(),
+        tech_stack: cleanText(values.tech_stack),
+        github_url: cleanText(values.github_url),
+        demo_url: cleanText(values.demo_url),
+        image_url: cleanText(values.image_url),
+        context: cleanText(values.context),
+        objective: cleanText(values.objective),
+        challenges: cleanText(values.challenges),
+        solution: cleanText(values.solution),
+        gallery_images: galleryImagesPayload.length > 0 ? galleryImagesPayload : null,
+        learned_skills: linesToArray(values.learned_skills),
+        display_settings: values.display_settings,
+      });
+    } catch (err) {
+      if (err instanceof Error) {
+        setUploadError(err.message);
+      }
     } finally {
       setIsUploadingImages(false);
     }
-
-    await onSubmit({
-      ...values,
-      title: values.title.trim(),
-      description: values.description.trim(),
-      tech_stack: cleanText(values.tech_stack),
-      github_url: cleanText(values.github_url),
-      demo_url: cleanText(values.demo_url),
-      image_url: uploadedCoverImageUrl,
-      context: cleanText(values.context),
-      objective: cleanText(values.objective),
-      challenges: cleanText(values.challenges),
-      solution: cleanText(values.solution),
-      gallery_images: galleryImagesPayload.length > 0 ? galleryImagesPayload : null,
-      learned_skills: linesToArray(values.learned_skills),
-    });
   };
 
   const isSubmitting = isLoading || isUploadingImages;
@@ -325,12 +258,12 @@ const ProjectForm = ({
         galleryImages={galleryImages}
         galleryImageErrors={galleryImageErrors}
         galleryGlobalError={getGalleryGlobalError(errors.gallery_images)}
-        coverPreviewUrl={coverPreviewUrl}
-        onCoverFileSelect={selectCoverImageFile}
+        coverPreviewUrl={null}
+        onCoverFileSelect={() => {}}
         onAddGalleryUrl={() => append({ url: "" })}
-        onAppendGalleryFiles={appendGalleryFiles}
+        onAddSelectedGalleryUrl={(url) => append({ url })}
         onChangeGalleryImage={changeGalleryImage}
-        onRemoveGalleryImage={removeGalleryImage}
+        onRemoveGalleryImage={remove}
         onMoveGalleryImage={move}
       />
 

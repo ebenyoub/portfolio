@@ -20,9 +20,10 @@ const Header = () => {
     { label: "Accueil", href: isHomePage ? "#" : "/" },
     { label: "Projets", href: isHomePage ? "#projets" : "/projects" },
     { label: "Stack", href: isHomePage ? "#stack" : "/#stack" },
-    { label: "Parcours", href: isHomePage ? "#parcours" : "/#parcours" },
-    { label: "Contact", href: "/contact" }
+    { label: "Parcours", href: isHomePage ? "#parcours" : "/#parcours" }
   ];
+
+  const contactHref = isHomePage ? "#contact" : "/#contact";
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-[#0A0A0A]/85 backdrop-blur-2xl border-b border-[#262626]" : "bg-transparent"}`}>
@@ -46,9 +47,9 @@ const Header = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-4">
-          <NavLink to="/contact" className="flex items-center gap-2 text-sm bg-[#3B82F6] text-white px-4 py-2 rounded-lg hover:bg-[#2563EB] transition-colors font-medium">
+          <a href={contactHref} className="flex items-center gap-2 text-sm bg-[#3B82F6] text-white px-4 py-2 rounded-lg hover:bg-[#2563EB] transition-colors font-medium">
             Me contacter
-          </NavLink>
+          </a>
         </div>
 
         <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-[#A1A1AA] hover:text-white p-1" aria-label="Menu">
@@ -69,9 +70,9 @@ const Header = () => {
               </NavLink>
             )
           ))}
-          <NavLink to="/contact" onClick={() => setMenuOpen(false)} className="text-sm text-[#3B82F6] font-medium mt-2">
+          <a href={contactHref} onClick={() => setMenuOpen(false)} className="text-sm text-[#3B82F6] font-medium mt-2">
             Me contacter →
-          </NavLink>
+          </a>
         </div>
       )}
     </nav>

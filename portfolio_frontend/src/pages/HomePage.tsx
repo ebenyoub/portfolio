@@ -195,14 +195,23 @@ const HomePage = () => {
               {settings.bio_recruiter}
             </p>
             <div className="flex flex-wrap gap-3 mb-12">
-              <a href="#projets" className="group flex items-center gap-2 bg-[#3B82F6] text-white px-6 py-3 rounded-lg font-semibold text-sm hover:bg-[#2563EB] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
+              <a
+                href="#projets"
+                className="group flex items-center gap-2 bg-[#3B82F6] text-white px-6 py-3 rounded-lg font-semibold text-sm hover:bg-[#2563EB] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              >
                 Voir mes projets
                 <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
               </a>
-              <Link to="/contact" className="flex items-center gap-2 border border-[#262626] text-white px-6 py-3 rounded-lg font-semibold text-sm hover:bg-[#111111] hover:border-[#3B3B3B] transition-all duration-200">
-                <Mail size={15} />
-                Me contacter
-              </Link>
+              <a
+                href="/cv_alternance_B3.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 border border-[#262626] bg-[#111111] text-white px-6 py-3 rounded-lg font-semibold text-sm hover:bg-[#1A1A1A] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                aria-label="Télécharger mon CV (Format PDF)"
+              >
+                <Download size={15} />
+                Télécharger mon CV
+              </a>
             </div>
             <div className="flex items-center gap-5 text-sm text-[#A1A1AA]">
               <div className="flex items-center gap-1.5"><MapPin size={13} />{settings.location}</div>
@@ -430,15 +439,6 @@ const HomePage = () => {
               <p className="mb-8 max-w-md text-base leading-relaxed text-[#A1A1AA]">
                 Disponible pour une alternance Bachelor 3 Ingenierie du Web a l'ESGI (Lyon / Remote). Ouvert aux projets freelance et aux opportunites de stage.
               </p>
-              <div className="mt-4">
-                <Link
-                  to="/contact"
-                  className="inline-flex items-center gap-2 rounded-lg border border-[#262626] px-5 py-3 text-sm font-semibold text-white transition-all hover:border-[#3B3B3B] hover:bg-[#111111]"
-                >
-                  <Mail size={15} />
-                  Ouvrir la page contact
-                </Link>
-              </div>
             </div>
 
             <div className="flex flex-col gap-3">

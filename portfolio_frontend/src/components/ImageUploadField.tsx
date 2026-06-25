@@ -1,6 +1,7 @@
-import { useRef } from "react";
+import { useState } from "react";
 import Input, { Label } from "./ui/Input";
 import { getImageSrc } from "../utils/images";
+import MediaPickerModal from "./MediaPickerModal";
 
 type ImageUploadFieldProps = {
   id: string;
@@ -23,21 +24,12 @@ const ImageUploadField = ({
   onChange,
   onFileSelect,
 }: ImageUploadFieldProps) => {
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
   const previewSrc = selectedPreviewUrl || getImageSrc(value);
 
   const updateValue = (nextValue: string) => {
     onFileSelect(null);
     onChange(nextValue);
-  };
-
-  const selectFile = (file: File) => {
-    onFileSelect(file);
-    onChange("");
-
-    if (inputRef.current) {
-      inputRef.current.value = "";
-    }
   };
 
   return (
@@ -63,24 +55,10 @@ const ImageUploadField = ({
           aria-describedby={error ? `${id}-error` : undefined}
         />
 
-        <input
-          ref={inputRef}
-          type="file"
-          aria-label={`Sélectionner ${label}`}
-          accept="image/jpeg,image/png,image/webp"
-          className="hidden"
-          onChange={(event) => {
-            const file = event.target.files?.[0];
-            if (file) {
-              selectFile(file);
-            }
-          }}
-        />
-
         <button
           type="button"
           className="shrink-0 bg-[#262626] border border-[#363636] hover:bg-[#363636] text-white rounded-lg px-4 py-2.5 text-xs font-mono font-semibold transition-colors cursor-pointer"
-          onClick={() => inputRef.current?.click()}
+          onClick={() => setIsPickerOpen(true)}
         >
           Choisir
         </button>
@@ -96,8 +74,14 @@ const ImageUploadField = ({
         )}
       </div>
 
-      <p className="text-xs font-mono text-[#4B4B4B]">Sélectionne une image ou colle une URL.</p>
+      <p className="text-xs font-mono text-[#4B4B4B]">Sélectionnez une image de la médiathèque ou collez une URL.</p>
       {error && <p id={`${id}-error`} role="alert" className="text-red-400 text-xs font-mono">{error}</p>}
+
+      <MediaPickerModal
+        isOpen={isPickerOpen}
+        onClose={() => setIsPickerOpen(false)}
+        onSelect={(url) => updateValue(url)}
+      />
     </div>
   );
 };

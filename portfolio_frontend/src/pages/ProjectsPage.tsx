@@ -104,6 +104,7 @@ const ProjectsPage = () => {
                 image_url={project.image_url ?? undefined}
                 tech_stack={project.tech_stack ?? undefined}
                 github_url={project.github_url ?? undefined}
+                demo_url={project.demo_url ?? undefined}
                 onOpenDetail={() => setSelectedProject(project)}
               />
             ))

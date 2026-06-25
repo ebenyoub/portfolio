@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { MapPin, Mail, Github, Linkedin, Download, ArrowUpRight } from "lucide-react";
+import { MapPin, Mail, Github, Linkedin, Download } from "lucide-react";
 import useFetch from "../hooks/apiFetch";
 
 const contactSchema = z.object({
@@ -62,12 +62,8 @@ const ContactPage = () => {
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Information & Links */}
           <div className="space-y-8">
-            <div>
-              <p className="text-sm text-[#A1A1AA] mb-4">Email de contact direct :</p>
-              <a href="mailto:embenyoub@gmail.com" className="group flex items-center gap-3 text-white text-lg font-semibold hover:text-[#3B82F6] transition-colors duration-200" style={{ fontFamily: "Manrope, sans-serif" }}>
-                embenyoub@gmail.com
-                <ArrowUpRight size={18} className="text-[#3B82F6] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </a>
+            <div className="pt-2">
+              <p className="text-sm text-[#A1A1AA] mb-1">Mes coordonnées et réseaux professionnels :</p>
             </div>
 
             <div className="flex flex-col gap-3">

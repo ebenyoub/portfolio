@@ -18,6 +18,8 @@ import useFetch from "../hooks/apiFetch";
 import ProjectCard from "../components/ProjectCard";
 import ProjectCaseStudyModal from "../components/ProjectCaseStudyModal";
 import type { Project } from "../types/project";
+import { getProjectCategory } from "../utils/projectPresentation";
+import { getImageSrc } from "../utils/images";
 
 // ─── Stack Categories Definition ────────────────────────────────────────────────
 const STACK_CATEGORIES = [
@@ -69,10 +71,10 @@ const STACK_CATEGORIES = [
 ];
 
 const TIMELINE = [
-  { year: "2021", title: "École 42", subtitle: "Formation en C & Algorithmique", description: "Apprentissage par les pairs, projets bas niveau (gestion mémoire, algorithmes de tri, parseurs), programmation système et graphique.", badge: "Formation" },
-  { year: "2022", title: "OpenClassrooms", subtitle: "Intégrateur Web", description: "Développement front-end, intégration HTML/CSS avancée, accessibilité WCAG, responsive design et optimisation des performances.", badge: "Diplôme" },
-  { year: "2023–2024", title: "La Plateforme", subtitle: "Développeur Web et Web Mobile", description: "Formation full-stack intensive : React, Node.js, PHP, MySQL, Docker. Projets en équipe avec méthodologie agile, Git flow et code reviews.", badge: "Diplôme" },
   { year: "2025", title: "ESGI — Bachelor 3", subtitle: "Ingénierie du Web", description: "Admission en Bachelor 3 — approfondissement architecture web, DevOps avancé, microservices et développement full-stack en alternance.", badge: "En cours", current: true },
+  { year: "2023–2024", title: "La Plateforme", subtitle: "Développeur Web et Web Mobile", description: "Formation full-stack intensive : React, Node.js, PHP, MySQL, Docker. Projets en équipe avec méthodologie agile, Git flow et code reviews.", badge: "Diplôme" },
+  { year: "2022", title: "OpenClassrooms", subtitle: "Intégrateur Web", description: "Développement front-end, intégration HTML/CSS avancée, accessibilité WCAG, responsive design et optimisation des performances.", badge: "Diplôme" },
+  { year: "2021", title: "École 42", subtitle: "Formation en C & Algorithmique", description: "Apprentissage par les pairs, projets bas niveau (gestion mémoire, algorithmes de tri, parseurs), programmation système et graphique.", badge: "Formation" },
 ];
 
 function StackCardComponent({ cat }: { cat: typeof STACK_CATEGORIES[0] }) {
@@ -104,9 +106,20 @@ const HomePage = () => {
   const { apiFetch } = useFetch();
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [heroActiveIndex, setHeroActiveIndex] = useState(0);
+  const [timeline, setTimeline] = useState(TIMELINE);
+  const [settings, setSettings] = useState({
+    name: "Elyas Benyoub",
+    title: "React & Full-Stack",
+    location: "Lyon, France",
+    email: "embenyoub@gmail.com",
+    github_url: "https://github.com/ebenyoub",
+    linkedin_url: "https://linkedin.com/in/elyas-benyoub",
+    bio_recruiter: "Conception d'applications web robustes, scalables et centrées sur l'expérience utilisateur. Admis à l'ESGI Lyon en Bachelor 3 Ingénierie du Web, je recherche une alternance pour relever vos défis techniques et intégrer vos équipes de développement."
+  });
 
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchData = async () => {
       try {
         const response = await apiFetch("/projects");
         const sorted = (response.data as Project[])
@@ -126,9 +139,37 @@ const HomePage = () => {
           toast.error(error.message);
         }
       }
+
+      // Fetch parameters
+      try {
+        const paramRes = await apiFetch("/parametres");
+        if (paramRes.data) {
+          setSettings((prev) => ({ ...prev, ...paramRes.data }));
+        }
+      } catch {
+        // Silent fallback
+      }
+
+      // Fetch parcours
+      try {
+        const parcoursRes = await apiFetch("/parcours");
+        if (parcoursRes.data && parcoursRes.data.length > 0) {
+          setTimeline(parcoursRes.data);
+        }
+      } catch {
+        // Silent fallback
+      }
     };
-    fetchProjects();
+    fetchData();
   }, [apiFetch]);
+
+  useEffect(() => {
+    if (projects.length <= 1) return;
+    const interval = setInterval(() => {
+      setHeroActiveIndex((prev) => (prev + 1) % projects.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [projects.length]);
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white pt-16">
@@ -140,17 +181,18 @@ const HomePage = () => {
           <div>
             <div className="inline-flex items-center gap-2.5 border border-[#262626] bg-[#111111] rounded-full px-3.5 py-1.5 mb-8">
               <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
-              <span className="text-xs font-mono text-[#A1A1AA]">Disponible pour une alternance — Lyon</span>
+              <span className="text-xs font-mono text-[#A1A1AA]">Disponible pour une alternance — {settings.location.split(",")[0] || "Lyon"}</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-[3.2rem] font-extrabold text-white leading-[1.1] tracking-tight mb-6" style={{ fontFamily: "Manrope, sans-serif" }}>
               Développeur Web<br />
-              <span className="text-transparent bg-clip-text" style={{ backgroundImage: "linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)" }}>Front-End &amp; Full-Stack</span>
+              <span className="text-transparent bg-clip-text" style={{ backgroundImage: "linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)" }}>
+                {settings.title.toLowerCase().includes("développeur web") 
+                  ? settings.title.replace(/développeur web/gi, "").trim()
+                  : settings.title}
+              </span>
             </h1>
-            <p className="text-[#A1A1AA] text-base leading-relaxed mb-3 max-w-[30rem]">
-              Je conçois des applications web avec React, TypeScript, Express et MySQL.
-            </p>
             <p className="text-[#A1A1AA] text-base leading-relaxed mb-10 max-w-[30rem]">
-              Admis en Bachelor 3 Ingénierie du Web à l'ESGI Lyon, je recherche une alternance pour contribuer à des projets concrets et progresser dans un cadre professionnel.
+              {settings.bio_recruiter}
             </p>
             <div className="flex flex-wrap gap-3 mb-12">
               <a href="#projets" className="group flex items-center gap-2 bg-[#3B82F6] text-white px-6 py-3 rounded-lg font-semibold text-sm hover:bg-[#2563EB] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
@@ -163,36 +205,117 @@ const HomePage = () => {
               </Link>
             </div>
             <div className="flex items-center gap-5 text-sm text-[#A1A1AA]">
-              <div className="flex items-center gap-1.5"><MapPin size={13} />Lyon, France</div>
+              <div className="flex items-center gap-1.5"><MapPin size={13} />{settings.location}</div>
               <div className="w-px h-4 bg-[#262626]" />
               <div className="flex items-center gap-3.5">
-                <a href="https://github.com/ebenyoub" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors" aria-label="GitHub"><Github size={17} /></a>
-                <a href="https://linkedin.com/in/elyas-benyoub" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors" aria-label="LinkedIn"><Linkedin size={17} /></a>
-                <a href="mailto:embenyoub@gmail.com" className="hover:text-white transition-colors" aria-label="Email"><Mail size={17} /></a>
+                {settings.github_url && (
+                  <a href={settings.github_url} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors" aria-label="GitHub">
+                    <Github size={17} />
+                  </a>
+                )}
+                {settings.linkedin_url && (
+                  <a href={settings.linkedin_url} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors" aria-label="LinkedIn">
+                    <Linkedin size={17} />
+                  </a>
+                )}
               </div>
             </div>
           </div>
           <div className="hidden lg:block">
-            <div className="bg-[#111111] border border-[#262626] rounded-xl overflow-hidden shadow-2xl">
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-[#262626] bg-[#0F0F0F]">
-                <span className="w-3 h-3 rounded-full bg-[#FF5F57]" />
-                <span className="w-3 h-3 rounded-full bg-[#FEBC2E]" />
-                <span className="w-3 h-3 rounded-full bg-[#28C840]" />
-                <span className="ml-3 text-xs text-[#6B7280] font-mono">elyas@portfolio ~/dev</span>
+            {projects.length > 0 ? (
+              (() => {
+                const activeProj = projects[heroActiveIndex] || projects[0];
+                return (
+                  <div className="bg-[#111111] border border-[#262626] rounded-xl overflow-hidden shadow-2xl flex flex-col h-[400px] transition-all duration-500 hover:border-[#3B82F6]/30">
+                    <div className="flex items-center justify-between px-4 py-3 border-b border-[#262626] bg-[#0F0F0F] select-none">
+                      <div className="flex items-center gap-2">
+                        <span className="w-3 h-3 rounded-full bg-[#FF5F57]" />
+                        <span className="w-3 h-3 rounded-full bg-[#FEBC2E]" />
+                        <span className="w-3 h-3 rounded-full bg-[#28C840]" />
+                        <span className="ml-3 text-xs text-[#6B7280] font-mono"> elyas.dev/projects</span>
+                      </div>
+                      <div className="flex gap-1.5">
+                        {projects.map((_, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => setHeroActiveIndex(idx)}
+                            className={`w-2 h-2 rounded-full transition-all ${idx === heroActiveIndex ? "bg-[#3B82F6] scale-125" : "bg-[#262626] hover:bg-[#404040]"}`}
+                            aria-label={`Voir projet à la une ${idx + 1}`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <div className="relative h-48 bg-[#1A1A1A] overflow-hidden flex-shrink-0">
+                      {activeProj.image_url ? (
+                        <img
+                          src={getImageSrc(activeProj.image_url)}
+                          alt={activeProj.title}
+                          className="w-full h-full object-cover opacity-90 transition-all duration-700 hover:scale-[1.01]"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-900/50 to-indigo-950/50 p-4 text-center text-sm font-bold text-white opacity-40">
+                          {activeProj.title}
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-transparent to-transparent" />
+                    </div>
+                    <div className="p-5 flex flex-col justify-between flex-grow">
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-[10px] font-mono uppercase tracking-wider text-[#3B82F6]">
+                            {getProjectCategory(activeProj)}
+                          </span>
+                        </div>
+                        <h3 className="text-base font-bold text-white mb-2 leading-tight" style={{ fontFamily: "Manrope, sans-serif" }}>
+                          {activeProj.title}
+                        </h3>
+                        <p className="text-[#A1A1AA] text-xs leading-relaxed line-clamp-2">
+                          {activeProj.description}
+                        </p>
+                      </div>
+                      <div className="flex items-center justify-between mt-auto">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedProject(activeProj)}
+                          className="flex items-center gap-1 text-xs font-semibold text-[#3B82F6] hover:text-[#60A5FA] transition-colors"
+                        >
+                          En savoir plus
+                          <ArrowRight size={12} />
+                        </button>
+                        <div className="flex items-center gap-3">
+                          {activeProj.demo_url && (
+                            <a
+                              href={activeProj.demo_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center rounded border border-[#3B82F6]/30 bg-[#3B82F6]/10 px-2 py-0.5 text-[11px] font-mono text-[#60A5FA] hover:bg-[#3B82F6]/25 transition-all"
+                            >
+                              Démo
+                            </a>
+                          )}
+                          {activeProj.github_url && (
+                            <a
+                              href={activeProj.github_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[#A1A1AA] hover:text-white transition-colors"
+                              aria-label="GitHub"
+                            >
+                              <Github size={15} />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()
+            ) : (
+              <div className="bg-[#111111] border border-[#262626] rounded-xl overflow-hidden shadow-2xl flex flex-col h-[400px] items-center justify-center text-center p-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] animate-pulse mb-3" />
+                <p className="text-[#A1A1AA] font-mono text-xs">Chargement du showcase...</p>
               </div>
-              <div className="p-6 text-sm font-mono leading-7 select-none">
-                <p><span className="text-[#6B7280]">// elyas.benyoub — dev web</span></p>
-                <p className="mt-1"><span className="text-[#8B5CF6]">const </span><span className="text-[#60A5FA]">developer</span><span className="text-white"> = {"{"}</span></p>
-                <p><span className="text-[#E5E7EB] ml-6">name</span><span className="text-[#6B7280]">: </span><span className="text-[#10B981]">"Elyas Benyoub"</span><span className="text-[#6B7280]">,</span></p>
-                <p><span className="text-[#E5E7EB] ml-6">location</span><span className="text-[#6B7280]">: </span><span className="text-[#10B981]">"Lyon, France"</span><span className="text-[#6B7280]">,</span></p>
-                <p className="mt-1"><span className="text-[#E5E7EB] ml-6">frontend</span><span className="text-[#6B7280]">: [</span><span className="text-[#F59E0B]">"React"</span><span className="text-[#6B7280]">, </span><span className="text-[#F59E0B]">"TypeScript"</span><span className="text-[#6B7280]">, </span><span className="text-[#F59E0B]">"Next.js"</span><span className="text-[#6B7280]">],</span></p>
-                <p><span className="text-[#E5E7EB] ml-6">backend</span><span className="text-[#6B7280]">: [</span><span className="text-[#F59E0B]">"Node.js"</span><span className="text-[#6B7280]">, </span><span className="text-[#F59E0B]">"Express"</span><span className="text-[#6B7280]">, </span><span className="text-[#F59E0B]">"PHP"</span><span className="text-[#6B7280]">],</span></p>
-                <p><span className="text-[#E5E7EB] ml-6">tools</span><span className="text-[#6B7280]">: [</span><span className="text-[#F59E0B]">"Docker"</span><span className="text-[#6B7280]">, </span><span className="text-[#F59E0B]">"Git"</span><span className="text-[#6B7280]">, </span><span className="text-[#F59E0B]">"Figma"</span><span className="text-[#6B7280]">],</span></p>
-                <p className="mt-2"><span className="text-[#E5E7EB] ml-6">status</span><span className="text-[#6B7280]">: </span><span className="text-[#10B981]">"open_to_alternance"</span><span className="text-[#6B7280]">,</span></p>
-                <p><span className="text-white">{"}"}</span><span className="text-[#6B7280]">;</span></p>
-                <p className="mt-4 flex items-center gap-1.5"><span className="text-[#3B82F6]">▸</span><span className="text-[#A1A1AA]">ready to ship</span><span className="inline-block w-2 h-4 bg-[#3B82F6] animate-pulse ml-1" /></p>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
@@ -230,6 +353,7 @@ const HomePage = () => {
                   image_url={project.image_url ?? undefined}
                   tech_stack={project.tech_stack ?? undefined}
                   github_url={project.github_url ?? undefined}
+                  demo_url={project.demo_url ?? undefined}
                   onOpenDetail={() => setSelectedProject(project)}
                 />
               ))
@@ -259,22 +383,27 @@ const HomePage = () => {
         <div className="relative">
           <div className="absolute left-[5.5rem] md:left-36 top-0 bottom-0 w-px bg-gradient-to-b from-[#3B82F6]/40 via-[#262626] to-transparent" />
           <div className="space-y-0">
-            {TIMELINE.map((item) => (
-              <div key={item.year} className="relative flex items-start gap-8 md:gap-14 py-8">
-                <div className="w-14 md:w-24 flex-shrink-0 text-right pt-1">
-                  <span className="text-xs font-mono text-[#A1A1AA] leading-tight block">{item.year}</span>
-                </div>
-                <div className={`absolute left-[4.85rem] md:left-[8.65rem] top-[2.15rem] w-3 h-3 rounded-full border-2 flex-shrink-0 z-10 ${item.current ? "border-[#3B82F6] bg-[#3B82F6] shadow-[0_0_10px_rgba(59,130,246,0.6)]" : "border-[#404040] bg-[#0A0A0A]"}`} />
-                <div className="flex-1 pl-4">
-                  <div className="flex items-center gap-3 mb-1">
-                    <h3 className="text-base font-bold text-white tracking-tight" style={{ fontFamily: "Manrope, sans-serif" }}>{item.title}</h3>
-                    <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${item.current ? "border-[#3B82F6]/40 bg-[#3B82F6]/10 text-[#60A5FA]" : "border-[#262626] bg-[#111111] text-[#A1A1AA]"}`}>{item.badge}</span>
+            {timeline.map((item) => {
+              const isCurrent = Boolean(item.current);
+              return (
+                <div key={`${item.year}-${item.title}`} className="relative flex items-start gap-8 md:gap-14 py-8">
+                  <div className="w-14 md:w-24 flex-shrink-0 text-right pt-1">
+                    <span className="text-xs font-mono text-[#A1A1AA] leading-tight block">{item.year}</span>
                   </div>
-                  <p className="text-sm text-[#3B82F6] font-medium mb-2">{item.subtitle}</p>
-                  <p className="text-sm text-[#A1A1AA] leading-relaxed max-w-lg">{item.description}</p>
+                  <div className={`absolute left-[4.85rem] md:left-[8.65rem] top-[2.15rem] w-3 h-3 rounded-full border-2 flex-shrink-0 z-10 ${isCurrent ? "border-[#3B82F6] bg-[#3B82F6] shadow-[0_0_10px_rgba(59,130,246,0.6)]" : "border-[#404040] bg-[#0A0A0A]"}`} />
+                  <div className="flex-1 pl-4">
+                    <div className="flex items-center gap-3 mb-1">
+                      <h3 className="text-base font-bold text-white tracking-tight" style={{ fontFamily: "Manrope, sans-serif" }}>{item.title}</h3>
+                      {item.badge && (
+                        <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${isCurrent ? "border-[#3B82F6]/40 bg-[#3B82F6]/10 text-[#60A5FA]" : "border-[#262626] bg-[#111111] text-[#A1A1AA]"}`}>{item.badge}</span>
+                      )}
+                    </div>
+                    {item.subtitle && <p className="text-sm text-[#3B82F6] font-medium mb-2">{item.subtitle}</p>}
+                    {item.description && <p className="text-sm text-[#A1A1AA] leading-relaxed max-w-lg">{item.description}</p>}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -301,15 +430,7 @@ const HomePage = () => {
               <p className="mb-8 max-w-md text-base leading-relaxed text-[#A1A1AA]">
                 Disponible pour une alternance Bachelor 3 Ingenierie du Web a l'ESGI (Lyon / Remote). Ouvert aux projets freelance et aux opportunites de stage.
               </p>
-              <a
-                href="mailto:embenyoub@gmail.com"
-                className="group flex items-center gap-3 text-lg font-semibold text-white transition-colors duration-200 hover:text-[#3B82F6]"
-                style={{ fontFamily: "Manrope, sans-serif" }}
-              >
-                embenyoub@gmail.com
-                <ArrowRight size={18} className="rotate-[-45deg] text-[#3B82F6] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </a>
-              <div className="mt-8">
+              <div className="mt-4">
                 <Link
                   to="/contact"
                   className="inline-flex items-center gap-2 rounded-lg border border-[#262626] px-5 py-3 text-sm font-semibold text-white transition-all hover:border-[#3B3B3B] hover:bg-[#111111]"
@@ -322,10 +443,10 @@ const HomePage = () => {
 
             <div className="flex flex-col gap-3">
               {[
-                { icon: Github, label: "GitHub", sublabel: "github.com/ebenyoub", href: "https://github.com/ebenyoub", color: "#FFFFFF" },
-                { icon: Linkedin, label: "LinkedIn", sublabel: "linkedin.com/in/elyas-benyoub", href: "https://linkedin.com/in/elyas-benyoub", color: "#0A66C2" },
-                { icon: Mail, label: "Email", sublabel: "embenyoub@gmail.com", href: "mailto:embenyoub@gmail.com", color: "#3B82F6" },
-                { icon: Download, label: "Curriculum Vitae", sublabel: "Telecharger le PDF", href: "/cv_alternance_B3.pdf", color: "#10B981" },
+                ...(settings.github_url ? [{ icon: Github, label: "GitHub", sublabel: settings.github_url.replace("https://", ""), href: settings.github_url, color: "#FFFFFF" }] : []),
+                ...(settings.linkedin_url ? [{ icon: Linkedin, label: "LinkedIn", sublabel: settings.linkedin_url.replace("https://", ""), href: settings.linkedin_url, color: "#0A66C2" }] : []),
+                { icon: Mail, label: "Email", sublabel: settings.email, href: `mailto:${settings.email}`, color: "#3B82F6" },
+                { icon: Download, label: "Curriculum Vitae", sublabel: "Télécharger le PDF", href: "/cv_alternance_B3.pdf", color: "#10B981" },
               ].map((link) => {
                 const Icon = link.icon;
                 return (
@@ -346,7 +467,7 @@ const HomePage = () => {
                       <p className="mb-0.5 text-sm font-semibold text-white" style={{ fontFamily: "Manrope, sans-serif" }}>
                         {link.label}
                       </p>
-                      <p className="text-xs text-[#A1A1AA]">{link.sublabel}</p>
+                      <p className="text-xs text-[#A1A1AA] truncate">{link.sublabel}</p>
                     </div>
                   </a>
                 );

@@ -38,6 +38,7 @@ function ProjectCaseStudyContent({
   const displaySettings = parseDisplaySettings(project.display_settings, project);
   const projectImages = getProjectImages(project, displaySettings);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [isZoomed, setIsZoomed] = useState(false);
   const hasCarousel = displaySettings.show_gallery && projectImages.length > 1;
   const activeImage = projectImages[activeImageIndex] ?? projectImages[0];
   const heroImage = activeImage?.src ?? project.image_url ?? null;
@@ -50,26 +51,33 @@ function ProjectCaseStudyContent({
 
   return (
     <>
-      <div className="relative h-52 flex-shrink-0 overflow-hidden bg-[#1A1A1A]">
+      <div className="relative h-64 md:h-80 flex-shrink-0 overflow-hidden bg-[#0A0A0A] flex items-center justify-center">
+        {heroImage && (
+          <div
+            className="absolute inset-0 bg-cover bg-center opacity-25 blur-md scale-105 select-none pointer-events-none"
+            style={{ backgroundImage: `url(${getImageSrc(heroImage)})` }}
+          />
+        )}
         {heroImage ? (
           <img
             src={getImageSrc(heroImage)}
             alt={activeImage?.alt ?? project.title}
-            className="h-full w-full object-cover opacity-75"
+            onClick={() => setIsZoomed(true)}
+            className="relative z-10 max-h-full max-w-full object-contain opacity-90 hover:opacity-100 transition-opacity cursor-zoom-in select-none"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-[#111111] px-6 text-center text-lg font-bold text-white opacity-50">
             {project.title}
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/35 to-transparent" />
+        <div className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-t from-[#111111]/70 to-transparent" />
 
         {hasCarousel && (
           <>
             <button
               type="button"
               onClick={() => setActiveImageIndex((current) => getPreviousIndex(current, projectImages.length))}
-              className="absolute left-4 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg border border-[#262626] bg-[#1A1A1A]/90 text-[#A1A1AA] transition-colors hover:text-white"
+              className="absolute left-4 top-1/2 z-30 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg border border-[#262626] bg-[#1A1A1A]/90 text-[#A1A1AA] transition-colors hover:text-white"
               aria-label="Image précédente"
             >
               <ChevronLeft size={18} />
@@ -77,12 +85,12 @@ function ProjectCaseStudyContent({
             <button
               type="button"
               onClick={() => setActiveImageIndex((current) => getNextIndex(current, projectImages.length))}
-              className="absolute right-4 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg border border-[#262626] bg-[#1A1A1A]/90 text-[#A1A1AA] transition-colors hover:text-white"
+              className="absolute right-4 top-1/2 z-30 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg border border-[#262626] bg-[#1A1A1A]/90 text-[#A1A1AA] transition-colors hover:text-white"
               aria-label="Image suivante"
             >
               <ChevronRight size={18} />
             </button>
-            <div className="absolute bottom-4 right-4 rounded-md border border-[#262626] bg-[#0A0A0A]/80 px-2.5 py-1 text-[11px] font-mono text-[#D4D4D8]">
+            <div className="absolute bottom-4 right-4 z-30 rounded-md border border-[#262626] bg-[#0A0A0A]/80 px-2.5 py-1 text-[11px] font-mono text-[#D4D4D8]">
               {activeImageIndex + 1} / {projectImages.length}
             </div>
           </>
@@ -92,19 +100,19 @@ function ProjectCaseStudyContent({
           <button
             type="button"
             onClick={onClose}
-            className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg border border-[#262626] bg-[#1A1A1A] text-[#A1A1AA] transition-all hover:border-[#404040] hover:text-white"
+            className="absolute right-4 top-4 z-30 flex h-8 w-8 items-center justify-center rounded-lg border border-[#262626] bg-[#1A1A1A] text-[#A1A1AA] transition-all hover:border-[#404040] hover:text-white"
             aria-label="Fermer le projet"
           >
             <X size={15} />
           </button>
         )}
 
-        <div className="absolute bottom-5 left-6 right-16">
+        <div className="absolute bottom-5 left-6 right-16 z-30 pointer-events-none">
           <span className="mb-1.5 block text-[10px] font-mono uppercase tracking-widest text-[#3B82F6]">
             {category}
           </span>
           <h2
-            className="text-xl font-bold tracking-tight text-white"
+            className="text-xl font-bold tracking-tight text-white drop-shadow-md"
             style={{ fontFamily: "Manrope, sans-serif" }}
           >
             {project.title}
@@ -200,7 +208,7 @@ function ProjectCaseStudyContent({
               <CaseStudyBlock title="Solutions">
                 <ul className="space-y-2">
                   {solutions.map((solution) => (
-                    <li key={solution} className="flex items-start gap-2.5 text-sm text-[#A1A1AA]">
+                    <li key={solution} className="flex items-start gap-2.5 text-sm text-[#10B981]">
                       <span className="mt-0.5 flex-shrink-0 text-[#10B981]">▸</span>
                       {solution}
                     </li>
@@ -225,12 +233,22 @@ function ProjectCaseStudyContent({
         )}
 
         <div className="flex gap-3 pb-1 pt-2">
+          {project.demo_url && (
+            <a
+              href={project.demo_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 rounded-lg bg-[#3B82F6] px-4 py-2.5 text-sm font-semibold text-white transition-all hover:bg-[#2563EB]"
+            >
+              Voir la démo
+            </a>
+          )}
           {project.github_url && (
             <a
               href={project.github_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-lg border border-[#262626] px-4 py-2.5 text-sm font-medium text-white transition-all hover:border-[#363636] hover:bg-[#1A1A1A]"
+              className="flex items-center gap-2 rounded-lg border border-[#262626] bg-[#111111] px-4 py-2.5 text-sm font-medium text-white transition-all hover:border-[#363636] hover:bg-[#1A1A1A]"
             >
               <Github size={15} />
               Code source
@@ -248,6 +266,29 @@ function ProjectCaseStudyContent({
           )}
         </div>
       </div>
+
+      {isZoomed && heroImage && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 cursor-zoom-out"
+          onClick={() => setIsZoomed(false)}
+        >
+          <img
+            src={getImageSrc(heroImage)}
+            alt={activeImage?.alt ?? project.title}
+            className="max-h-[95vh] max-w-[95vw] object-contain select-none animate-in fade-in zoom-in-95 duration-200"
+          />
+          <button
+            type="button"
+            className="absolute top-4 right-4 text-white/70 hover:text-white p-2 rounded-lg bg-white/10"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsZoomed(false);
+            }}
+          >
+            <X size={20} />
+          </button>
+        </div>
+      )}
     </>
   );
 }

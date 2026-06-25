@@ -21,6 +21,7 @@ const ProjectCard = ({
   image_url,
   tech_stack,
   github_url,
+  demo_url,
   onOpenDetail,
 }: ProjectCardProps) => {
   const [imageFailed, setImageFailed] = useState(false);
@@ -54,16 +55,16 @@ const ProjectCard = ({
             src={getImageSrc(image_url)}
             alt={title}
             onError={() => setImageFailed(true)}
-            className="w-full h-full object-cover opacity-50 group-hover:opacity-65 group-hover:scale-[1.03] transition-all duration-500"
+            className="w-full h-full object-cover opacity-85 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-500"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-900 to-indigo-950 p-4 text-center text-sm font-bold text-white opacity-40">
             {title}
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#111111]/60 to-transparent" />
         <div className="absolute right-3 top-3">
-          <span className="rounded border border-[#262626] bg-[#0A0A0A]/80 px-2 py-0.5 text-[10px] font-mono text-[#A1A1AA] backdrop-blur-sm">
+          <span className="rounded border border-[#262626] bg-[#0A0A0A]/85 px-2 py-0.5 text-[10px] font-mono text-[#A1A1AA] backdrop-blur-sm">
             {category}
           </span>
         </div>
@@ -93,16 +94,32 @@ const ProjectCard = ({
         )}
 
         <div className="flex items-center justify-between mt-auto pt-2">
-          <button
-            type="button"
-            onClick={onOpenDetail}
-            onKeyDown={(event) => event.stopPropagation()}
-            className="flex items-center gap-1.5 text-xs font-medium text-[#3B82F6] transition-all group-hover:gap-2.5"
-            aria-label={`Voir le detail de ${title}`}
-          >
-            Voir le détail
-            <ArrowUpRight size={13} />
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpenDetail();
+              }}
+              className="flex items-center gap-1 text-xs font-semibold text-[#3B82F6] hover:text-[#60A5FA] transition-colors"
+              aria-label={`Voir le detail de ${title}`}
+            >
+              Voir le détail
+              <ArrowUpRight size={13} />
+            </button>
+            {demo_url && (
+              <a
+                href={demo_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="inline-flex items-center gap-0.5 rounded border border-[#3B82F6]/30 bg-[#3B82F6]/10 px-2 py-0.5 text-[11px] font-mono text-[#60A5FA] hover:bg-[#3B82F6]/25 transition-all"
+                aria-label={`Ouvrir la démo de ${title}`}
+              >
+                Démo
+              </a>
+            )}
+          </div>
           {github_url && (
             <a
               href={github_url}

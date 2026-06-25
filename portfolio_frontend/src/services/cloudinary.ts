@@ -37,7 +37,10 @@ const validateImageFile = (file: File) => {
   }
 };
 
-export const uploadImageToCloudinary = async (file: File): Promise<CloudinaryUploadResult> => {
+export const uploadImageToCloudinary = async (
+  file: File,
+  onProgress?: (percent: number) => void
+): Promise<CloudinaryUploadResult> => {
   validateImageFile(file);
 
   const { cloudName, uploadPreset } = getCloudinaryConfig();
@@ -45,29 +48,45 @@ export const uploadImageToCloudinary = async (file: File): Promise<CloudinaryUpl
   formData.append("file", file);
   formData.append("upload_preset", uploadPreset);
 
-  const response = await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(cloudName)}/image/upload`, {
-    method: "POST",
-    body: formData
+  return new Promise<CloudinaryUploadResult>((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `https://api.cloudinary.com/v1_1/${encodeURIComponent(cloudName)}/image/upload`, true);
+
+    if (onProgress && xhr.upload) {
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percent = Math.round((event.loaded / event.total) * 100);
+          onProgress(percent);
+        }
+      };
+    }
+
+    xhr.onload = () => {
+      let payload: CloudinaryUploadResponse;
+      try {
+        payload = JSON.parse(xhr.responseText) as CloudinaryUploadResponse;
+      } catch {
+        return reject(new Error("Réponse Cloudinary illisible."));
+      }
+
+      if (xhr.status >= 200 && xhr.status < 300) {
+        if (payload.secure_url && payload.public_id) {
+          resolve({
+            secure_url: payload.secure_url,
+            public_id: payload.public_id,
+          });
+        } else {
+          reject(new Error("Réponse Cloudinary invalide."));
+        }
+      } else {
+        reject(new Error(payload?.error?.message || `Upload Cloudinary impossible (Status ${xhr.status}).`));
+      }
+    };
+
+    xhr.onerror = () => {
+      reject(new Error("Erreur réseau lors de l'upload Cloudinary."));
+    };
+
+    xhr.send(formData);
   });
-
-  let payload: CloudinaryUploadResponse;
-
-  try {
-    payload = await response.json() as CloudinaryUploadResponse;
-  } catch {
-    throw new Error("Réponse Cloudinary illisible.");
-  }
-
-  if (!response.ok) {
-    throw new Error(payload?.error?.message || "Upload Cloudinary impossible.");
-  }
-
-  if (!payload.secure_url || !payload.public_id) {
-    throw new Error("Réponse Cloudinary invalide.");
-  }
-
-  return {
-    secure_url: payload.secure_url,
-    public_id: payload.public_id,
-  };
 };

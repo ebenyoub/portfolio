@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { X, Terminal } from "lucide-react";
-import useAuth from "../hooks/useAuth";
 
 const Header = () => {
-  const { isAuthenticated, logout } = useAuth();
-  const navigate = useNavigate();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
@@ -46,29 +43,12 @@ const Header = () => {
               </NavLink>
             )
           ))}
-          {isAuthenticated && (
-            <NavLink to="/admin" className="text-sm text-[#A1A1AA] hover:text-white transition-colors duration-150 font-mono">
-              [Admin]
-            </NavLink>
-          )}
         </div>
 
         <div className="hidden md:flex items-center gap-4">
-          {isAuthenticated ? (
-            <button
-              onClick={() => {
-                logout();
-                navigate("/login");
-              }}
-              className="text-sm bg-red-600/20 text-red-400 border border-red-500/30 px-4 py-2 rounded-lg hover:bg-red-600 hover:text-white transition-colors font-medium cursor-pointer"
-            >
-              Déconnexion
-            </button>
-          ) : (
-            <NavLink to="/contact" className="flex items-center gap-2 text-sm bg-[#3B82F6] text-white px-4 py-2 rounded-lg hover:bg-[#2563EB] transition-colors font-medium">
-              Me contacter
-            </NavLink>
-          )}
+          <NavLink to="/contact" className="flex items-center gap-2 text-sm bg-[#3B82F6] text-white px-4 py-2 rounded-lg hover:bg-[#2563EB] transition-colors font-medium">
+            Me contacter
+          </NavLink>
         </div>
 
         <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-[#A1A1AA] hover:text-white p-1" aria-label="Menu">
@@ -89,27 +69,9 @@ const Header = () => {
               </NavLink>
             )
           ))}
-          {isAuthenticated && (
-            <NavLink to="/admin" onClick={() => setMenuOpen(false)} className="text-sm text-[#A1A1AA] hover:text-white transition-colors font-mono">
-              [Admin Dashboard]
-            </NavLink>
-          )}
-          {isAuthenticated ? (
-            <button
-              onClick={() => {
-                setMenuOpen(false);
-                logout();
-                navigate("/login");
-              }}
-              className="text-sm text-red-400 font-medium mt-2 text-left"
-            >
-              Déconnexion →
-            </button>
-          ) : (
-            <NavLink to="/contact" onClick={() => setMenuOpen(false)} className="text-sm text-[#3B82F6] font-medium mt-2">
-              Me contacter →
-            </NavLink>
-          )}
+          <NavLink to="/contact" onClick={() => setMenuOpen(false)} className="text-sm text-[#3B82F6] font-medium mt-2">
+            Me contacter →
+          </NavLink>
         </div>
       )}
     </nav>

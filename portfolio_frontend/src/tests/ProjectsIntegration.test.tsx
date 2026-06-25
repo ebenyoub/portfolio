@@ -62,9 +62,14 @@ describe("Frontend Projects Pages Integration Tests", () => {
 
     it("opens a premium project modal from the list", async () => {
       const user = userEvent.setup();
+      const projectWithGallery = {
+        ...mockProject,
+        gallery_images: ["https://example.com/first.png", "https://example.com/second.png"],
+        display_settings: { show_cover: false, show_gallery: true },
+      };
       mockUseFetch.mockReturnValue({
         apiFetch: vi.fn().mockResolvedValue({
-          data: [mockProject],
+          data: [projectWithGallery],
         }),
         isLoading: false,
       });
@@ -79,6 +84,8 @@ describe("Frontend Projects Pages Integration Tests", () => {
 
       expect(screen.getByRole("dialog", { name: /Apercu du projet React Calculator/i })).toBeInTheDocument();
       expect(screen.getByText("Code source")).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Image suivante" })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Afficher l'image 2" })).toBeInTheDocument();
     });
 
     it("renders error state when projects cannot be loaded", async () => {
@@ -183,8 +190,10 @@ describe("Frontend Projects Pages Integration Tests", () => {
         </MemoryRouter>
       );
 
-      const firstImage = await screen.findByAltText("React Calculator");
+      const firstImage = await screen.findByAltText("React Calculator - image 1");
       expect(firstImage).toHaveAttribute("src", "https://example.com/first.png");
+      expect(screen.getByRole("button", { name: "Image suivante" })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Afficher l'image 2" })).toBeInTheDocument();
     });
 
     it("renders the premium detail route without media controls when no gallery is available", async () => {

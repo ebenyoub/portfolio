@@ -29,7 +29,7 @@ const ProjectHero = ({
   onOpenImage,
 }: ProjectHeroProps) => {
   const activeImage = projectImages[activeImageIndex] ?? projectImages[0];
-  const imageFitClass = hasCarousel ? "object-contain" : "object-cover";
+  const imageFitClass = "object-cover";
 
   return (
     <div className={showMediaSection ? "grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-8 lg:gap-12 items-center bg-[#0A0A0A] text-white p-2" : "max-w-3xl bg-[#0A0A0A] text-white"}>
@@ -87,7 +87,7 @@ const ProjectHero = ({
                   className="group block h-full w-full cursor-zoom-in"
                   aria-label={`Agrandir ${activeImage.alt}`}
                 >
-                  <img src={getImageSrc(activeImage.src)} alt={activeImage.alt} className={`h-full w-full opacity-60 hover:opacity-85 transition-opacity duration-300 ${imageFitClass}`} />
+                  <img src={getImageSrc(activeImage.src)} alt={activeImage.alt} className={`h-full w-full opacity-80 hover:opacity-95 transition-opacity duration-300 ${imageFitClass}`} />
                   <span className="absolute bottom-3 right-3 rounded-lg bg-black/70 px-3 py-1.5 text-xs font-bold text-white opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
                     Agrandir
                   </span>

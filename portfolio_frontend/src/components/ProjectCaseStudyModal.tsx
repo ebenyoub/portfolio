@@ -1,5 +1,5 @@
-import { useEffect, type ReactNode } from "react";
-import { Github, X } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import { ChevronLeft, ChevronRight, Github, X } from "lucide-react";
 import type { Project } from "../types/project";
 import { getImageSrc } from "../utils/images";
 import { parseDisplaySettings, parseJsonArray } from "../utils/project";
@@ -8,7 +8,11 @@ import {
   getProjectCategory,
   getProjectTechnologies,
 } from "../utils/projectPresentation";
-import { getProjectImages } from "../pages/project-detail/utils/projectImages";
+import {
+  getNextIndex,
+  getPreviousIndex,
+  getProjectImages,
+} from "../pages/project-detail/utils/projectImages";
 
 type ProjectCaseStudyModalProps = {
   project: Project | null;
@@ -33,7 +37,10 @@ function ProjectCaseStudyContent({
 }) {
   const displaySettings = parseDisplaySettings(project.display_settings, project);
   const projectImages = getProjectImages(project, displaySettings);
-  const heroImage = projectImages[0]?.src ?? project.image_url ?? null;
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const hasCarousel = displaySettings.show_gallery && projectImages.length > 1;
+  const activeImage = projectImages[activeImageIndex] ?? projectImages[0];
+  const heroImage = activeImage?.src ?? project.image_url ?? null;
   const category = getProjectCategory(project);
   const technologies = getProjectTechnologies(project);
   const objectives = getProjectBulletList(project.objective);
@@ -47,15 +54,39 @@ function ProjectCaseStudyContent({
         {heroImage ? (
           <img
             src={getImageSrc(heroImage)}
-            alt={project.title}
-            className="h-full w-full object-cover opacity-40"
+            alt={activeImage?.alt ?? project.title}
+            className="h-full w-full object-cover opacity-75"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-[#111111] px-6 text-center text-lg font-bold text-white opacity-50">
             {project.title}
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/55 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/35 to-transparent" />
+
+        {hasCarousel && (
+          <>
+            <button
+              type="button"
+              onClick={() => setActiveImageIndex((current) => getPreviousIndex(current, projectImages.length))}
+              className="absolute left-4 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg border border-[#262626] bg-[#1A1A1A]/90 text-[#A1A1AA] transition-colors hover:text-white"
+              aria-label="Image précédente"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveImageIndex((current) => getNextIndex(current, projectImages.length))}
+              className="absolute right-4 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg border border-[#262626] bg-[#1A1A1A]/90 text-[#A1A1AA] transition-colors hover:text-white"
+              aria-label="Image suivante"
+            >
+              <ChevronRight size={18} />
+            </button>
+            <div className="absolute bottom-4 right-4 rounded-md border border-[#262626] bg-[#0A0A0A]/80 px-2.5 py-1 text-[11px] font-mono text-[#D4D4D8]">
+              {activeImageIndex + 1} / {projectImages.length}
+            </div>
+          </>
+        )}
 
         {onClose && (
           <button
@@ -95,6 +126,31 @@ function ProjectCaseStudyContent({
                 >
                   {tech}
                 </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {hasCarousel && (
+          <div>
+            <h4 className="mb-3 text-xs font-mono uppercase tracking-widest text-[#A1A1AA]">
+              Carousel projet
+            </h4>
+            <div className="grid grid-cols-4 gap-2">
+              {projectImages.map((image, index) => (
+                <button
+                  type="button"
+                  key={`${image.src}-${index}`}
+                  onClick={() => setActiveImageIndex(index)}
+                  className={`aspect-video overflow-hidden rounded-lg border bg-[#111111] transition ${
+                    index === activeImageIndex
+                      ? "border-[#3B82F6] opacity-100"
+                      : "border-[#262626] opacity-45 hover:opacity-100"
+                  }`}
+                  aria-label={`Afficher l'image ${index + 1}`}
+                >
+                  <img src={getImageSrc(image.src)} alt="" className="h-full w-full object-cover" />
+                </button>
               ))}
             </div>
           </div>
@@ -198,8 +254,8 @@ function ProjectCaseStudyContent({
 
 export function ProjectCaseStudyPanel({ project, onClose }: { project: Project; onClose?: () => void }) {
   return (
-    <div className="flex max-h-[92vh] w-full flex-col overflow-hidden rounded-t-2xl border border-[#262626] bg-[#111111] shadow-2xl md:rounded-2xl md:max-w-3xl">
-      <ProjectCaseStudyContent project={project} onClose={onClose} />
+    <div className="flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-[#262626] bg-[#111111] shadow-2xl">
+      <ProjectCaseStudyContent key={project.id} project={project} onClose={onClose} />
     </div>
   );
 }
@@ -208,8 +264,6 @@ export default function ProjectCaseStudyModal({
   project,
   onClose,
 }: ProjectCaseStudyModalProps) {
-  const visible = Boolean(project);
-
   useEffect(() => {
     if (!project) return;
 
@@ -237,11 +291,7 @@ export default function ProjectCaseStudyModal({
   if (!project) return null;
 
   return (
-    <div
-      className={`fixed inset-0 z-50 flex items-end justify-center p-0 transition-all duration-300 md:items-center md:p-6 ${
-        visible ? "opacity-100" : "opacity-0"
-      }`}
-    >
+    <div className="fixed inset-0 z-50">
       <button
         type="button"
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
@@ -249,14 +299,16 @@ export default function ProjectCaseStudyModal({
         aria-label="Fermer la modale du projet"
       />
       <div
-        role="dialog"
-        aria-modal="true"
-        aria-label={`Apercu du projet ${project.title}`}
-        className={`relative w-full transition-all duration-300 ${
-          visible ? "translate-y-0 scale-100" : "translate-y-8 scale-[0.97]"
-        }`}
+        className="relative flex min-h-full items-center justify-center p-4 pointer-events-none md:p-6"
       >
-        <ProjectCaseStudyPanel project={project} onClose={onClose} />
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Apercu du projet ${project.title}`}
+          className="pointer-events-auto"
+        >
+          <ProjectCaseStudyPanel project={project} onClose={onClose} />
+        </div>
       </div>
     </div>
   );

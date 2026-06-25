@@ -109,43 +109,16 @@ const HomePage = () => {
     const fetchProjects = async () => {
       try {
         const response = await apiFetch("/projects");
-        // Sort and prioritize based on specified order or featured order:
-        // Prioritized order:
-        // 1. La Loge
-        // 2. Application Rétrospective Agile
-        // 3. ArgentBank
-        // 4. Médiathèque PHP MVC
-        // 5. Cub3D
-        // 6. Kasa
-        // 7. SportSee
-        // 8. OhMyFood
-        // 9. Petits Plats
-        const priorityTitles = [
-          "la loge",
-          "retrospective backend",
-          "retrospective frontend",
-          "argentbank",
-          "atelier dein",
-          "cub3d",
-          "kasa",
-          "sportsee",
-          "ohmyfood",
-          "petits plats"
-        ];
-        
-        const sorted = (response.data as Project[]).filter((p) => {
-          // Remove "Portfolio Personnel" from public list as requested
-          return p.title.toLowerCase() !== "portfolio personnel";
-        }).sort((a, b) => {
-          const idxA = priorityTitles.findIndex(t => a.title.toLowerCase().includes(t));
-          const idxB = priorityTitles.findIndex(t => b.title.toLowerCase().includes(t));
-          
-          if (idxA !== -1 && idxB !== -1) return idxA - idxB;
-          if (idxA !== -1) return -1;
-          if (idxB !== -1) return 1;
-          
-          return (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0);
-        });
+        const sorted = (response.data as Project[])
+          .filter((project) => (
+            project.title.toLowerCase() !== "portfolio personnel"
+            && (project.is_featured === true || project.is_featured === 1)
+          ))
+          .sort((a, b) => {
+            const orderA = typeof a.featured_order === "number" ? a.featured_order : Number.MAX_SAFE_INTEGER;
+            const orderB = typeof b.featured_order === "number" ? b.featured_order : Number.MAX_SAFE_INTEGER;
+            return orderA - orderB;
+          });
 
         setProjects(sorted);
       } catch (error) {
@@ -263,6 +236,16 @@ const HomePage = () => {
             ) : (
               <p className="text-[#A1A1AA] font-mono col-span-full">Aucun projet trouvé.</p>
             )}
+          </div>
+
+          <div className="mt-10 flex justify-center">
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-2 rounded-lg border border-[#262626] px-5 py-3 text-sm font-semibold text-white transition-all hover:border-[#3B3B3B] hover:bg-[#111111]"
+            >
+              Voir tous les projets
+              <ArrowRight size={15} />
+            </Link>
           </div>
         </div>
       </section>

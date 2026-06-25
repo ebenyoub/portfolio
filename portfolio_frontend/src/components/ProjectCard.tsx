@@ -35,8 +35,20 @@ const ProjectCard = ({
   } as Project);
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-[#262626] bg-[#111111] transition-all duration-300 hover:border-[#3B82F6]/40 hover:shadow-[0_0_40px_rgba(59,130,246,0.06)]">
-      <div className="relative h-44 bg-[#1A1A1A] overflow-hidden flex-shrink-0">
+    <article
+      className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border border-[#262626] bg-[#111111] transition-all duration-300 hover:border-[#3B82F6]/40 hover:shadow-[0_0_40px_rgba(59,130,246,0.06)]"
+      onClick={onOpenDetail}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onOpenDetail();
+        }
+      }}
+      tabIndex={0}
+      role="button"
+      aria-label={`Ouvrir le detail de ${title}`}
+    >
+      <div className="relative -mx-px -mt-px h-44 overflow-hidden rounded-t-[inherit] bg-[#1A1A1A] flex-shrink-0">
         {image_url && !imageFailed ? (
           <img
             src={getImageSrc(image_url)}
@@ -84,6 +96,7 @@ const ProjectCard = ({
           <button
             type="button"
             onClick={onOpenDetail}
+            onKeyDown={(event) => event.stopPropagation()}
             className="flex items-center gap-1.5 text-xs font-medium text-[#3B82F6] transition-all group-hover:gap-2.5"
             aria-label={`Voir le detail de ${title}`}
           >

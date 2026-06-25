@@ -159,7 +159,7 @@ export default function AdminLayout() {
   if (!isAuthenticated) return null;
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#0A0A0A]">
+    <div className="flex min-h-screen overflow-hidden bg-[#0A0A0A]">
       <aside
         className={`relative hidden flex-shrink-0 flex-col border-r border-[#1A1A1A] bg-[#0A0A0A] transition-all duration-200 md:flex ${
           collapsed ? "w-[56px]" : "w-[220px]"
@@ -207,7 +207,7 @@ export default function AdminLayout() {
         </div>
       )}
 
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+      <div className="flex min-w-0 flex-1 flex-col">
         <div className="flex h-14 flex-shrink-0 items-center justify-between border-b border-[#1A1A1A] px-4 md:hidden">
           <div className="flex items-center gap-2">
             <div className="flex h-6 w-6 items-center justify-center rounded bg-[#3B82F6]">
@@ -227,7 +227,7 @@ export default function AdminLayout() {
         </div>
 
         <main className="flex-1 overflow-y-auto">
-          <div className="mx-auto max-w-5xl px-5 py-8 md:px-8">
+          <div className="mx-auto w-full max-w-5xl px-5 py-6 md:px-8 md:py-8">
             <Outlet />
           </div>
         </main>

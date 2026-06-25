@@ -17,8 +17,8 @@ const FeaturedSettings = ({
   onToggleFeatured,
   onUpdateFeaturedOrder,
 }: FeaturedSettingsProps) => (
-  <div className="flex flex-wrap items-center justify-center gap-2 lg:justify-center">
-    <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-[#262626] bg-[#0A0A0A] px-2.5 py-1.5 text-[11px] font-mono text-[#A1A1AA]">
+  <div className="flex flex-nowrap items-center justify-center gap-2 whitespace-nowrap lg:justify-center">
+    <label className="inline-flex flex-nowrap cursor-pointer items-center gap-2 rounded-lg border border-[#262626] bg-[#0A0A0A] px-2.5 py-1.5 text-[11px] font-mono text-[#A1A1AA] whitespace-nowrap">
       <input
         type="checkbox"
         className="h-4 w-4 rounded border-[#262626] bg-[#0A0A0A] text-[#3B82F6] focus:ring-[#3B82F6]/30 focus:ring-offset-[#0A0A0A]"
@@ -32,7 +32,7 @@ const FeaturedSettings = ({
       {isFeatured ? "On" : "Off"}
     </label>
 
-    <label className="inline-flex items-center gap-2 rounded-lg border border-[#262626] bg-[#0A0A0A] px-2.5 py-1.5 text-[11px] font-mono text-[#A1A1AA]">
+    <label className="inline-flex flex-nowrap items-center gap-2 rounded-lg border border-[#262626] bg-[#0A0A0A] px-2.5 py-1.5 text-[11px] font-mono text-[#A1A1AA] whitespace-nowrap">
       Ordre
       <input
         type="number"

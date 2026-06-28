@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
-  VITE_API_URL: z.string().url(),
+  VITE_API_URL: z.string().min(1),
   VITE_CLOUDINARY_CLOUD_NAME: z.string().optional(),
   VITE_CLOUDINARY_UPLOAD_PRESET: z.string().optional(),
 });
@@ -13,7 +13,7 @@ if (!envParsed.success) {
 }
 
 export const env = envParsed.data || {
-  VITE_API_URL: 'http://localhost:3001/api',
+  VITE_API_URL: '/api',
   VITE_CLOUDINARY_CLOUD_NAME: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME,
   VITE_CLOUDINARY_UPLOAD_PRESET: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET,
 };

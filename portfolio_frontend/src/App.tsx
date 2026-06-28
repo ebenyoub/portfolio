@@ -12,7 +12,6 @@ import AdminMediasPage from './pages/admin/AdminMediasPage'
 import AdminParametresPage from './pages/admin/AdminParametresPage'
 import CreateProjectPage from './pages/CreateProjectPage'
 import EditProjectPage from './pages/EditProjectPage'
-import ContactPage from './pages/ContactPage'
 import AdminLayout from './components/AdminLayout'
 import PrivateRoute from './components/PrivateRoute'
 
@@ -23,7 +22,6 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/projects/:id" element={<ProjectDetailPage />} />
-        <Route path="/contact" element={<ContactPage />} />
         <Route path="/login" element={<LoginPage />} />
         
         {/* Protected Admin Routes */}

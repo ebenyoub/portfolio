@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import {
   Github,
   Linkedin,
@@ -102,8 +105,46 @@ function StackCardComponent({ cat }: { cat: typeof STACK_CATEGORIES[0] }) {
   );
 }
 
+const contactSchema = z.object({
+  name: z.string().trim().min(2, "Le nom doit contenir au moins 2 caractères"),
+  email: z.email("Email invalide"),
+  subject: z.string().trim().min(3, "Le sujet doit contenir au moins 3 caractères"),
+  message: z.string().trim().min(10, "Le message doit contenir au moins 10 caractères"),
+});
+
+type ContactFormValues = z.infer<typeof contactSchema>;
+
 const HomePage = () => {
-  const { apiFetch } = useFetch();
+  const { apiFetch, isLoading } = useFetch();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitSuccessful },
+  } = useForm<ContactFormValues>({
+    resolver: zodResolver(contactSchema),
+  });
+
+  const onSubmit = async (values: ContactFormValues) => {
+    try {
+      const response = await apiFetch("/contact", {
+        method: "POST",
+        body: JSON.stringify({
+          name: values.name.trim(),
+          email: values.email.trim(),
+          subject: values.subject.trim(),
+          message: values.message.trim(),
+        }),
+      });
+
+      toast.success(response.message || "Message envoyé avec succès.");
+      reset();
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
+  };
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [heroActiveIndex, setHeroActiveIndex] = useState(0);
@@ -439,43 +480,121 @@ const HomePage = () => {
               <p className="mb-8 max-w-md text-base leading-relaxed text-[#A1A1AA]">
                 Disponible pour une alternance Bachelor 3 Ingenierie du Web a l'ESGI (Lyon / Remote). Ouvert aux projets freelance et aux opportunites de stage.
               </p>
+              
+              <div className="flex flex-col gap-3">
+                {[
+                  ...(settings.github_url ? [{ icon: Github, label: "GitHub", sublabel: settings.github_url.replace("https://", ""), href: settings.github_url, color: "#FFFFFF" }] : []),
+                  ...(settings.linkedin_url ? [{ icon: Linkedin, label: "LinkedIn", sublabel: settings.linkedin_url.replace("https://", ""), href: settings.linkedin_url, color: "#0A66C2" }] : []),
+                  { icon: Mail, label: "Email", sublabel: settings.email, href: `mailto:${settings.email}`, color: "#3B82F6" },
+                  { icon: Download, label: "Curriculum Vitae", sublabel: "Télécharger le PDF", href: "/cv_alternance_B3.pdf", color: "#10B981" },
+                ].map((link) => {
+                  const Icon = link.icon;
+                  return (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      target={link.href.startsWith("http") || link.href.endsWith(".pdf") ? "_blank" : undefined}
+                      rel={link.href.startsWith("http") || link.href.endsWith(".pdf") ? "noopener noreferrer" : undefined}
+                      className="group flex items-start gap-3 rounded-xl border border-[#262626] bg-[#111111] p-4 transition-all duration-200 hover:border-[#363636] hover:bg-[#141414]"
+                    >
+                      <div
+                        className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg"
+                        style={{ background: `${link.color}14`, border: `1px solid ${link.color}20` }}
+                      >
+                        <Icon size={15} style={{ color: link.color }} />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="mb-0.5 text-sm font-semibold text-white" style={{ fontFamily: "Manrope, sans-serif" }}>
+                          {link.label}
+                        </p>
+                        <p className="text-xs text-[#A1A1AA] truncate">{link.sublabel}</p>
+                      </div>
+                    </a>
+                  );
+                })}
+                <div className="mt-3 flex items-center gap-2 text-xs font-mono text-[#4B4B4B]">
+                  <MapPin size={11} />
+                  Lyon, France - 2026
+                </div>
+              </div>
             </div>
 
-            <div className="flex flex-col gap-3">
-              {[
-                ...(settings.github_url ? [{ icon: Github, label: "GitHub", sublabel: settings.github_url.replace("https://", ""), href: settings.github_url, color: "#FFFFFF" }] : []),
-                ...(settings.linkedin_url ? [{ icon: Linkedin, label: "LinkedIn", sublabel: settings.linkedin_url.replace("https://", ""), href: settings.linkedin_url, color: "#0A66C2" }] : []),
-                { icon: Mail, label: "Email", sublabel: settings.email, href: `mailto:${settings.email}`, color: "#3B82F6" },
-                { icon: Download, label: "Curriculum Vitae", sublabel: "Télécharger le PDF", href: "/cv_alternance_B3.pdf", color: "#10B981" },
-              ].map((link) => {
-                const Icon = link.icon;
-                return (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    target={link.href.startsWith("http") || link.href.endsWith(".pdf") ? "_blank" : undefined}
-                    rel={link.href.startsWith("http") || link.href.endsWith(".pdf") ? "noopener noreferrer" : undefined}
-                    className="group flex items-start gap-3 rounded-xl border border-[#262626] bg-[#111111] p-4 transition-all duration-200 hover:border-[#363636] hover:bg-[#141414]"
-                  >
-                    <div
-                      className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg"
-                      style={{ background: `${link.color}14`, border: `1px solid ${link.color}20` }}
-                    >
-                      <Icon size={15} style={{ color: link.color }} />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="mb-0.5 text-sm font-semibold text-white" style={{ fontFamily: "Manrope, sans-serif" }}>
-                        {link.label}
-                      </p>
-                      <p className="text-xs text-[#A1A1AA] truncate">{link.sublabel}</p>
-                    </div>
-                  </a>
-                );
-              })}
-              <div className="mt-3 flex items-center gap-2 text-xs font-mono text-[#4B4B4B]">
-                <MapPin size={11} />
-                Lyon, France - 2026
-              </div>
+            {/* Form */}
+            <div className="bg-[#111111] border border-[#262626] rounded-2xl p-7 shadow-2xl">
+              {isSubmitSuccessful && (
+                <div className="mb-6 rounded-lg border border-green-500/20 bg-green-500/5 px-4 py-3 text-sm font-medium text-green-400 font-mono">
+                  Votre message a bien été envoyé.
+                </div>
+              )}
+
+              <form className="space-y-5" onSubmit={handleSubmit(onSubmit)} noValidate>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label htmlFor="name" className="block text-sm font-medium text-white" style={{ fontFamily: "Manrope, sans-serif" }}>
+                      Nom <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="name"
+                      type="text"
+                      {...register("name")}
+                      aria-invalid={!!errors.name}
+                      className={`w-full bg-[#0A0A0A] border rounded-lg px-4 py-2.5 text-sm text-white placeholder-[#4B4B4B] font-mono outline-none focus:border-[#3B82F6] focus:ring-1 focus:ring-[#3B82F6]/30 transition-colors ${errors.name ? "border-red-500/50" : "border-[#262626]"}`}
+                    />
+                    {errors.name && <p role="alert" className="text-xs text-red-400 font-mono">{errors.name.message}</p>}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label htmlFor="email" className="block text-sm font-medium text-white" style={{ fontFamily: "Manrope, sans-serif" }}>
+                      Email <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      {...register("email")}
+                      aria-invalid={!!errors.email}
+                      className={`w-full bg-[#0A0A0A] border rounded-lg px-4 py-2.5 text-sm text-white placeholder-[#4B4B4B] font-mono outline-none focus:border-[#3B82F6] focus:ring-1 focus:ring-[#3B82F6]/30 transition-colors ${errors.email ? "border-red-500/50" : "border-[#262626]"}`}
+                    />
+                    {errors.email && <p role="alert" className="text-xs text-red-400 font-mono">{errors.email.message}</p>}
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label htmlFor="subject" className="block text-sm font-medium text-white" style={{ fontFamily: "Manrope, sans-serif" }}>
+                    Sujet <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="subject"
+                    type="text"
+                    {...register("subject")}
+                    aria-invalid={!!errors.subject}
+                    className={`w-full bg-[#0A0A0A] border rounded-lg px-4 py-2.5 text-sm text-white placeholder-[#4B4B4B] font-mono outline-none focus:border-[#3B82F6] focus:ring-1 focus:ring-[#3B82F6]/30 transition-colors ${errors.subject ? "border-red-500/50" : "border-[#262626]"}`}
+                  />
+                  {errors.subject && <p role="alert" className="text-xs text-red-400 font-mono">{errors.subject.message}</p>}
+                </div>
+
+                <div className="space-y-1.5">
+                  <label htmlFor="message" className="block text-sm font-medium text-white" style={{ fontFamily: "Manrope, sans-serif" }}>
+                    Message <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    id="message"
+                    rows={6}
+                    {...register("message")}
+                    aria-invalid={!!errors.message}
+                    className={`w-full bg-[#0A0A0A] border rounded-lg px-4 py-2.5 text-sm text-white placeholder-[#4B4B4B] font-mono outline-none focus:border-[#3B82F6] focus:ring-1 focus:ring-[#3B82F6]/30 transition-colors ${errors.message ? "border-red-500/50" : "border-[#262626]"}`}
+                  />
+                  {errors.message && <p role="alert" className="text-xs text-red-400 font-mono">{errors.message.message}</p>}
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full flex items-center justify-center gap-2 bg-[#3B82F6] text-white py-3 rounded-lg font-semibold text-sm hover:bg-[#2563EB] transition-all disabled:opacity-60 disabled:cursor-not-allowed mt-2"
+                  style={{ fontFamily: "Manrope, sans-serif" }}
+                >
+                  {isLoading ? "Envoi..." : "Envoyer le message"}
+                </button>
+              </form>
             </div>
           </div>
         </div>

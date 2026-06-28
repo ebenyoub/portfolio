@@ -1,6 +1,6 @@
 import { env } from "../config/env";
 
-const allowedImageTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
+const allowedImageTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
 const maxFileSizeBytes = 5 * 1024 * 1024;
 
 export type CloudinaryUploadResult = {
@@ -29,7 +29,7 @@ const getCloudinaryConfig = () => {
 
 const validateImageFile = (file: File) => {
   if (!allowedImageTypes.has(file.type)) {
-    throw new Error("Format invalide. Formats acceptés : jpg, jpeg, png, webp.");
+    throw new Error("Format invalide. Formats acceptés : jpg, jpeg, png, webp, gif.");
   }
 
   if (file.size > maxFileSizeBytes) {

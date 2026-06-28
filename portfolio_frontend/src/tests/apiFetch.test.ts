@@ -27,11 +27,11 @@ const getLastCallHeaders = () => {
 describe("useFetch / apiFetch", () => {
   beforeEach(() => {
     // Default: no token in storage. Overridden per-test when needed.
-    vi.spyOn(Storage.prototype, "getItem").mockReturnValue(null);
+    // We stub only getItem since that's the only localStorage method the hook calls.
+    vi.stubGlobal("localStorage", { getItem: vi.fn().mockReturnValue(null) });
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
     vi.unstubAllGlobals();
     mockEnv.VITE_API_URL = "http://localhost:3000";
   });
@@ -114,7 +114,7 @@ describe("useFetch / apiFetch", () => {
   // ── Authorization header ───────────────────────────────────────────────────
 
   it("sends an Authorization header when a token is stored in localStorage", async () => {
-    vi.spyOn(Storage.prototype, "getItem").mockReturnValue("my-jwt-token");
+    vi.stubGlobal("localStorage", { getItem: vi.fn().mockReturnValue("my-jwt-token") });
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse({ ok: true })));
 
     const { result } = renderHook(() => useFetch());

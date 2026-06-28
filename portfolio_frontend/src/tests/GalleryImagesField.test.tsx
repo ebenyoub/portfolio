@@ -9,11 +9,8 @@ type GalleryField = GalleryImageFormValue & {
   id: string;
 };
 
-const firstImage = new File(['first'], 'first.png', { type: 'image/png' });
-const secondImage = new File(['second'], 'second.png', { type: 'image/png' });
-
 const renderField = () => {
-  const onAppendFiles = vi.fn();
+  const onChangeImage = vi.fn();
 
   const Harness = () => {
     const [images, setImages] = useState<GalleryField[]>([]);
@@ -22,45 +19,53 @@ const renderField = () => {
       <GalleryImagesField
         label="Images du carousel"
         images={images}
-        onAddUrl={() => setImages((currentImages) => [
-          ...currentImages,
-          { id: String(currentImages.length), url: '' },
+        onAddUrl={() => setImages((current) => [
+          ...current,
+          { id: String(current.length), url: '' },
         ])}
-        onAppendFiles={(files) => {
-          onAppendFiles(files);
-          setImages((currentImages) => [
-            ...currentImages,
-            ...files.map((file, index) => ({
-              id: `${currentImages.length}-${index}`,
-              url: '',
-              file,
-              previewUrl: URL.createObjectURL(file),
-            })),
-          ]);
+        onChangeImage={(index, value) => {
+          onChangeImage(index, value);
+          setImages((current) => current.map((img, i) =>
+            i === index ? { ...img, url: value } : img
+          ));
         }}
-        onChangeImage={(index, value) => setImages((currentImages) => currentImages.map((image, imageIndex) => (
-          imageIndex === index ? { ...image, url: value, file: undefined } : image
-        )))}
-        onRemoveImage={(index) => setImages((currentImages) => currentImages.filter((_, imageIndex) => imageIndex !== index))}
-        onMoveImage={() => undefined}
+        onRemoveImage={(index) => setImages((current) => current.filter((_, i) => i !== index))}
+        onMoveImage={vi.fn()}
       />
     );
   };
 
   const renderResult = render(<Harness />);
 
-  return { ...renderResult, onAppendFiles };
+  return { ...renderResult, onChangeImage };
 };
 
 describe('GalleryImagesField', () => {
-  it('keeps selected files in memory and shows local previews without uploading', async () => {
+  it('renders the Choisir des images and Ajouter une URL vide buttons', () => {
+    renderField();
+
+    expect(screen.getByRole('button', { name: 'Choisir des images' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Ajouter une URL vide' })).toBeInTheDocument();
+  });
+
+  it('adds an empty URL input when Ajouter une URL vide is clicked', async () => {
     const user = userEvent.setup();
-    const { container, onAppendFiles } = renderField();
+    renderField();
 
-    await user.upload(screen.getByLabelText('Sélectionner les images du carousel'), [firstImage, secondImage]);
+    await user.click(screen.getByRole('button', { name: 'Ajouter une URL vide' }));
 
-    expect(onAppendFiles).toHaveBeenCalledWith([firstImage, secondImage]);
-    expect(URL.createObjectURL).toHaveBeenCalledTimes(2);
-    expect(container.querySelectorAll('img')).toHaveLength(2);
+    expect(screen.getAllByPlaceholderText(/https:\/\/res\.cloudinary/)).toHaveLength(1);
+  });
+
+  it('calls onChangeImage when a URL is typed in a gallery input', async () => {
+    const user = userEvent.setup();
+    const { onChangeImage } = renderField();
+
+    await user.click(screen.getByRole('button', { name: 'Ajouter une URL vide' }));
+
+    const [input] = screen.getAllByPlaceholderText(/https:\/\/res\.cloudinary/);
+    await user.type(input, 'https://example.com/image.png');
+
+    expect(onChangeImage).toHaveBeenCalled();
   });
 });

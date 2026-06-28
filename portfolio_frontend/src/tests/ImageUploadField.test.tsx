@@ -4,30 +4,23 @@ import { useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import ImageUploadField from '../components/ImageUploadField';
 
-const imageFile = new File(['cover'], 'cover.png', { type: 'image/png' });
-
-const renderField = () => {
+const renderField = (initialValue = '') => {
   const onChange = vi.fn();
   const onFileSelect = vi.fn();
 
   const Harness = () => {
-    const [value, setValue] = useState('');
-    const [selectedPreviewUrl, setSelectedPreviewUrl] = useState<string | null>(null);
+    const [value, setValue] = useState(initialValue);
 
     return (
       <ImageUploadField
         id="image_url"
         label="Image de couverture"
         value={value}
-        selectedPreviewUrl={selectedPreviewUrl}
         onChange={(nextValue) => {
           onChange(nextValue);
           setValue(nextValue);
         }}
-        onFileSelect={(file) => {
-          onFileSelect(file);
-          setSelectedPreviewUrl(file ? URL.createObjectURL(file) : null);
-        }}
+        onFileSelect={onFileSelect}
       />
     );
   };
@@ -38,15 +31,43 @@ const renderField = () => {
 };
 
 describe('ImageUploadField', () => {
-  it('keeps the selected file in memory and shows a local preview without uploading', async () => {
+  it('renders an accessible URL input labeled with the field label', () => {
+    renderField();
+
+    const input = screen.getByLabelText('Image de couverture');
+    expect(input).toBeInTheDocument();
+    expect(input.tagName).toBe('INPUT');
+  });
+
+  it('calls onChange when a URL is typed in the input', async () => {
     const user = userEvent.setup();
-    const { container, onChange, onFileSelect } = renderField();
+    const { onChange } = renderField();
 
-    await user.upload(screen.getByLabelText('Sélectionner Image de couverture'), imageFile);
+    const input = screen.getByLabelText('Image de couverture');
+    await user.type(input, 'https://example.com/cover.png');
 
-    expect(onFileSelect).toHaveBeenCalledWith(imageFile);
+    expect(onChange).toHaveBeenCalled();
+  });
+
+  it('renders a Choisir button to open the media picker', () => {
+    renderField();
+
+    expect(screen.getByRole('button', { name: 'Choisir' })).toBeInTheDocument();
+  });
+
+  it('shows a Retirer button and preview when a value is set', () => {
+    const { container } = renderField('https://res.cloudinary.com/demo/image/upload/cover.webp');
+
+    expect(screen.getByRole('button', { name: 'Retirer' })).toBeInTheDocument();
+    expect(container.querySelector('img')).toBeInTheDocument();
+  });
+
+  it('calls onChange with empty string when Retirer is clicked', async () => {
+    const user = userEvent.setup();
+    const { onChange } = renderField('https://res.cloudinary.com/demo/image/upload/cover.webp');
+
+    await user.click(screen.getByRole('button', { name: 'Retirer' }));
+
     expect(onChange).toHaveBeenCalledWith('');
-    expect(URL.createObjectURL).toHaveBeenCalledWith(imageFile);
-    expect(container.querySelector('img')).toHaveAttribute('src', 'blob:local-preview');
   });
 });

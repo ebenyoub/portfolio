@@ -121,7 +121,7 @@ describe("Frontend Projects Pages Integration Tests", () => {
         </MemoryRouter>
       );
 
-      expect(screen.getByText(/Chargement du projet.../i)).toBeInTheDocument();
+      expect(screen.getByText(/Chargement de l'étude de cas.../i)).toBeInTheDocument();
     });
 
     it("renders error state when project is not found", async () => {

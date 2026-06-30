@@ -7,6 +7,7 @@ import useFetch from "../hooks/apiFetch";
 const mockEnv = vi.hoisted(() => ({ VITE_API_URL: "http://localhost:3000" }));
 
 vi.mock("../config/env", () => ({ env: mockEnv }));
+vi.mock("../hooks/useAuth", () => ({ default: vi.fn(() => ({ logout: vi.fn() })) }));
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
@@ -168,7 +169,11 @@ describe("useFetch / apiFetch", () => {
 
   // ── error responses ────────────────────────────────────────────────────────
 
-  it("throws the server error message when the response is not OK", async () => {
+  it("calls logout and returns null on a 401 response", async () => {
+    const { default: useAuth } = await import("../hooks/useAuth");
+    const mockLogout = vi.fn();
+    vi.mocked(useAuth).mockReturnValue({ logout: mockLogout, token: null, user: null, isAuthenticated: false, login: vi.fn() });
+
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue(
@@ -177,8 +182,11 @@ describe("useFetch / apiFetch", () => {
     );
 
     const { result } = renderHook(() => useFetch());
+    let response: unknown;
+    await act(async () => { response = await result.current.apiFetch("/admin"); });
 
-    await expect(result.current.apiFetch("/admin")).rejects.toThrow("Unauthorized");
+    expect(mockLogout).toHaveBeenCalledOnce();
+    expect(response).toBeNull();
   });
 
   it('falls back to "Erreur serveur" when the error response has no message field', async () => {

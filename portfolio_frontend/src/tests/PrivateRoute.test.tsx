@@ -5,6 +5,9 @@ import PrivateRoute from "../components/PrivateRoute";
 import useAuth from "../hooks/useAuth";
 import type { JwtPayload } from "../context/AuthProvider";
 
+const makeToken = (payload: object) =>
+  `eyJhbGciOiJIUzI1NiJ9.${btoa(JSON.stringify(payload))}.signature`;
+
 vi.mock("../hooks/useAuth", () => ({
   default: vi.fn(),
 }));
@@ -42,8 +45,9 @@ describe("PrivateRoute Component", () => {
   });
 
   it("renders children when user is authenticated", () => {
+    const validToken = makeToken({ id: 1, email: "admin@test.com", role: "admin", exp: Math.floor(Date.now() / 1000) + 3600 });
     mockUseAuth.mockReturnValue({
-      token: "mock-token",
+      token: validToken,
       user: { id: 1, email: "admin@test.com", role: "admin" } as JwtPayload,
       isAuthenticated: true,
       login: vi.fn(),

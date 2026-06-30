@@ -16,14 +16,23 @@ const decodeToken = (token: string): JwtPayload => {
   return JSON.parse(atob(token.split(".")[1]));
 };
 
+const getSavedToken = (): { token: string | null; user: JwtPayload | null } => {
+  const saved = localStorage.getItem("token");
+  if (!saved) return { token: null, user: null };
+  try {
+    return { token: saved, user: decodeToken(saved) };
+  } catch {
+    localStorage.removeItem("token");
+    return { token: null, user: null };
+  }
+};
+
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const savedToken = localStorage.getItem("token");
+  const { token: savedToken, user: savedUser } = getSavedToken();
   const navigate = useNavigate();
 
   const [token, setToken] = useState<string | null>(savedToken);
-  const [user, setUser] = useState<JwtPayload | null>(
-    savedToken ? decodeToken(savedToken) : null
-  );
+  const [user, setUser] = useState<JwtPayload | null>(savedUser);
 
   const isAuthenticated = Boolean(token);
 

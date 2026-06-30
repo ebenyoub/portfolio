@@ -169,10 +169,11 @@ describe("useFetch / apiFetch", () => {
 
   // ── error responses ────────────────────────────────────────────────────────
 
-  it("calls logout and returns null on a 401 response", async () => {
+  it("calls logout and returns null on a 401 when a token is present", async () => {
     const { default: useAuth } = await import("../hooks/useAuth");
     const mockLogout = vi.fn();
-    vi.mocked(useAuth).mockReturnValue({ logout: mockLogout, token: null, user: null, isAuthenticated: false, login: vi.fn() });
+    vi.mocked(useAuth).mockReturnValue({ logout: mockLogout, token: "existing-token", user: null, isAuthenticated: true, login: vi.fn() });
+    vi.stubGlobal("localStorage", { getItem: vi.fn().mockReturnValue("existing-token") });
 
     vi.stubGlobal(
       "fetch",
@@ -187,6 +188,20 @@ describe("useFetch / apiFetch", () => {
 
     expect(mockLogout).toHaveBeenCalledOnce();
     expect(response).toBeNull();
+  });
+
+  it("throws on a 401 when no token is present (wrong credentials)", async () => {
+    vi.stubGlobal("localStorage", { getItem: vi.fn().mockReturnValue(null) });
+
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ message: "Identifiants invalides" }), { status: 401 })
+      )
+    );
+
+    const { result } = renderHook(() => useFetch());
+    await expect(result.current.apiFetch("/api/auth/login")).rejects.toThrow("Identifiants invalides");
   });
 
   it('falls back to "Erreur serveur" when the error response has no message field', async () => {

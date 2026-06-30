@@ -41,8 +41,12 @@ const useFetch = () => {
             });
 
             if (response.status === 401) {
-                logout();
-                return null;
+                if (token) {
+                    logout();
+                    return null;
+                }
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Erreur serveur");
             }
 
             if (!response.ok) {

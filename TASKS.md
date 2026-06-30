@@ -20,6 +20,8 @@
 - [x] Amélioration de l'accessibilité du portfolio public et de l'admin (PB-013).
 
 ## Tâches futures
-- [ ] Validation complète du flux d'upload Cloudinary unsigned avec les variables d'environnement.
-- [ ] Raccorder le composant `FeaturedProjectsCarousel` à la page d'accueil en respectant Figma Make.
-
+- [ ] Finaliser la revue recruteur du portfolio avant le job dating : projets visibles, images, liens, CV, contact, responsive.
+- [ ] Raccorder le composant `FeaturedProjectsCarousel` à la page d'accueil en respectant Figma Make si cela apporte une vraie valeur avant jeudi.
+- [ ] Migrer La Loge vers la même architecture que le portfolio : front statique dans `/var/www/la-loge`, backend et base de données en Docker, Nginx en reverse proxy.
+- [ ] Mettre en place le CI/CD GitHub Actions pour le front de La Loge.
+- [ ] Préparer les supports alternance : pitch court, CV, liste d'entreprises et explication des projets.

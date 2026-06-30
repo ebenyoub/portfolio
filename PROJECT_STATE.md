@@ -10,7 +10,7 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
 ### 1. État Docker
 * **Base de données (`db`)** : Conteneur MySQL 8.0 opérationnel et persistant. Point d'entrée `init.sql` exécuté correctement. Port 3308 lié à `127.0.0.1` en local pour éviter toute exposition publique.
 * **Backend** : Conteneur Node.js 20 opérationnel (port `3001`).
-* **Frontend** : Conteneur opérationnel avec build multi-stage et serveur Nginx Alpine (port `8080` mappé vers le port `80`).
+* **Frontend** : En production, le front du portfolio est désormais servi directement par Nginx depuis `/var/www/portfolio`. Le conteneur frontend Docker n'est plus le chemin cible pour la production. En local, le front continue de fonctionner via Vite (`npm run dev`).
 * **Sécurité & Production** : Fichier `docker-compose.prod.yml` en place pour retirer l'exposition de ports de MySQL en production. Les secrets de la base de données sont isolés dans `.env.mysql` pour éviter d'exposer les secrets applicatifs (JWT, Cloudinary, Mail) au conteneur MySQL.
 * **CORS** : Les origines backend sont configurées par `CORS_ORIGIN` dans `portfolio_backend/.env`, sous forme de liste séparée par des virgules. Cette même variable est injectée par les compositions Docker de développement et de production.
 
@@ -47,6 +47,13 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
   * Accessibilité (`Accessibility.test.tsx`) : Régressions sur le nom accessible de la modale d'image, les contrôles de carousel et les erreurs de galerie annoncées aux lecteurs d'écran.
 * **CI Locale** : Intégration dans le processus `make validate` qui vérifie le linting, le build et exécute les tests unitaires/d'intégration de tout le projet.
 
+### 8. État Déploiement / CI-CD
+* **Architecture VPS Portfolio** : Nginx sert le front depuis `/var/www/portfolio` et proxyfie `/api/` vers le backend Docker.
+* **CI/CD Portfolio** : GitHub Actions exécute `npm ci`, `npm run lint`, `npm test`, `npm run build`, puis synchronise `dist/` vers `/var/www/portfolio` via `rsync`.
+* **Cloudinary** : Le support des GIF est activé et le preset local utilisé est `portfolio_upload`.
+* **Galeries projets** : Le fallback local Cub3D ne doit plus réinjecter automatiquement les images supprimées en administration.
+* **Prochaine priorité infra** : appliquer la même stratégie de déploiement à La Loge.
+
 ---
 
 ## Points d'attention
@@ -55,5 +62,8 @@ Portfolio professionnel d'Elyas Benyoub pour décrocher une alternance ESGI Bach
 ---
 
 ## Prochaine tâche recommandée
-* **Raccordement du carousel accueil**
-  * Intégrer `FeaturedProjectsCarousel` à `HomePage` en conservant l'alignement Figma Make.
+* **Migration La Loge vers architecture de production simplifiée**
+  * Servir le front La Loge depuis `/var/www/la-loge`.
+  * Garder backend et base de données en Docker.
+  * Configurer Nginx en reverse proxy.
+  * Ajouter un workflow GitHub Actions pour déployer le front automatiquement.

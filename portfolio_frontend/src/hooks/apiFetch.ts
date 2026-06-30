@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { env } from "../config/env";
+import useAuth from "./useAuth";
 
 export type LoginResponse = {
     success: boolean;
@@ -13,6 +14,7 @@ export type ApiErrorResponse = {
 
 const useFetch = () => {
     const [isLoading, setIsLoading] = useState(false);
+    const { logout } = useAuth();
 
     const apiFetch = useCallback(async (endpoint: string, options: RequestInit = {}) => {
         try {
@@ -38,6 +40,11 @@ const useFetch = () => {
                 headers: headers
             });
 
+            if (response.status === 401) {
+                logout();
+                return null;
+            }
+
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.message || "Erreur serveur");
@@ -51,7 +58,7 @@ const useFetch = () => {
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    }, [logout]);
 
     return { apiFetch, isLoading };
 }

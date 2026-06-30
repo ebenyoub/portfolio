@@ -75,3 +75,19 @@ Ce document liste et priorise les prochaines interventions à effectuer sur le P
 ### [P2] PB-013 : Amélioration globale de l'Accessibilité (WCAG / a11y) (Terminé)
 * **Description** : Ajout d'indicateurs de focus clavier, de noms accessibles sur les contrôles iconiques et les tiroirs de navigation, ainsi que d'annonces d'erreur pour les formulaires et les médias.
 * **Statut** : Terminé.
+
+### [P0] PB-014 : Finalisation Portfolio avant Job Dating
+* **Description** : Vérifier rapidement le parcours recruteur : page d'accueil, projets visibles, images de couverture, GIF Pokémon, liens GitHub/démo, CV, contact et responsive mobile.
+* **Statut** : À faire.
+
+### [P0] PB-015 : Migration La Loge vers Front Statique + Nginx
+* **Description** : Appliquer à La Loge la stratégie validée sur le portfolio : front buildé dans `/var/www/la-loge`, Nginx servant les fichiers statiques, backend et base de données conservés en Docker.
+* **Statut** : À faire.
+
+### [P0] PB-016 : CI/CD Front La Loge
+* **Description** : Créer un workflow GitHub Actions pour La Loge afin de builder le front et synchroniser automatiquement `dist/` vers `/var/www/la-loge` via `rsync` à chaque push sur la branche principale.
+* **Statut** : À faire.
+
+### [P0] PB-017 : Préparation Alternance / Job Dating
+* **Description** : Préparer les éléments essentiels pour jeudi : pitch court, CV, liste d'entreprises cibles, explication du portfolio, explication de La Loge et mise en avant du CI/CD.
+* **Statut** : À faire.

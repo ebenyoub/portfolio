@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import AuthContext from "./AuthContext";
+import { useNavigate } from "react-router-dom";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -17,6 +18,7 @@ const decodeToken = (token: string): JwtPayload => {
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const savedToken = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   const [token, setToken] = useState<string | null>(savedToken);
   const [user, setUser] = useState<JwtPayload | null>(
@@ -35,6 +37,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.removeItem("token");
     setToken(null);
     setUser(null);
+    navigate('/login', { replace: true })
   };
 
   return (

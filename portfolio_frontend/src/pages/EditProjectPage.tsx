@@ -6,17 +6,12 @@ import Container from "../components/ui/Container";
 import useFetch from "../hooks/apiFetch";
 import ProjectForm, { type ProjectFormValues, type ProjectPayload } from "../components/ProjectForm";
 import type { Project } from "../types/project";
-import { cub3dGalleryPaths, isCub3dProject, parseDisplaySettings, parseJsonArray } from "../utils/project";
+import { parseDisplaySettings, parseJsonArray } from "../utils/project";
 
 const arrayToLines = (value: string[] | string | null | undefined) => parseJsonArray(value).join("\n");
 
 const projectToFormValues = (project: Project): ProjectFormValues => {
   const galleryImages = parseJsonArray(project.gallery_images);
-  const defaultGalleryImages = galleryImages.length > 0
-    ? galleryImages
-    : isCub3dProject(project)
-      ? cub3dGalleryPaths
-      : [];
 
   return {
     title: project.title,
@@ -25,7 +20,7 @@ const projectToFormValues = (project: Project): ProjectFormValues => {
     github_url: project.github_url ?? "",
     demo_url: project.demo_url ?? "",
     image_url: project.image_url ?? "",
-    gallery_images: defaultGalleryImages.map((url) => ({ url })),
+    gallery_images: galleryImages.map((url) => ({ url })),
     context: project.context ?? "",
     objective: project.objective ?? "",
     challenges: project.challenges ?? "",
